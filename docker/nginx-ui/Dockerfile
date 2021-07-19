@@ -3,15 +3,15 @@ ARG TAG_NGINX=1.20
 FROM nginx:${TAG_NGINX}
 
 # Copy the different available configurations
-COPY ./docker/nginx-api/build/default.conf /etc/nginx/sites-available/default.conf
+COPY ./docker/nginx-ui/build/default.conf /etc/nginx/sites-available/default.conf
 # Define several possible configuration and update the docker-entrypoint script to apply on start !
 #COPY ./docker/nginx-api/build/default_dev.conf /etc/nginx/sites-available/default_dev.conf
 #COPY ./docker/nginx-api/build/default_prod.conf /etc/nginx/sites-available/default_prod.conf
 
 # Container entrypoint
-COPY ./docker/nginx-api/build/docker-entrypoint /
+COPY ./docker/nginx-ui/build/docker-entrypoint /
 
-#COPY ./src_api /srv
+#COPY ./src_ui /srv
 
 RUN set -eux \
     # Remove the default installed configuration

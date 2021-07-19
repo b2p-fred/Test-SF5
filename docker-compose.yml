@@ -74,21 +74,20 @@ services:
       - 1025:1025
       - 1080:1080
 
-  # TODO use the same nginx base image for the front end application -)
-#  # Front UI web server
-#  nginx-ui:
-#    build:
-#      context: .
-#      dockerfile: ./docker/nginx-api/Dockerfile
-#    container_name: docker_sf5_nginx_ui
-#    ports:
-#      - 8010:80
-#    volumes:
-#      - ./src_ui:/srv:rw
-#      - ./logs_ui:/var/log/nginx
-#    restart: always
-#    networks:
-#      - dev
+  # Front UI web server
+  nginx-ui:
+    build:
+      context: .
+      dockerfile: ./docker/nginx-ui/Dockerfile
+    container_name: docker_sf5_nginx_ui
+    ports:
+      - 8002:80
+    volumes:
+      - ./src_ui:/var/www/html/:rw
+      - ./logs_ui:/var/log/nginx
+    restart: always
+    networks:
+      - dev
 
 networks:
   dev:

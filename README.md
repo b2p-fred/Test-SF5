@@ -35,8 +35,9 @@ docker-compose up -d && docker-compose logs -f
 Then browse:
 - http://localhost:8080 for the PHPMyadmin Web interface
 - http://localhost:8001 for the API interface
+- http://localhost:8001 for the front end application
 
-The Docker configuration starts PHP-FPM and Nginx containers to allow executing the PHP scripts located in the *./src_api* folder.
+The Docker configuration starts PHP-FPM and Nginx containers to allow executing the PHP scripts located in the *./src_api* folder. Also it starts a second Nginx instance to serve the *./src_ui* Html files.
 
 To stop all the services:
 ```shell
