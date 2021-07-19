@@ -1,0 +1,4 @@
+ARG TAG_MARIADB=10.2.29
+
+FROM mariadb:${TAG_MARIADB}
+

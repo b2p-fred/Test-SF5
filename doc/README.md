@@ -1,4 +1,4 @@
-# documentation
+# Documentation
 
 ## process et règles de développement
 

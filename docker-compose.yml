@@ -1,0 +1,97 @@
+version: "3.8"
+
+services:
+
+  # PHP interpreter
+  php-fpm:
+    build: docker/php-fpm
+    container_name: docker_sf5_php-fpm
+    volumes:
+      - ./src_api:/var/www/html/:rw
+    restart: always
+    environment:
+      - APP_USER=${APP_USER}
+      - APP_ENV=${APP_ENV}
+      - APP_SECRET=${APP_SECRET}
+      - DATABASE_URL=mysql://${DATABASE_USER}:${DATABASE_PASSWORD}@database:3306/${DATABASE_NAME}?serverVersion=5.7
+    networks:
+      - dev
+
+  # API web server
+  nginx-api:
+    build:
+      context: .
+      dockerfile: ./docker/nginx-api/Dockerfile
+    container_name: docker_sf5_nginx_api
+    ports:
+      - 8001:80
+    volumes:
+      - ./src_api:/var/www/html/:rw
+      - ./logs_api:/var/log/nginx
+    restart: always
+    depends_on:
+      - php-fpm
+    networks:
+      - dev
+
+  # Application database
+  mariadb:
+    build: docker/mariadb
+    container_name: docker_sf5_mariadb
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DATABASE_NAME}
+      - MYSQL_USER=${DATABASE_USER}
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+    networks:
+      - dev
+
+  # MySQL Web interface
+  # Browse http://localhost:8080 to monitor the database
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: docker_sf5_phpmyadmin
+    restart: always
+    depends_on:
+      - mariadb
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_USER=${DATABASE_USER}
+      - PMA_PASSWORD=${DATABASE_PASSWORD}
+    networks:
+      - dev
+
+  # Catch mails sent from the PHP application
+  # Browse http://localhost:1080 to view the webmail
+  mailcatcher:
+    image: sj26/mailcatcher
+    ports:
+      - 1025:1025
+      - 1080:1080
+
+  # TODO use the same nginx base image for the front end application -)
+#  # Front UI web server
+#  nginx-ui:
+#    build:
+#      context: .
+#      dockerfile: ./docker/nginx-api/Dockerfile
+#    container_name: docker_sf5_nginx_ui
+#    ports:
+#      - 8010:80
+#    volumes:
+#      - ./src_ui:/srv:rw
+#      - ./logs_ui:/var/log/nginx
+#    restart: always
+#    networks:
+#      - dev
+
+networks:
+  dev:
+
+volumes:
+  db-data:
