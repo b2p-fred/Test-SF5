@@ -4,11 +4,15 @@ services:
 
   # PHP interpreter
   php-fpm:
-    build: docker/php-fpm
-    container_name: docker_sf5_php-fpm
+    build:
+      context: docker/php-fpm
+      args:
+        - TAG_PHP=${TAG_PHP}
+    image: ${PROJECT}_php:${PROJECT_VERSION}-${PROJECT_API_VERSION}
+    container_name: ${PROJECT}_php-fpm
+    restart: always
     volumes:
       - ./src_api:/var/www/html/:rw
-    restart: always
     environment:
       - APP_USER=${APP_USER}
       - APP_ENV=${APP_ENV}
@@ -22,13 +26,17 @@ services:
     build:
       context: .
       dockerfile: ./docker/nginx-api/Dockerfile
-    container_name: docker_sf5_nginx_api
+      args:
+        - TAG_NGINX=${TAG_NGINX}
+        - VERSION=${PROJECT_API_VERSION}
+    image: ${PROJECT}_api:${PROJECT_VERSION}-${PROJECT_API_VERSION}
+    container_name: ${PROJECT}_nginx_api
+    restart: always
     ports:
-      - 8001:80
+      - "8001:80"
     volumes:
       - ./src_api:/var/www/html/:rw
       - ./logs_api:/var/log/nginx
-    restart: always
     depends_on:
       - php-fpm
     networks:
@@ -36,8 +44,12 @@ services:
 
   # Application database
   mariadb:
-    build: docker/mariadb
-    container_name: docker_sf5_mariadb
+    build:
+      context: docker/mariadb
+      args:
+        - TAG_MARIADB=${TAG_MARIADB}
+    image: ${PROJECT}_db:${PROJECT_VERSION}-${PROJECT_API_VERSION}
+    container_name: ${PROJECT}_mariadb
     restart: always
     volumes:
       - db-data:/var/lib/mysql
@@ -52,13 +64,17 @@ services:
   # MySQL Web interface
   # Browse http://localhost:8080 to monitor the database
   phpmyadmin:
-    image: phpmyadmin
-    container_name: docker_sf5_phpmyadmin
+    build:
+      context: docker/phpmyadmin
+      args:
+        - TAG_PHPMYADMIN=${TAG_PHPMYADMIN}
+    image: ${PROJECT}_dbadmin:${PROJECT_VERSION}-${PROJECT_API_VERSION}
+    container_name: ${PROJECT}_phpmyadmin
     restart: always
     depends_on:
       - mariadb
     ports:
-      - 8080:80
+      - "8080:80"
     environment:
       - PMA_HOST=mariadb
       - PMA_USER=${DATABASE_USER}
@@ -69,23 +85,35 @@ services:
   # Catch mails sent from the PHP application
   # Browse http://localhost:1080 to view the webmail
   mailcatcher:
-    image: sj26/mailcatcher
+    build:
+      context: docker/mailcatcher
+      args:
+        - TAG_MAILCATCHER=${TAG_MAILCATCHER}
+    image: ${PROJECT}_mailer:${PROJECT_VERSION}-${PROJECT_API_VERSION}
+    container_name: ${PROJECT}_mailcatcher
+    restart: always
     ports:
-      - 1025:1025
-      - 1080:1080
+      - "1025:1025"
+      - "1080:1080"
+    networks:
+      - dev
 
   # Front UI web server
   nginx-ui:
     build:
       context: .
       dockerfile: ./docker/nginx-ui/Dockerfile
-    container_name: docker_sf5_nginx_ui
+      args:
+        - TAG_NGINX=${TAG_NGINX}
+        - VERSION=${PROJECT_PWA_VERSION}
+    image: ${PROJECT}_pwa:${PROJECT_VERSION}-${PROJECT_PWA_VERSION}
+    container_name: ${PROJECT}_nginx_ui
+    restart: always
     ports:
-      - 8002:80
+      - "8002:80"
     volumes:
       - ./src_ui:/var/www/html/:rw
       - ./logs_ui:/var/log/nginx
-    restart: always
     networks:
       - dev
 

@@ -1,0 +1,4 @@
+ARG TAG_MAILCATCHER=0.8.0
+
+FROM sj26/mailcatcher:${TAG_MAILCATCHER}
+

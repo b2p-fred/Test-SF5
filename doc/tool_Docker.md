@@ -36,6 +36,9 @@ Using docker as a non-root user:
 ```
     # Create a docker group
     sudo groupadd docker
+    
+    # Join the newly created group
+    newgrp docker
 
     # Add yourself to the group
     sudo usermod -aG docker $USER

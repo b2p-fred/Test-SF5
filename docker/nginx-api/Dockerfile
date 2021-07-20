@@ -2,6 +2,10 @@ ARG TAG_NGINX=1.20
 
 FROM nginx:${TAG_NGINX}
 
+LABEL com.description="eProtocole Web application"
+LABEL com.version="${VERSION}"
+LABEL com.authors="B2P Web"
+
 # Copy the different available configurations
 COPY ./docker/nginx-api/build/default.conf /etc/nginx/sites-available/default.conf
 # Define several possible configuration and update the docker-entrypoint script to apply on start !

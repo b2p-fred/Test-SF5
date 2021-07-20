@@ -21,8 +21,10 @@ A voir tous les fichiers [dans le répertoire *doc*](./doc/README.md)
 In PHPStorm, menu File / Settings / Build, create a new Docker configuration named *My Docker** and configured to be used with a Unix socket.
 
 The services' configuration is located in the *.env* file:
+- software components version (eg. nginx, MariaDB, ...)
+- application versions
 - database parameters
-- application parameters
+- application parameters and configuration
 
 To run all the services:
 ```shell
@@ -35,7 +37,7 @@ docker-compose up -d && docker-compose logs -f
 Then browse:
 - http://localhost:8080 for the PHPMyadmin Web interface
 - http://localhost:8001 for the API interface
-- http://localhost:8001 for the front end application
+- http://localhost:8002 for the front end application
 
 The Docker configuration starts PHP-FPM and Nginx containers to allow executing the PHP scripts located in the *./src_api* folder. Also it starts a second Nginx instance to serve the *./src_ui* Html files.
 

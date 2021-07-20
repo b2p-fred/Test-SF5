@@ -1,6 +1,6 @@
-ARG TAG_PHP=7.4
+ARG TAG_PHP=7.4-fpm
 
-FROM php:${TAG_PHP}-fpm
+FROM php:${TAG_PHP}
 
 ENV \
     COMPOSER_ALLOW_SUPERUSER=1 \
