@@ -9,7 +9,7 @@ ENV \
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        git \
+        git unzip \
         zlib1g-dev \
         libxml2-dev \
         libpng-dev \
@@ -22,11 +22,11 @@ RUN apt-get update \
         zip \
         opcache \
         gd \
-        intl \
+        intl
     #
     # composer
     #
-    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
 # Intentionnaly install a specific version !
     && php composer-setup.php --version=2.1.3 \
@@ -42,8 +42,8 @@ RUN apt-get update \
 #    #
 #    # Symfony
 #    #
-#    &&  curl -sS https://get.symfony.com/cli/installer | bash \
-#    &&  mv /root/.symfony/bin/symfony /usr/local/bin \
+RUN curl -sS https://get.symfony.com/cli/installer | bash \
+    &&  mv /root/.symfony/bin/symfony /usr/local/bin
 
 # Use the default production configuration
 #RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
@@ -60,3 +60,9 @@ RUN mkdir -p /var/www/.composer
 RUN chown -R www-data:www-data /var/www/.composer
 
 WORKDIR /var/www/
+
+# Container entrypoint
+COPY build/docker-entrypoint.sh /
+
+# Configure entrypoint
+ENTRYPOINT [ "/docker-entrypoint.sh" ]

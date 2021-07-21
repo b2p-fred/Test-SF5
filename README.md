@@ -30,16 +30,17 @@ To run all the services:
 ```shell
 # Run this command (to tail the containers log)
 docker-compose up
+
 # Or this one (Ctrl+C will not stop the containers)
 docker-compose up -d && docker-compose logs -f
 ```
 
 Then browse:
 - http://localhost:8080 for the PHPMyadmin Web interface
-- http://localhost:8001 for the API interface
+- http://localhost:8000 or http://localhost:8000/lucky/number for the API interface (Symfony 5)
 - http://localhost:8002 for the front end application
 
-The Docker configuration starts PHP-FPM and Nginx containers to allow executing the PHP scripts located in the *./src_api* folder. Also it starts a second Nginx instance to serve the *./src_ui* Html files.
+The Docker configuration starts PHP-FPM and Nginx containers to allow executing the Symfony application of the project (source files located in the *./src* folder). Also it starts a second Nginx instance to serve the *./src_ui* Html files.
 
 To stop all the services:
 ```shell

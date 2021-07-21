@@ -8,15 +8,13 @@ LABEL com.version="${VERSION}"
 LABEL com.authors="B2P Web"
 
 # Copy the different available configurations
-COPY ./docker/nginx-ui/build/default.conf /etc/nginx/sites-available/default.conf
-# Define several possible configuration and update the docker-entrypoint script to apply on start !
-#COPY ./docker/nginx-api/build/default_dev.conf /etc/nginx/sites-available/default_dev.conf
-#COPY ./docker/nginx-api/build/default_prod.conf /etc/nginx/sites-available/default_prod.conf
+COPY ./build/default.conf /etc/nginx/sites-available/default.conf
+# Define several possible configuration and update the docker-entrypoint.sh script to apply on start !
+#COPY ./build/default_dev.conf /etc/nginx/sites-available/default_dev.conf
+#COPY ./build/default_prod.conf /etc/nginx/sites-available/default_prod.conf
 
 # Container entrypoint
-COPY ./docker/nginx-ui/build/docker-entrypoint /
-
-#COPY ./src_ui /srv
+COPY ./build/docker-entrypoint.sh /
 
 RUN set -eux \
     # Remove the default installed configuration
@@ -25,4 +23,4 @@ RUN set -eux \
     && usermod -u 1000 www-data
 
 # Configure entrypoint
-ENTRYPOINT [ "/docker-entrypoint" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]

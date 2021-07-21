@@ -11,8 +11,10 @@ services:
     image: ${PROJECT}_php:${PROJECT_VERSION}-${PROJECT_API_VERSION}
     container_name: ${PROJECT}_php-fpm
     restart: always
+    ports:
+      - "8000:8000"
     volumes:
-      - ./src_api:/var/www/html/:rw
+      - ./:/var/www/:rw
     environment:
       - APP_USER=${APP_USER}
       - APP_ENV=${APP_ENV}
@@ -24,8 +26,7 @@ services:
   # API web server
   nginx-api:
     build:
-      context: .
-      dockerfile: ./docker/nginx-api/Dockerfile
+      context: docker/nginx-api
       args:
         - TAG_NGINX=${TAG_NGINX}
         - VERSION=${PROJECT_API_VERSION}
@@ -34,9 +35,8 @@ services:
     restart: always
     ports:
       - "8001:80"
-    volumes:
-      - ./src_api:/var/www/html/:rw
-      - ./logs_api:/var/log/nginx
+#    volumes:
+#      - .:/var/www/:rw
     depends_on:
       - php-fpm
     networks:
@@ -101,8 +101,7 @@ services:
   # Front UI web server
   nginx-ui:
     build:
-      context: .
-      dockerfile: ./docker/nginx-ui/Dockerfile
+      context: docker/nginx-ui
       args:
         - TAG_NGINX=${TAG_NGINX}
         - VERSION=${PROJECT_PWA_VERSION}
@@ -112,8 +111,7 @@ services:
     ports:
       - "8002:80"
     volumes:
-      - ./src_ui:/var/www/html/:rw
-      - ./logs_ui:/var/log/nginx
+      - ./src_ui:/var/www/:rw
     networks:
       - dev
 
