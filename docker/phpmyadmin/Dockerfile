@@ -2,3 +2,4 @@ ARG TAG_PHPMYADMIN=5.1.1-fpm
 
 FROM phpmyadmin:${TAG_PHPMYADMIN}
 
+EXPOSE 80/tcp

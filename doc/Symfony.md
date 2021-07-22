@@ -95,3 +95,13 @@ This to allow using annotations for the controllers' methods rules:
 ```
 rather than updating the *config/routes.yaml* configuration file. 
 
+### Monolog logging facility
+```shell
+$ composer require symfony/monolog-bundle
+```
+
+This to include the Monolog logger in the application. 
+
+Then configure the *dev/monolog.yaml* main handler to use a `rotating_file` type; this will avoid having too huge files in the development environment. 
+
+Read the doc on the Monolog powerful features [here](https://github.com/symfony/monolog-bundle).

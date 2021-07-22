@@ -7,6 +7,8 @@ LABEL com.description="eProtocole Web application"
 LABEL com.version="${VERSION}"
 LABEL com.authors="B2P Web"
 
+EXPOSE 80/tcp
+
 # Copy the different available configurations
 COPY ./build/default.conf /etc/nginx/sites-available/default.conf
 # Define several possible configuration and update the docker-entrypoint.sh script to apply on start !

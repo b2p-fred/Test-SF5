@@ -2,6 +2,8 @@ ARG TAG_PHP=7.4-fpm
 
 FROM php:${TAG_PHP}
 
+EXPOSE 9000/tcp
+
 ENV \
     COMPOSER_ALLOW_SUPERUSER=1 \
     APP_ENV=prod \
@@ -50,8 +52,11 @@ RUN curl -sS https://get.symfony.com/cli/installer | bash \
 # Use the default development configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
+COPY build/symfony.ini "$PHP_INI_DIR/conf.d/symfony.ini"
+
 # Application directory
 RUN usermod -u 1000 www-data
+RUN groupmod -g 1000 www-data
 RUN usermod -a -G www-data root
 
 RUN mkdir -p /var/www
@@ -61,8 +66,14 @@ RUN chown -R www-data:www-data /var/www/.composer
 
 WORKDIR /var/www/
 
-# Container entrypoint
-COPY build/docker-entrypoint.sh /
+USER www-data
 
-# Configure entrypoint
-ENTRYPOINT [ "/docker-entrypoint.sh" ]
+#CMD composer install ; php bin/console doctrine:migrations:migrate ; php-fpm --nodaemonize
+CMD composer install ; php-fpm --daemonize ; symfony server:start
+
+#CMD ["php-fpm", "--nodaemonize"]
+## Container entrypoint
+#COPY build/docker-entrypoint.sh /
+#
+## Configure entrypoint
+#ENTRYPOINT [ "/docker-entrypoint.sh" ]

@@ -15,6 +15,9 @@ A voir tous les fichiers [dans le répertoire *doc*](./doc/README.md)
 
 ## Docker files
 
+**Note** before running any Docker command, please copy the *.env.dist* provided file to *.env* and feel free to adapt this file content to your host needs -)
+
+`.dockerignore` to avoid including some files in the Docker layers
 `docker-compose.yml` the main file to run all the services
 `./docker` all the docker stuff used in the configuration
 
@@ -36,11 +39,15 @@ docker-compose up -d && docker-compose logs -f
 ```
 
 Then browse:
-- http://localhost:8080 for the PHPMyadmin Web interface
-- http://localhost:8000 or http://localhost:8000/lucky/number for the API interface (Symfony 5)
-- http://localhost:8002 for the front end application
+- `http://localhost:8080` for the PHPMyadmin Web interface
+- `http://localhost:8000` or `http://localhost:8000/lucky/number` for the API interface (Symfony 5)
+- `http://localhost:8002` for the front end application
 
-The Docker configuration starts PHP-FPM and Nginx containers to allow executing the Symfony application of the project (source files located in the *./src* folder). Also it starts a second Nginx instance to serve the *./src_ui* Html files.
+**Tip** while browsing `http://localhost:8000/lucky/number`, have a look to the Docker log -)
+
+The Docker configuration starts PHP-FPM and Nginx containers to allow executing the Symfony application of the project (source files located in the *./src* folder). Also, it starts a second Nginx instance to serve the *./src_ui* Html files.
+
+**Note** the front end part of the application is not yet available in this repository...
 
 To stop all the services:
 ```shell
@@ -49,4 +56,3 @@ To stop all the services:
 # Else
 docker-compose down
 ```
-
