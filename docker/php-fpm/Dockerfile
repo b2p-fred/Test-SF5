@@ -68,12 +68,4 @@ WORKDIR /var/www/
 
 USER www-data
 
-#CMD composer install ; php bin/console doctrine:migrations:migrate ; php-fpm --nodaemonize
-CMD composer install ; php-fpm --daemonize ; symfony server:start
-
-#CMD ["php-fpm", "--nodaemonize"]
-## Container entrypoint
-#COPY build/docker-entrypoint.sh /
-#
-## Configure entrypoint
-#ENTRYPOINT [ "/docker-entrypoint.sh" ]
+CMD composer install ; php-fpm --daemonize ; sleep 1 ; rm .symfony/var/*.pid ; symfony server:start

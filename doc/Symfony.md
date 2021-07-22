@@ -38,10 +38,14 @@ $ docker exec -it docker_sf5_php-fpm symfony server:start -d
 $ docker exec -it docker_sf5_php-fpm symfony server:log
 ```
 
+**Note** that the recent Docker compose services are auto-starting the Symfony server. Thus, you do not need anymore to execute any command for this.
+
+If it happens an error message as "`server is already running`", this is because of a badly interrupted former execution. To cope with this problem, remove all the **.pid* files locate in the `.symfony/var` directory.
+
 To run a Symfony console command:
 ```shell
 # Symfony console
-$ docker exec -it docker_sf5_php-fpm php bin/console about
+$ docker exec -it docker_sf5_php-fpm symfony console about
 
  -------------------- --------------------------------- 
   Symfony                                               
@@ -105,3 +109,36 @@ This to include the Monolog logger in the application.
 Then configure the *dev/monolog.yaml* main handler to use a `rotating_file` type; this will avoid having too huge files in the development environment. 
 
 Read the doc on the Monolog powerful features [here](https://github.com/symfony/monolog-bundle).
+
+### Doctrine ORM
+```shell
+composer require --with-all-dependencies doctrine
+
+# OR
+
+composer require --no-scripts doctrine/doctrine-bundle
+```
+
+**Note** use `--no-scripts` else the default cachec learing script declared in the *composer.json* will fail the installation.
+
+This to include the [Doctrine ORM](https://www.doctrine-project.org/) in the application.
+
+Install the Maker bundle to help building entities ...
+```shell
+composer require symfony/maker-bundle --dev
+
+# Create a new entity
+symfony console make:entity Building
+# Fields are: name, address, zipcode (integer), city
+
+# And again a new entity
+symfony console make:entity Company
+# Fields are: name, building (relation ManyToOne)
+
+# Create the DB migration
+symfony console make:migration
+
+# Run the DB migration
+symfony console doctrine:migrations:migrate
+
+```

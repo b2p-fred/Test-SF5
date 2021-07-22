@@ -36,11 +36,9 @@ Les labels permettent de catégoriser les issues dans le backlog.
 * Support (jaune) : correspond à des tâches d'aide de projet...
 
 ### Labels liés à l'état des issues
-* Backlog review (vert turquoise) : issues liées à des demandes de la part des équipes commerciales et projet, demandant une estimation de la part de l'équipe de développement pour pouvoir l'intégrer ou non dans la roadmap de développement
+* `_estimating` : issues en cours d'estimation. qui ont été incluses dans la roadmap de développement, qui demandent d'être vues en sizing pour définir la liste des tâches techniques associées et affiner le sizing
 
-* A estimer (jaune foncé) : issues qui ont été incluses dans la roadmap de développement, qui demandent d'être vues en sizing pour définir la liste des tâches techniques associées et affiner le sizing
-
-* A planifier (bleu foncé) : issues vues en sizing et prêtes à être intégrées dans un sprint
+* `_scheduling` : issues vues en sizing et prêtes à être intégrées dans un sprint
 
 * To Do (jaune) : issues intégrées dans un sprint mais pas encore commencées 
 
@@ -58,9 +56,9 @@ Les issues de développement (bugs, tâches techniques) seront rattachées à de
 
 # Chiffrage
 ## Estimation
-Lorsqu'une nouvelle demande est exprimée par un client, un commercial ou un responsable projet, cette demande est répertorié dans un backlog spécifique (Jira), différent de celui de développement (Github). 
+Lorsqu'une nouvelle demande est exprimée par un client, un commercial ou un responsable projet, cette demande est répertoriée dans un backlog spécifique (Jira), différent de celui de développement (Github). 
 
-Afin de statuer sur l'intégration de la fonctionnalité liée à la demande dans la roadmap de développement et sur sa priorité, il est nécessaire d'avoir une estimation du temps nécessaire à son développement. Cette estimation est réalisée par l'équipe de développement dans un délai assez rapide. 
+Afin de statuer sur l'intégration de la fonctionnalité liée à la demande dans la roadmap de développement et sur sa priorité, il est nécessaire d'avoir une estimation du temps nécessaire à son développement. Un ticket Jira est créé parle Product Owner et soumis à l'équipe pour estimation. Cette estimation est réalisée par l'équipe de développement dans un délai assez rapide. 
 
 ## Sizing
 Le sizing permet d'affiner l'estimation du temps à passer pour la réalisation d'une issue, tout en listant de manière exhaustive les tâches techniques à réaliser. Dans l'idéal, un sizing sera réalisé toutes les semaines / 2 semaines par l'équipe.
