@@ -110,6 +110,13 @@ Then configure the *dev/monolog.yaml* main handler to use a `rotating_file` type
 
 Read the doc on the Monolog powerful features [here](https://github.com/symfony/monolog-bundle).
 
+### Symfony security features
+```shell
+composer require symfony/security-bundle
+```
+
+This to include the [Symfony security features](https://www.doctrine-project.org/) in the application.
+
 ### Doctrine ORM
 ```shell
 composer require --with-all-dependencies doctrine
@@ -134,17 +141,30 @@ symfony console make:entity Company
 # Create the DB migration
 symfony console make:migration
 
-# Run the DB migration
+# Create the database
+symfony console doctrine:database:create
+
+# Run the DB migration (on an existing database)
 symfony console doctrine:migrations:migrate
 
 ```
 
 
-
-### Symfony security features
+Creat and implement a controller for the entities
 ```shell
-composer require symfony/security-bundle
+# Create the controllers
+symfony console make:controller Company
+symfony console make:controller Building
 ```
 
-This to include the [Symfony security features](https://www.doctrine-project.org/) in the application.
+And then edit the *src/Controller/CompanyController.php* and *src/Controller/BuildingController.php* (view the [source code](../src/Controller/CompanyController.php)).
+And the *templates/building/index.html.twig* and *templates/company/index.html.twig* 
+And navigate to `http://localhost:8000/company`
+
+
+```shell
+# View the company table content
+# PHPStorm is also your best friend for this -)
+$ symfony console doctrine:query:sql "select * from company"
+```
 
