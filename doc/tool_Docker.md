@@ -54,9 +54,11 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 ```
 
-## Development
+## User identity
 
 **Note** that this is only necessary if the user identity is defined in a common repository where each user has its own id ... on our current PC configuration, all users are identified as 1000 -)
+
+**DO NOT EXECUTE !**
 
 Because all the development tools are based on Docker containers, it is important to share the user identity between the host computer and the Docker containers. The main reason is to manage correctly the shared volumes files permissions. The user identity is locally stored in an environment variable that must be exposed in the shell environment.
 

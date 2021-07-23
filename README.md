@@ -7,15 +7,18 @@ Plusieurs sujets :
 - outils (installation et configuration): [Docker](./doc/tool_Docker.md), [PHP Storm](./doc/tool_PHPStorm.md)
 - ...
 
-A voir tous les fichiers [dans le répertoire *doc*](./doc/README.md)
+A voir : tous les fichiers [dans le répertoire *doc*](./doc)
 
 ## Common files
 
 `.gitignore` to avoid including anything in the repo
+`.dockerignore` to avoid including anything in the Docker layers
 
 ## Docker files
 
-**Note** before running any Docker command, please copy the *.env.dist* provided file to *.env* and feel free to adapt this file content to your host needs -)
+**Note:** before running any Docker command, please copy the *.env.dist* provided file to *.env* and feel free to adapt this file content to your host needs -)
+
+Symfony allows using a *.env.local*
 
 `.dockerignore` to avoid including some files in the Docker layers
 `docker-compose.yml` the main file to run all the services

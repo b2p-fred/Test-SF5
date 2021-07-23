@@ -113,17 +113,13 @@ Read the doc on the Monolog powerful features [here](https://github.com/symfony/
 ### Doctrine ORM
 ```shell
 composer require --with-all-dependencies doctrine
-
-# OR
-
-composer require --no-scripts doctrine/doctrine-bundle
 ```
 
-**Note** use `--no-scripts` else the default cachec learing script declared in the *composer.json* will fail the installation.
+**Note** sometimes one must use `--no-scripts` else the default cache clearing script declared in the *composer.json* will fail the installation.
 
 This to include the [Doctrine ORM](https://www.doctrine-project.org/) in the application.
 
-Install the Maker bundle to help building entities ...
+Install the Maker bundle to help build entities ...
 ```shell
 composer require symfony/maker-bundle --dev
 
@@ -142,3 +138,13 @@ symfony console make:migration
 symfony console doctrine:migrations:migrate
 
 ```
+
+
+
+### Symfony security features
+```shell
+composer require symfony/security-bundle
+```
+
+This to include the [Symfony security features](https://www.doctrine-project.org/) in the application.
+

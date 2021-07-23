@@ -1,5 +1,5 @@
-ARG TAG_PHPMYADMIN=4.9-fpm
+ARG TAG_PHPMYADMIN=latest
 
-FROM phpmyadmin/phpmyadmin:${TAG_PHPMYADMIN}
+FROM phpmyadmin:${TAG_PHPMYADMIN}
 
 EXPOSE 80/tcp
