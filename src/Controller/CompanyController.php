@@ -7,11 +7,12 @@ use App\Repository\CompanyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CompanyController extends AbstractController
 {
     /**
-     * @Route("/company", name="company")
+     * @Route("/admin/company", name="company")
      */
     public function index(): Response
     {
@@ -21,7 +22,7 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/company/create", name="create_company")
+     * @Route("/admin/company/create", name="create_company")
      */
     public function createCompany(ValidatorInterface $validator): Response
     {
@@ -48,7 +49,7 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/company/{id}", name="company_show")
+     * @Route("/admin/company/{id}", name="company_show")
      *
      * Thanks to the ExtraBundle, no need to get a Repository and find the company in the repository -)
      * See https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html

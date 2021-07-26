@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LuckyController extends AbstractController
 {
     /**
+     * @Route ("/")
      * @Route ("/lucky/number")
      *
      * Example method that gets a random integer and sleeps for some few milliseconds
@@ -26,7 +27,7 @@ class LuckyController extends AbstractController
 
         // Make the job -)
         $number = random_int(0, 100);
-        sleep($number / 10);
+        sleep($number / 100);
 
         // Final timestamp
         $endTimestamp = \microtime(true);
@@ -35,8 +36,8 @@ class LuckyController extends AbstractController
 
         $logger->info(\sprintf('Job completed. Started at %.2f (%s). Duration : %d s', $startTimestamp, \date('H:i:s', $startTimestamp), $duration));
 
-        return new Response(
-            '<html><body>Lucky number: ' . $number . '</body></html>'
-        );
+        return $this->render('lucky/number.html.twig', [
+            'number' => $number,
+        ]);
     }
 }

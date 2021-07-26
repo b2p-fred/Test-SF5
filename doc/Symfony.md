@@ -128,24 +128,24 @@ This to include the [Doctrine ORM](https://www.doctrine-project.org/) in the app
 
 Install the Maker bundle to help build entities ...
 ```shell
-composer require symfony/maker-bundle --dev
+$ composer require symfony/maker-bundle --dev
 
 # Create a new entity
-symfony console make:entity Building
+$ symfony console make:entity Building
 # Fields are: name, address, zipcode (integer), city
 
 # And again a new entity
-symfony console make:entity Company
+$ symfony console make:entity Company
 # Fields are: name, building (relation ManyToOne)
 
 # Create the DB migration
-symfony console make:migration
+$ symfony console make:migration
 
 # Create the database
-symfony console doctrine:database:create
+$ symfony console doctrine:database:create
 
 # Run the DB migration (on an existing database)
-symfony console doctrine:migrations:migrate
+$ symfony console doctrine:migrations:migrate
 
 ```
 
@@ -153,8 +153,8 @@ symfony console doctrine:migrations:migrate
 Creat and implement a controller for the entities
 ```shell
 # Create the controllers
-symfony console make:controller Company
-symfony console make:controller Building
+$ symfony console make:controller Company
+$ symfony console make:controller Building
 ```
 
 And then edit the *src/Controller/CompanyController.php* and *src/Controller/BuildingController.php* (view the [source code](../src/Controller/CompanyController.php)).
@@ -168,3 +168,59 @@ And navigate to `http://localhost:8000/company`
 $ symfony console doctrine:query:sql "select * from company"
 ```
 
+
+### User authentication
+According to [this page](https://symfony.com/doc/current/security.html#create-user-class)
+
+```shell
+# Create a User class
+$ symfony console make:user
+# Accept all the default proposed choices
+
+# More user information
+$ symfony console make:entity User
+# FirstName, LastName
+```
+
+Add the Doctrine fixtures package to create data in the database:
+```shell
+# Add the package
+$ composer require orm-fixtures --dev
+
+# Create some fixtures
+$ symfony console make:fixtures
+```
+
+And edit the [Fixtures creation](../src/DataFixtures/UserFixtures.php).
+
+Update the [firewall configuration](../config/packages/security.yaml):
+- login_throttling (optional)
+- login method (eg. login_form, login json, ...)
+- ...
+
+```shell
+# Add the package for the logging throttling feature
+$ composer require symfony/rate-limiter
+```
+
+
+Add a favicon:
+```shell
+# Copy the favicon.ico file in to the `public` folder and then:
+$ composer require symfony/asset
+```
+
+
+Create a user [registration form](https://symfony.com/doc/current/forms.html:
+```shell
+# Forms
+$ composer require symfony/form
+$ composer require symfony/validator
+
+# Verification email
+$ composer require symfonycasts/verify-email-bundle symfony/mailer
+
+// Create a user registration form
+$ php bin/console make:registration-form
+
+```
