@@ -108,6 +108,27 @@ services:
     networks:
       - dev
 
+  # Front UI build tools
+  node:
+    build:
+      context: .
+      dockerfile: docker/nodejs/Dockerfile
+      target: node
+    image: ${PROJECT:-test}_node:${PROJECT_VERSION:-0}
+    container_name: ${PROJECT:-test}_nodejs
+    restart: unless-stopped
+#    environment:
+#      - 'API_ENDPOINT=${API_ENDPOINT:-http://api-nginx:80}'
+#      - 'WS_ENDPOINT=${WS_ENDPOINT:-http://sigsrv-node:3000}'
+#      - 'BRANDING=${BRANDING:-default}'
+#      #           For testing only:
+#      - 'BROWSER_ENTRYPOINT=${API_ENTRYPOINT:-http://nginx}'
+#      - 'SELENIUM_CHROME_HOST=${SELENIUM_CHROME_HOST:-selenium-chrome}'
+#    ports:
+#      - "8002:8080"
+#    volumes:
+#      - ./:/srv/app/:rw
+
   # Front UI web server
   nginx-ui:
     build:
@@ -119,7 +140,7 @@ services:
     container_name: ${PROJECT:-test}_nginx_ui
     restart: unless-stopped
 #    ports:
-#      - "8002:80"
+#      - "8003:80"
 #    volumes:
 #      - ./src_ui:/var/www/:rw
     networks:
