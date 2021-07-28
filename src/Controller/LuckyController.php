@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LuckyController extends AbstractController
 {
     /**
-     * @Route ("/")
+     * @Route ("/", name="homepage")
      * @Route ("/lucky/number")
      *
      * Example method that gets a random integer and sleeps for some few milliseconds

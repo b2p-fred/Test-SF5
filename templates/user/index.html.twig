@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Utilisateurs{% endblock %}
+{% block content %}
+    <div class="p-5">
+        <h2>Liste des utilisateurs</h2>
+
+        <table class="table table-responsive">
+            <tr>
+                <th></th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Date de naissance</th>
+                <th>Mail</th>
+            </tr>
+            {% for user in users %}
+                <tr>
+                    <td><a href="{{ path('user_show', {"id": user.id}) }}">Fiche</a></td>
+                    <td>{{ user.firstName }}</td>
+                    <td>{{ user.lastName }}</td>
+                    <td></td>
+{#                    <td>{{ user.birthday|date('d/m/Y') }}</td>#}
+                    <td>{{ user.email }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% if is_granted('ROLE_ADMIN') %}
+            <hr/>
+            <a href="{{ path('app_register') }}">Back</a>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -12,12 +12,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class CompanyController extends AbstractController
 {
     /**
-     * @Route("/admin/company", name="company")
+     * @Route("/admin/companies", name="companies")
      */
-    public function index(): Response
+    public function index(CompanyRepository $companyRepository): Response
     {
+        $companies = $companyRepository->findAll();
+
         return $this->render('company/index.html.twig', [
-            'controller_name' => 'CompanyController',
+            'items' => $companies,
         ]);
     }
 
@@ -56,10 +58,10 @@ class CompanyController extends AbstractController
      */
     public function show(Company $company): Response
     {
-        return new Response('Check out this great company: '.$company->getName());
+//        return new Response('Check out this great company: '.$company->getName());
 
         // or render a template
         // in the template, print things with {{ product.name }}
-        // return $this->render('company/show.html.twig', ['company' => $company]);
+         return $this->render('company/show.html.twig', ['item' => $company]);
     }
 }

@@ -56,6 +56,9 @@
         "symfony/rate-limiter": "5.3.*",
         "symfony/runtime": "5.3.*",
         "symfony/security-bundle": "5.3.*",
+        "symfony/security-core": "5.3.*",
+        "symfony/twig-bridge": "5.3.*",
+        "symfony/twig-bundle": "^5.3",
         "symfony/validator": "5.3.*",
         "symfony/yaml": "5.3.*",
         "symfonycasts/verify-email-bundle": "^1.5"
@@ -108,7 +111,6 @@
         "symfony/debug-bundle": "^5.3",
         "symfony/maker-bundle": "^1.33",
         "symfony/stopwatch": "^5.3",
-        "symfony/twig-bundle": "^5.3",
         "symfony/var-dumper": "^5.3",
         "symfony/web-profiler-bundle": "^5.3"
     }

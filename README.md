@@ -34,16 +34,32 @@ The services' configuration is located in the *.env* file:
 
 To run all the services:
 ```shell
+# Check if some containers are running
+$ docker ps -a
+$ docker-compose down
+
 # Run this command (to tail the containers log)
-docker-compose up
+$ docker-compose up
 
 # Or this one (Ctrl+C will not stop the containers)
-docker-compose up -d && docker-compose logs -f
+$ docker-compose up -d && docker-compose logs -f
+```
+
+To prepare the application:
+```shell
+# Create the database
+$ docker exec -it docker_sf5_php-fpm symfony console doctrine:database:create
+
+# Populate the migrations
+$ docker exec -it docker_sf5_php-fpm symfony console doctrine:migrations:migrate
+
+# Load the test fixtures
+$ docker exec -it docker_sf5_php-fpm symfony console doctrine:fixtures:load
 ```
 
 Then browse:
 - `http://localhost:8080` for the PHPMyadmin Web interface
-- `http://localhost:8000` or `http://localhost:8000/lucky/number` for the API interface (Symfony 5)
+- `http://localhost:8000` for the API interface (Symfony 5)
 - `http://localhost:8002` for the front end application
 
 **Tip** while browsing `http://localhost:8000/lucky/number`, have a look to the Docker log -)
@@ -57,5 +73,5 @@ To stop all the services:
 # Ctrl+C if you started with: docker-compose up
 
 # Else
-docker-compose down
+$ docker-compose down
 ```

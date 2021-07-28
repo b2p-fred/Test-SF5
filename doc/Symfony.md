@@ -19,7 +19,22 @@ $ symfony new .
 ```shell
 # Start the Docker environment
 $ docker-compose up
+```
 
+First solution, run `bash` inside the PHP container:
+```shell
+# Dive into the PHP container with a shell
+$ docker exec -it docker_sf5_php-fpm bash
+www-data@456b61389e7d:~$ symfony check:requirements
+www-data@456b61389e7d:~$ symfony check:security
+www-data@456b61389e7d:~$ symfony server:start
+...
+...
+```
+**Hint**: To use this solution, you can also `Create terminal` in a container from the PHPStorm IDE 
+
+Second solution, run Symfony commands in the container:
+```shell
 # Check Symfony requirements
 $ docker exec -it docker_sf5_php-fpm symfony check:requirements
 
@@ -216,6 +231,8 @@ Create a user [registration form](https://symfony.com/doc/current/forms.html:
 # Forms
 $ composer require symfony/form
 $ composer require symfony/validator
+$ composer require symfony/security-bundle
+$ composer require symfony/security-core
 
 # Verification email
 $ composer require symfonycasts/verify-email-bundle symfony/mailer

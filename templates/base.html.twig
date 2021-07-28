@@ -1,31 +1,140 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
 
-        <link rel="favicon" href="{{ asset('/icons/favicon.ico') }}" >
+    <link rel="favicon" href="{{ asset('/icons/favicon.ico') }}">
 
-        {# Run `composer require symfony/webpack-encore-bundle`
+    <style>
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #666;
+            border-radius: 50%;
+            font-family: sans-serif;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+    {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
-        {% block stylesheets %}
-            <!-- Bootstrap 4 -->
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-            {#{{ encore_entry_link_tags('app') }}#}
-        {% endblock %}
+    {% block stylesheets %}
+        <!-- Bootstrap 4 -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+              integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+              crossorigin="anonymous">
+        {# {{ encore_entry_link_tags('app') }} #}
+    {% endblock %}
 
-        {% block javascripts %}
-            {#{{ encore_entry_script_tags('app') }}#}
-        {% endblock %}
-    </head>
-    <body>
-        <div id="main-wrap" class="container-fluid">
-            {% block body %}{% endblock %}
+    {% block javascripts %}
+        {# {{ encore_entry_script_tags('app') }} #}
+    {% endblock %}
+</head>
+
+<body>
+{% if app.debug %}
+    <p>Request method: {{ app.request.method }} {{ app.request.getPathInfo() }}</p>
+    <p>Application Environment: {{ app.environment }}</p>
+
+    {# Send a dump of the resquest variable content to the debug toolbar #}
+    {% dump app.request %}
+{% endif %}
+
+<div id="main-wrap" class="container-fluid">
+    {% block body %}
+        <div id="sidebar">
+            {% block sidebar %}
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                    <a class="navbar-brand" href="{{ path('homepage') }}">Navbar</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{ path('homepage') }}">Home <span
+                                            class="sr-only">(current)</span></a>
+                            </li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('users') }}">Users</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('companies') }}">Companies</a>
+                                </li>
+                            {% endif %}
+                            {% if is_granted('ROLE_USER') %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('buildings') }}">Buildings</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        <form class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                        <ul class="navbar-nav ml-1">
+                            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                <li class="nav-item active">
+                                    <div class="avatar mr-1">
+                                        {{ app.user.firstName|first }}{{ app.user.lastName|first }}
+                                    </div>
+                                </li>
+                            {% endif %}
+
+                            <li class="nav-item active">
+                                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                                    <a class="nav-link btn btn-outline-warning" href="{{ path('app_logout') }}">Bye!</a>
+                                {% else %}
+                                    <a class="nav-link btn btn-outline-success"
+                                       href="{{ path('app_login') }}">Welcome</a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            {% endblock %}
         </div>
 
-        <!-- Bootstrap 4 -->
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    </body>
+        {# Read and display all flash messages #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-{{ label }} alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+
+        <div id="footer">
+            <hr/>
+            <a class="btn btn-primary" href="{{ app.request.headers.get('referer') }}">Back</a>
+        </div>
+    {% endblock %}
+</div>
+
+<!-- Bootstrap 4 -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
 </html>

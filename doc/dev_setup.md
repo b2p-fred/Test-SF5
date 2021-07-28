@@ -68,7 +68,7 @@ $ docker-compose logs
 # Stop the running services
 $ docker-compose down
  
-# and remove all the share volumes
+# and remove all the shared volumes
 $ docker-compose down --volumes
 
 ```

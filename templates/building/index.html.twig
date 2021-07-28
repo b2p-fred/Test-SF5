@@ -2,19 +2,13 @@
 
 {% block title %}Hello BuildingController!{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block content %}
+    <h1>Hello buildings!</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/src/Controller/BuildingController.php'|file_link(0) }}">src/Controller/BuildingController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/templates/building/index.html.twig'|file_link(0) }}">templates/building/index.html.twig</a></code></li>
-    </ul>
-</div>
+    {# List of all the items #}
+    {% for item in items %}
+        <ul>
+            <li><a href="{{ path('building_show', {"id": item.id}) }}">{{ item.name }}</a></li>
+        </ul>
+    {% endfor %}
 {% endblock %}

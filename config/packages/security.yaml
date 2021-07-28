@@ -2,19 +2,38 @@ security:
     # https://symfony.com/doc/current/security/experimental_authenticators.html
     enable_authenticator_manager: true
 
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: [ ROLE_USER, ROLE_ADMIN ]
+
     password_hashers:
         App\Entity\User:
             algorithm: auto
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
+        # used to reload user from session & other features (e.g., switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: email
+    #                property: apiToken
 
     firewalls:
+        #        api_login:
+        #            pattern: ^/api/login
+        #            stateless: true
+        #            json_login:
+        #                check_path: /api/login_check
+        #                success_handler: lexik_jwt_authentication.handler.authentication_success
+        #                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        #
+        #
+        #        api:
+        #            pattern:   ^/api
+        #            stateless: true
+        #            jwt: ~
+
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
@@ -23,18 +42,9 @@ security:
             lazy: true
             provider: app_user_provider
 
-#            custom_authenticators:
-#                - App\Security\ApiKeyAuthenticator
-
-            form_login:
-                login_path: login
-                check_path: login
-
-                # CSRF protection
-#                csrf_token_generator: security.csrf.token_manager
-
-            # configure the form authentication as the entry point for unauthenticated users
-            entry_point: form_login
+            custom_authenticator: App\Security\LoginFormAuthenticator
+            #            custom_authenticators:
+            #                - App\Security\ApiKeyAuthenticator
 
             # configure the maximum login attempts in a custom period of time
             login_throttling:
@@ -42,7 +52,7 @@ security:
                 interval: '15 minutes'
 
             logout:
-                path: logout
+                path: /logout
                 target: /
 
             # activate different ways to authenticate
@@ -54,13 +64,16 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        #        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+
         - { path: ^/profile, roles: ROLE_USER }
 
         # require ROLE_ADMIN for /admin*
         - { path: '^/admin', roles: ROLE_ADMIN }
 
         # OR require ROLE_ADMIN or IS_AUTHENTICATED_FULLY for /admin*
-        - { path: '^/admin', roles: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }
+        - { path: '^/admin', roles: [ IS_AUTHENTICATED_FULLY, ROLE_ADMIN ] }
 
         # the 'path' value can be any valid regular expression
         # (this one will match URLs like /api/post/7298 and /api/comment/528491)
