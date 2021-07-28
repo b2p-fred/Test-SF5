@@ -4,24 +4,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
 
-    <link rel="favicon" href="{{ asset('/icons/favicon.ico') }}">
-
-    <style>
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background-color: #666;
-            border-radius: 50%;
-            font-family: sans-serif;
-            color: #fff;
-            font-weight: bold;
-            font-size: 16px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
+    <link rel="shortcut icon" href="{{ asset("icons/favicon.ico") }}">
 
     {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
@@ -30,6 +13,9 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
               integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
               crossorigin="anonymous">
+
+        <!-- Application CSS -->
+        <link rel="stylesheet" href="{{ asset("css/app.css") }}">
         {# {{ encore_entry_link_tags('app') }} #}
     {% endblock %}
 
