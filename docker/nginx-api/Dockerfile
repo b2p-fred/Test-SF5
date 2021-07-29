@@ -1,4 +1,5 @@
 ARG TAG_NGINX=1.20
+ARG VERSION=beta
 
 FROM nginx:${TAG_NGINX}
 

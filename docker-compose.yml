@@ -11,10 +11,6 @@ services:
     image: ${PROJECT:-test}_php:${PROJECT_VERSION:-0}
     container_name: ${PROJECT:-test}_php-fpm
     restart: unless-stopped
-#    ports:
-#      - "8000:8000"
-#    volumes:
-#      - ./:/var/www/:rw
     environment:
       - APP_USER=${APP_USER:-www-data}
       - APP_ENV=${APP_ENV:-dev}
@@ -35,10 +31,6 @@ services:
     image: ${PROJECT:-test}_api:${PROJECT_VERSION:-0}
     container_name: ${PROJECT:-test}_nginx_api
     restart: unless-stopped
-#    ports:
-#      - "8001:80"
-#    volumes:
-#      - ./:/var/www/:rw
     depends_on:
       - php-fpm
     networks:
@@ -55,10 +47,6 @@ services:
     labels:
       com.symfony.server.service-prefix: 'mariadb'
     restart: unless-stopped
-#    ports:
-#      - "3306:3306"
-#    volumes:
-#      - db-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD:-root}
       - MYSQL_DATABASE=${DATABASE_NAME:-db}
@@ -112,42 +100,37 @@ services:
   node:
     build:
       context: .
-      dockerfile: docker/nodejs/Dockerfile
+      dockerfile: docker/frontend/Dockerfile
       target: node
+      args:
+        - TAG_NODEJS=${TAG_NODEJS:-14}
+        - VERSION=${PROJECT_PWA_VERSION:-1}
     image: ${PROJECT:-test}_node:${PROJECT_VERSION:-0}
     container_name: ${PROJECT:-test}_nodejs
     restart: unless-stopped
-#    environment:
-#      - 'API_ENDPOINT=${API_ENDPOINT:-http://api-nginx:80}'
-#      - 'WS_ENDPOINT=${WS_ENDPOINT:-http://sigsrv-node:3000}'
-#      - 'BRANDING=${BRANDING:-default}'
-#      #           For testing only:
-#      - 'BROWSER_ENTRYPOINT=${API_ENTRYPOINT:-http://nginx}'
-#      - 'SELENIUM_CHROME_HOST=${SELENIUM_CHROME_HOST:-selenium-chrome}'
-#    ports:
-#      - "8002:8080"
-#    volumes:
-#      - ./:/srv/app/:rw
+    environment:
+      - "NODE_ENV=${NODE_ENV:-development}"
+      - "NODE_USER=${NODE_USER:-node}"
+    networks:
+      - dev
 
   # Front UI web server
   nginx-ui:
     build:
-      context: docker/nginx-ui
+      context: .
+      dockerfile: docker/frontend/Dockerfile
+      target: nginx
       args:
         - TAG_NGINX=${TAG_NGINX:-1.20}
         - VERSION=${PROJECT_PWA_VERSION:-1}
     image: ${PROJECT:-test}_pwa:${PROJECT_VERSION:-0}
     container_name: ${PROJECT:-test}_nginx_ui
     restart: unless-stopped
-#    ports:
-#      - "8003:80"
-#    volumes:
-#      - ./src_ui:/var/www/:rw
+    environment:
+      - "NODE_ENV=${NODE_ENV:-production}"
+      - "NODE_USER=${NODE_USER:-node}"
     networks:
       - dev
 
 networks:
   dev:
-
-volumes:
-  db-data:
