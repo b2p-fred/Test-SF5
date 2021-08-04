@@ -47,47 +47,22 @@ jobs:
       matrix:
         php-versions: ['7.4', '8.0']
     steps:
-#      # —— Check Elasticsearch 🔎 ——————————————————————————————————————————————
-#      - name: Check the Elasticsearch connection from runner host
-#        run: |
-#          curl -fsSL "http://localhost:$ES_HTTP_PORT"
-#          curl -fsSL "http://localhost:$ES_HTTP_PORT/_cluster/health?pretty"
-
-      # —— Setup Github actions 🐙 —————————————————————————————————————————————
+      # —— Setup Github actions —————————————————————————————————————————————
       # https://github.com/actions/checkout (official)
       - name: Checkout
         uses: actions/checkout@v2
 
-      # https://github.com/shivammathur/setup-php (community)
+      # —— Setup PHP & extensions ————————————————————————————————————————————
       - name: Setup PHP, extensions and composer with shivammathur/setup-php
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring, pdo
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, json
         env:
           update: true
 
       - name: Check PHP Version
         run: php -v
-
-#      # https://github.com/zhulik/redis-action (community)
-#      - name: Setup Redis with zhulik/redis-action
-#        uses: zhulik/redis-action@1.1.0
-#        with:
-#          redis version: '5'
-
-#      ## —— Yarn 🐱 ————————————————————————————————————————————————————————————
-#      - name: Yarn install
-#        uses: actions/setup-node@v2
-#        with:
-#          node-version: '12'
-#          registry-url: npm.fontawesome.com
-#      - run: yarn install
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
-
-#      - name: Yarn build
-#        run: yarn run encore production
 
       # —— Composer —————————————————————————————————————————————————————————
       - name: Validate composer.json and composer.lock
@@ -116,25 +91,25 @@ jobs:
           bin/console about
           bin/console strangebuzz:version
 
-      ## —— Coding standards ————————————————————————————————————————————————
+      # —— Coding standards —————————————————————————————————————————————————
       # Can't handle PHP8 for now
       - name: Coding standards checks (php_codesniffer + php-cs-fixer)
         run: make cs
         if: matrix.php-versions == '7.4'
 
-      ## —— Static analysis —————————————————————————————————————————————————
+      # —— Static analysis ——————————————————————————————————————————————————
       - name: Static analysis of PHP code (PHPStan)
         run: make static-analysis
         if: matrix.php-versions == '7.4'
 
-      ## —— MariaDB ———————————————————————————————————————————————————————————
+      # —— MariaDB ——————————————————————————————————————————————————————————
       - name: Start Maria DB
         uses: ankane/setup-mariadb@v1
         with:
           mariadb-version: 10.5
           database: test-db
 
-      ## —— Tests ———————————————————————————————————————————————————————————
+      # —— Tests ————————————————————————————————————————————————————————————
       - name: Load Doctrine fixtures and populate the Elasticsearch indexes
         run: |
           make load-fixtures
