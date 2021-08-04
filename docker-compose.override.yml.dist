@@ -7,14 +7,14 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./:/var/www/:rw
+      - ./:/var/www/
 
   # API web server
   nginx-api:
     ports:
       - "8001:80"
     volumes:
-      - ./:/var/www/:rw
+      - ./:/var/www/:ro
 
   # Application database
   mariadb:
@@ -39,6 +39,10 @@ services:
   # Front UI web server
   nginx-ui:
     ports:
-      - "8002:80"
-    volumes:
-      - ./src_ui:/var/www/:rw
+      - "9001:80"
+#    volumes:
+#      - ./my-web-front/dist/:/usr/share/nginx/html/:ro
+
+volumes:
+  db-data:
+  built-front:

@@ -97,16 +97,16 @@ services:
       - dev
 
   # Front UI build tools
-  node:
+  node-vuejs:
     build:
       context: .
-      dockerfile: docker/frontend/Dockerfile
+      dockerfile: docker/frontend-vuejs/Dockerfile
       target: node
       args:
         - TAG_NODEJS=${TAG_NODEJS:-14}
         - VERSION=${PROJECT_PWA_VERSION:-1}
-    image: ${PROJECT:-test}_node:${PROJECT_VERSION:-0}
-    container_name: ${PROJECT:-test}_nodejs
+    image: ${PROJECT:-test}_vuejs:${PROJECT_VERSION:-0}
+    container_name: ${PROJECT:-test}_vuejs
     restart: unless-stopped
     environment:
       - "NODE_ENV=${NODE_ENV:-development}"
@@ -114,11 +114,29 @@ services:
     networks:
       - dev
 
-  # Front UI web server
+  node-nuxtjs:
+    build:
+      context: .
+      dockerfile: docker/frontend-nuxtjs/Dockerfile
+      target: node
+      args:
+        - TAG_NODEJS=${TAG_NODEJS:-14}
+        - VERSION=${PROJECT_PWA_VERSION:-1}
+    image: ${PROJECT:-test}_nuxtjs:${PROJECT_VERSION:-0}
+    container_name: ${PROJECT:-test}_nuxtjs
+    restart: unless-stopped
+    environment:
+      - "NODE_ENV=${NODE_ENV:-development}"
+      - "NODE_USER=${NODE_USER:-node}"
+      - "HOST=0.0.0.0"
+    networks:
+      - dev
+
+  # Front UI web server (for the VueJS application)
   nginx-ui:
     build:
       context: .
-      dockerfile: docker/frontend/Dockerfile
+      dockerfile: docker/frontend-vuejs/Dockerfile
       target: nginx
       args:
         - TAG_NGINX=${TAG_NGINX:-1.20}
