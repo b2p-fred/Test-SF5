@@ -1,7 +1,6 @@
 {
     "name": "b2p/eprotocole",
     "description": "eProtocole",
-    "version": "dev-0",
     "keywords": ["b2p"],
     "homepage": "http://project.com",
     "readme": "./README.md",
@@ -39,7 +38,7 @@
         "php": ">=7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "composer/package-versions-deprecated": "1.11.99.2",
+        "composer/package-versions-deprecated": "1.11.99",
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.9",
