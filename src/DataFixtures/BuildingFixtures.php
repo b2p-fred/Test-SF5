@@ -11,7 +11,7 @@ class BuildingFixtures extends Fixture
     public const BUILDING_1_REFERENCE = 'building-1';
     public const BUILDING_2_REFERENCE = 'building-2';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $building = new Building();
         $building

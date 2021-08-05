@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Company
 {
     /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -18,11 +20,15 @@ class Company
     private $id;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @var Building|null
+     *
      * @ORM\ManyToOne(targetEntity=Building::class, inversedBy="companies")
      */
     private $building;

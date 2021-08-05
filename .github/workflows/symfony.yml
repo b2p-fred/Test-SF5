@@ -105,7 +105,7 @@ jobs:
 
       # —— Static analysis ——————————————————————————————————————————————————
       - name: Static analysis of PHP code (PHPStan)
-        run: composer stan
+        run: composer phpstan
         if: matrix.php-versions == '7.4'
 
       # —— MariaDB ——————————————————————————————————————————————————————————

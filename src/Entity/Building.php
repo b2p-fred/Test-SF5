@@ -13,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Building
 {
     /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -25,21 +27,29 @@ class Building
     private $name;
 
     /**
+     * @var string|null
+     *
      * @ORM\Column(type="string", length=512, nullable=true)
      */
     private $address;
 
     /**
+     * @var int|null
+     *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $zipcode;
 
     /**
+     * @var string|null
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
 
     /**
+     * @var Collection&iterable<Company>
+     *
      * @ORM\OneToMany(targetEntity=Company::class, mappedBy="building")
      */
     private $companies;
