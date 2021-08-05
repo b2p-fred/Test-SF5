@@ -95,9 +95,29 @@ Un article très intéressant [ici](https://nvie.com/posts/a-successful-git-bran
 ### PSR
 Les conventions de nommage et de codage définies par les spécifications PSR seront respectées par l’équipe de développement.
 Ces conventions décrivent comment nommer les fichiers et espaces de noms ainsi que l’ensemble des règles à appliquer pour écrire le code source PHP. Elles fournissent également des interfaces standards pour des fonctionnalités courantes fournies par les frameworks (Log, Cache…). Elles ont été définies et adoptées par les acteurs principaux de l’écosystème PHP (Symfony, Zend Framework, Doctrine, Drupal, PEAR, eZPublish, phpBB, Joomla, Laravel, etc).
-Le respect de ces conventions peut ensuite être automatiquement vérifié (et corrigé) grâce à PHP CS Fixer et PHP Code Sniffer.
 
 TODO: choisir + ADR
+
+### PHP_CodeSniffer
+[PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) est un outil d'analyse du respect de règles de codage. Il permet de vérifier le respect des conventions de codage.
+
+```shell
+$ composer require --dev squizlabs/php_codesniffer
+
+# First configuration and execution
+$ vendor/bin/phpcs
+```
+
+
+### PHPStan
+[PHPStan](https://github.com/phpstan/phpstan) est un outil d'analyse statique de code source.
+
+```shell
+$ composer require --dev phpstan/phpstan
+
+# First configuration and execution
+$ vendor/bin/phpstan analyse src tests
+```
 
 ### Composer
 Composer sera utilisé pour la gestion des dépendances du projet.
@@ -120,7 +140,7 @@ TODO: choisir + ADR
 
 Le but de la code review n'est pas de juger de la qualité intrinsèque du code (c'est le boulot de SonarQube ou d'outils d'analyse de code) mais de sa comprehension et de sa maintenabilité.
 
-Il faut se poser plusieurs questions: 
+Il faut se poser plusieurs questions : 
 - est-ce que je comprends ce que la Merge Request apporte dans l'application ? Si je reviens sur cette MR dans quelques mois, ce sera toujours aussi clair ? Si non, ça manque un peu de doc ...
 
 - est-ce que je comprends ce qui est ajouté / modifié dans le code et est-ce que je serai capable de faire un fix dans cette fonctionnalité en cas de bug ?
@@ -146,7 +166,7 @@ On fera exception à ces règles d'acceptation pour des MR qui ne concernent que
 
 # Serveur de test
 
-L'idée est de pouvoir disposer à tout moment d'une version de l'application qui puisse permettre de tester les dernières focntionnalités 
+L'idée est de pouvoir disposer à tout moment d'une version de l'application qui puisse permettre de tester les dernières fonctionnalités 
 
 TODO à voir ...
 

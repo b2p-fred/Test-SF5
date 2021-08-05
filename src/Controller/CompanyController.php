@@ -38,7 +38,7 @@ class CompanyController extends AbstractController
         // Minimum validation for the company attributes
         $errors = $validator->validate($company);
         if (count($errors) > 0) {
-            return new Response((string) $errors, 400);
+            return new Response((string)$errors, 400);
         }
 
         // tell Doctrine you want to (eventually) save the Company (no queries yet)
@@ -47,7 +47,7 @@ class CompanyController extends AbstractController
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
-        return new Response('Saved new company with id '.$company->getId());
+        return new Response('Saved new company with id ' . $company->getId());
     }
 
     /**
@@ -62,6 +62,6 @@ class CompanyController extends AbstractController
 
         // or render a template
         // in the template, print things with {{ product.name }}
-         return $this->render('company/show.html.twig', ['item' => $company]);
+        return $this->render('company/show.html.twig', ['item' => $company]);
     }
 }

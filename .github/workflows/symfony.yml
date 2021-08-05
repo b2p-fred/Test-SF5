@@ -85,7 +85,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --prefer-dist
+        run: composer install --no-progress
 
       # —— Symfony ——————————————————————————————————————————————————————————
       - name: Check Symfony requirements & security
@@ -116,10 +116,10 @@ jobs:
           database: test-db
 
       # —— Tests ————————————————————————————————————————————————————————————
-      - name: Load Doctrine fixtures and populate the Elasticsearch indexes
+      - name: Load Doctrine fixtures
         run: |
-          make load-fixtures
-          make populate
+          symfony console doctrine:database:create
+          symfony console doctrine:migrations:migrate
 
       - name: Run functionnal and unit tests
         run: |

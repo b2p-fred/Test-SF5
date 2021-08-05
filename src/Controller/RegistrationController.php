@@ -46,7 +46,9 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
                 (new TemplatedEmail())
                     ->from(new Address('mailer@fred-domain.com', 'Fred mail Bot'))
                     ->to($user->getEmail())
@@ -55,7 +57,7 @@ class RegistrationController extends AbstractController
             );
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('company');
+            return $this->redirectToRoute('/');
         }
 
         return $this->render('registration/register.html.twig', [
