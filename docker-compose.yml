@@ -96,23 +96,23 @@ services:
     networks:
       - dev
 
-  # Front UI build tools
-  node-vuejs:
-    build:
-      context: .
-      dockerfile: docker/frontend-vuejs/Dockerfile
-      target: node
-      args:
-        - TAG_NODEJS=${TAG_NODEJS:-14}
-        - VERSION=${PROJECT_PWA_VERSION:-1}
-    image: ${PROJECT:-test}_vuejs:${PROJECT_VERSION:-0}
-    container_name: ${PROJECT:-test}_vuejs
-    restart: unless-stopped
-    environment:
-      - "NODE_ENV=${NODE_ENV:-development}"
-      - "NODE_USER=${NODE_USER:-node}"
-    networks:
-      - dev
+#  # Front UI build tools
+#  node-vuejs:
+#    build:
+#      context: .
+#      dockerfile: docker/frontend-vuejs/Dockerfile
+#      target: node
+#      args:
+#        - TAG_NODEJS=${TAG_NODEJS:-14}
+#        - VERSION=${PROJECT_PWA_VERSION:-1}
+#    image: ${PROJECT:-test}_vuejs:${PROJECT_VERSION:-0}
+#    container_name: ${PROJECT:-test}_vuejs
+#    restart: unless-stopped
+#    environment:
+#      - "NODE_ENV=${NODE_ENV:-development}"
+#      - "NODE_USER=${NODE_USER:-node}"
+#    networks:
+#      - dev
 
   node-nuxtjs:
     build:

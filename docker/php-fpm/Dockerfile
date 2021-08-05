@@ -20,8 +20,8 @@ RUN apt-get update \
         curl debconf apt-transport-https apt-utils \
         build-essential locales acl \
     && docker-php-ext-install \
+        mbstring \
         pdo_mysql \
-        soap \
         zip \
         opcache \
         gd \
