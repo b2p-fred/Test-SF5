@@ -59,7 +59,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, json
-          tools: composer:2.1, phpcs, phpstan, phpunit, behat, symfony
+          tools: composer:2.1, phpcs3.6, phpstan0.12, phpunit:9.5, behat:3.8, symfony:4.25
           coverage: pcov
           ini-values: date.timezone=UTC
         env:
@@ -85,7 +85,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --prefere-dist
+        run: composer install --prefer-dist
 
       # —— Symfony ——————————————————————————————————————————————————————————
       - name: Check Symfony requirements & security
