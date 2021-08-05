@@ -55,14 +55,19 @@ jobs:
       # —— Setup PHP & extensions ————————————————————————————————————————————
       - name: Setup PHP, extensions and composer with shivammathur/setup-php
         uses: shivammathur/setup-php@v2
+        id: setup-php
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, json
+          tools: composer:2.1, phpcs, phpstan, phpunit, behat, symfony:5.3
+          coverage: pcov
+          ini-values: date.timezone=UTC
         env:
           update: true
+          fail-fast: true
 
-      - name: Check PHP Version
-        run: php -v
+      - name: Print PHP version
+        run: echo ${{ steps.setup-php.outputs.php-version }}
 
       # —— Composer —————————————————————————————————————————————————————————
       - name: Validate composer.json and composer.lock
@@ -80,7 +85,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install
+        run: composer install --prefere-dist
 
       # —— Symfony ——————————————————————————————————————————————————————————
       - name: Check Symfony requirements & security
