@@ -17,17 +17,17 @@ jobs:
     name: Symfony 5 (PHP ${{ matrix.php-versions }})
     # https://hub.docker.com/_/ubuntu/
     runs-on: ubuntu-20.04
-#    services:
-#      # MariaDB
-#      mariadb:
-#        image: mariadb:10.5.11
-#        env:
-#          MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD:-root}
-#          MYSQL_DATABASE: ${DATABASE_NAME:-db}
-#          MYSQL_USER: ${DATABASE_USER:-db}
-#          MYSQL_PASSWORD: ${DATABASE_PASSWORD:-db}
-#        ports:
-#          - 3306:3306
+    services:
+      # MariaDB
+      mariadb:
+        image: mariadb:10.5.11
+        env:
+          MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD:-root}
+          MYSQL_DATABASE: ${DATABASE_NAME:-db}
+          MYSQL_USER: ${DATABASE_USER:-db}
+          MYSQL_PASSWORD: ${DATABASE_PASSWORD:-db}
+        ports:
+          - 3306:3306
 #      # Mysql
 #      mysql:
 #        image: mysql:5.7
@@ -59,7 +59,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, json
-          tools: composer:2.1, phpcs, phpstan, phpunit, behat, symfony:5.3
+          tools: composer:2.1, phpcs, phpstan, phpunit, behat, symfony
           coverage: pcov
           ini-values: date.timezone=UTC
         env:
