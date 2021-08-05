@@ -116,6 +116,8 @@ jobs:
 
       # —— Tests ————————————————————————————————————————————————————————————
       - name: Load Doctrine fixtures
+        env:
+          DATABASE_URL: mysql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@${{ env.DATABASE_HOST }}:${{ env.DATABASE_PRT }}/${{ env.DATABASE_NAME }}?serverVersion=mariadb-10.5.11
         run: |
           cp .env.dist .env
           symfony console doctrine:database:create
