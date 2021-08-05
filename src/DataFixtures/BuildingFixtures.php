@@ -15,19 +15,19 @@ class BuildingFixtures extends Fixture
     {
         $building = new Building();
         $building
-            ->setName("Building 1")
-            ->setAddress("Rue des fleurs")
-            ->setZipcode("26500")
-            ->setCity("Bourg-lès-Valence");
+            ->setName('Building 1')
+            ->setAddress('Rue des fleurs')
+            ->setZipcode(26500)
+            ->setCity('Bourg-lès-Valence');
         $manager->persist($building);
         $this->addReference(self::BUILDING_1_REFERENCE, $building);
 
         $building = new Building();
         $building
-            ->setName("Building 2")
-            ->setAddress("Rue des oiseaux")
-            ->setZipcode("26000")
-            ->setCity("Valence");
+            ->setName('Building 2')
+            ->setAddress('Rue des oiseaux')
+            ->setZipcode(26000)
+            ->setCity('Valence');
         $manager->persist($building);
         $this->addReference(self::BUILDING_2_REFERENCE, $building);
 

@@ -25,7 +25,7 @@ class BuildingController extends AbstractController
     /**
      * @Route("/admin/building/{id}", name="building_show")
      *
-     * Thanks to the ExtraBundle, no need to get a Repository and find the building in the repository -)
+     * Thanks to the ExtraBundle, no need to get a Repository and find the building in the repository :)
      * See https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html
      */
     public function show(Building $building): Response

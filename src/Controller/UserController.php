@@ -25,7 +25,7 @@ class UserController extends AbstractController
     /**
      * @Route("/admin/user/{id}", name="user_show")
      *
-     * Thanks to the ExtraBundle, no need to get a Repository and find the User in the repository -)
+     * Thanks to the ExtraBundle, no need to get a Repository and find the User in the repository :)
      * See https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html
      */
     public function show(User $user): Response

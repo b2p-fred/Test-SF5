@@ -94,7 +94,10 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "lint": "php-cs-fixer --dry-run fix",
+        "lint-fix": "php-cs-fixer fix",
+        "stan": "phpstan analyse -c phpstan.neon src tests --level 6"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -107,8 +110,11 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^0.12.94",
-        "squizlabs/php_codesniffer": "^3.6",
+        "phpstan/phpstan-doctrine": "^0.12.42",
+        "phpstan/phpstan-symfony": "^0.12.41",
         "symfony/debug-bundle": "^5.3",
         "symfony/maker-bundle": "^1.33",
         "symfony/stopwatch": "^5.3",

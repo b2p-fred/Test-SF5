@@ -20,12 +20,11 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
+    use TargetPathTrait;
     /**
      * @var LoggerInterface
      */
     private $logger;
-
-    use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
 

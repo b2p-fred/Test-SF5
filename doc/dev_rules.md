@@ -98,25 +98,55 @@ Ces conventions décrivent comment nommer les fichiers et espaces de noms ainsi 
 
 TODO: choisir + ADR
 
-### PHP_CodeSniffer
-[PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) est un outil d'analyse du respect de règles de codage. Il permet de vérifier le respect des conventions de codage.
+### PHP-CS-Fixer
+[PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) est un outil d'analyse du respect de règles de codage. Il permet de vérifier le respect des conventions de codage.
+
+**Note** on va préférer cet outil au traditionnel PHPCS pour sa logique de fix et de "un outil pour un langage" ... et on utilisera un linter JS our le javascript, un linter CSS pour le CSS -)
 
 ```shell
-$ composer require --dev squizlabs/php_codesniffer
+$ composer require --dev friendsofphp/php-cs-fixer
 
-# First configuration and execution
-$ vendor/bin/phpcs
+# Execution (lint mode, do not fix the errors)
+$ vendor/bin/php-cs-fixer --dry-run fix
+
+# Execution (fix the errors)
+$ vendor/bin/php-cs-fixer fix
+
+# Configuration in this file: .php-cs-fixer.dist.php
+
+# Update the composer.json:
+#    "scripts": {
+#        "lint": "php-cs-fixer --dry-run fix",
+#        "lint-fix": "php-cs-fixer fix",
+#    },
+# to run:
+$ composer lint
+$ composer lint-fix
 ```
-
 
 ### PHPStan
 [PHPStan](https://github.com/phpstan/phpstan) est un outil d'analyse statique de code source.
 
-```shell
-$ composer require --dev phpstan/phpstan
+Un bon [tutoriel ici](https://blog.martinhujer.cz/how-to-configure-phpstan-for-symfony-applications/), sans oublier la [doc officielle](https://phpstan.org/user-guide/getting-started) et les docs des extensions [Doctrine](https://github.com/phpstan/phpstan-doctrine) et [Symfony](https://github.com/phpstan/phpstan-symfony).
 
-# First configuration and execution
+```shell
+# Install the application and a Symfony extension
+$ composer require --dev phpstan/phpstan
+$ composer require --dev phpstan/extension-installer
+$ composer require --dev phpstan/phpstan-doctrine
+$ composer require --dev phpstan/phpstan-symfony
+
+# Default source code analysis (the loosest analysis...)
 $ vendor/bin/phpstan analyse src tests
+# Levels (from 0 to 8)
+$ vendor/bin/phpstan --level 1 analyse src tests
+
+# Update the composer.json:
+#    "scripts": {
+#        "phpstan": "phpstan analyse -c phpstan.neon src tests --level 5 --no-progress"
+#    },
+# to run:
+$ composer phpstan
 ```
 
 ### Composer

@@ -5,6 +5,7 @@ FROM php:${TAG_PHP}
 EXPOSE 9000/tcp
 
 ENV \
+    PHP_USER=www-data \
     COMPOSER_ALLOW_SUPERUSER=1 \
     APP_ENV=prod \
     APP_USER=www-data
@@ -30,7 +31,7 @@ RUN apt-get update \
     #
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
-# Intentionnaly install a specific version !
+# Intentionally install a specific version !
     && php composer-setup.php --version=2.1.3 \
 # Uncomment to use the last stable version
 #    && php composer-setup.php \
@@ -55,17 +56,15 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY build/symfony.ini "$PHP_INI_DIR/conf.d/symfony.ini"
 
 # Application directory
-RUN usermod -u 1000 www-data
-RUN groupmod -g 1000 www-data
-RUN usermod -a -G www-data root
-
-RUN mkdir -p /var/www
-RUN chown -R www-data:www-data /var/www
-RUN mkdir -p /var/www/.composer
-RUN chown -R www-data:www-data /var/www/.composer
+RUN usermod -u 1000 $PHP_USER &&\
+    groupmod -g 1000 $PHP_USER &&\
+    usermod -a -G $PHP_USER root &&\
+    mkdir -p /var/www &&\
+    mkdir -p /var/www/.composer &&\
+    chown -R "$PHP_USER:$PHP_USER" /var/www
 
 WORKDIR /var/www/
 
-USER www-data
+USER $PHP_USER
 
 CMD composer install ; php-fpm --daemonize ; sleep 1 ; rm .symfony/var/*.pid ; symfony server:start

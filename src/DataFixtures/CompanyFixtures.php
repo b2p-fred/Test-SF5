@@ -12,7 +12,7 @@ class CompanyFixtures extends Fixture
     {
         $company = new Company();
         $company
-            ->setName("Acme 1")
+            ->setName('Acme 1')
             ->setBuilding($this->getReference(BuildingFixtures::BUILDING_1_REFERENCE));
         $manager->persist($company);
 
