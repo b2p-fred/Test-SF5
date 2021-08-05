@@ -12,40 +12,37 @@ on:
       
 env:
   ES_HTTP_PORT: 9209
+  DATABASE_HOST: mariadb
+  DATABASE_PORT: 3306
+  DATABASE_NAME: sf5
+  DATABASE_USER: sf5
+  DATABASE_PASSWORD: sf5
+  DATABASE_ROOT_PASSWORD: secret
+
 jobs:
   symfony:
     name: Symfony 5 (PHP ${{ matrix.php-versions }})
     # https://hub.docker.com/_/ubuntu/
     runs-on: ubuntu-20.04
+
     services:
       # MariaDB
       mariadb:
         image: mariadb:10.5.11
-        env:
-          MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD:-root}
-          MYSQL_DATABASE: ${DATABASE_NAME:-db}
-          MYSQL_USER: ${DATABASE_USER:-db}
-          MYSQL_PASSWORD: ${DATABASE_PASSWORD:-db}
         ports:
           - 3306:3306
-#      # Mysql
-#      mysql:
-#        image: mysql:5.7
-#        env:
-#          MYSQL_ROOT_PASSWORD: root
-#        ports:
-#          - 3306:3306
-#        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-#      # https://hub.docker.com/_/elasticsearch/
-#      elasticsearch:
-#        image: elasticsearch:6.8.10
-#        ports:
-#          - 9209:9200
-#        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ env.DATABASE_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ env.DATABASE_NAME }}
+          MYSQL_USER: ${{ env.DATABASE_USER }}
+          MYSQL_PASSWORD: ${{ env.DATABASE_PASSWORD }}
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
     strategy:
       fail-fast: true
       matrix:
         php-versions: ['7.4', '8.0']
+
     steps:
       # —— Setup Github actions —————————————————————————————————————————————
       # https://github.com/actions/checkout (official)
@@ -109,21 +106,13 @@ jobs:
         if: matrix.php-versions == '7.4'
 
 #      # —— MariaDB ——————————————————————————————————————————————————————————
-#      - name: Shutdown Ubuntu MySQL (SUDO)
-#        run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please do not remove it
-#
-#      - name: Start Maria DB
-#        uses: getong/mariadb-action@v1.1
-#        with:
-##          host port: 3800 # Optional, default value is 3306. The port of host
-##          container port: 3307 # Optional, default value is 3306. The port of container
-##          character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
-##          collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
-#          mariadb version: '10.5' # Optional, default value is "latest". The version of the MariaDB
-#          mysql database: 'ci-test' # Optional, default value is "test". The specified database which will be created
-##          mysql root password: ${{ secrets.RootPassword }} # Required if "mysql user" is empty, default is empty. The root superuser password
-#          mysql user: 'ci-test'
-#          mysql password: 'ci-test'
+      - name: Verify MariaDB connection
+        env:
+          PORT: ${{ job.services.mariadb.ports[3306] }}
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+            sleep 1
+          done
 
       # —— Tests ————————————————————————————————————————————————————————————
       - name: Load Doctrine fixtures
