@@ -50,8 +50,8 @@ jobs:
 
       # —— Setup PHP & extensions ————————————————————————————————————————————
       - name: Setup PHP, extensions and composer with shivammathur/setup-php
-        uses: shivammathur/setup-php@v2
         id: setup-php
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, json
@@ -89,9 +89,10 @@ jobs:
           symfony check:requirements
           symfony check:security
 
-      - name: Check the Symfony console
+      - name: Check the Symfony console and dump environment variables
         run: |
           symfony console about
+          symfony var:export --multiline
 
       # —— Coding standards —————————————————————————————————————————————————
       # Can't handle PHP8 for now
@@ -104,27 +105,38 @@ jobs:
         run: composer phpstan
         if: matrix.php-versions == '7.4'
 
-      # —— MariaDB ——————————————————————————————————————————————————————————
-      - name: Verify MariaDB connection
-        env:
-          PORT: ${{ job.services.mariadb.ports[3306] }}
-          DATABASE_URL: mysql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@${{ env.DATABASE_HOST }}:${{ env.DATABASE_PORT }}/${{ env.DATABASE_NAME }}?serverVersion=mariadb-10.5.11
-
-        run: |
-          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
-            sleep 1
-          done
+#      # —— MariaDB ——————————————————————————————————————————————————————————
+#      - name: Verify MariaDB connection
+#        env:
+#          PORT: ${{ job.services.mariadb.ports[3306] }}
+#          DATABASE_URL: mysql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@${{ env.DATABASE_HOST }}:${{ env.DATABASE_PORT }}/${{ env.DATABASE_NAME }}?serverVersion=mariadb-10.5.11
+#
+#        run: |
+#          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+#            sleep 1
+#          done
 
       # —— Tests ————————————————————————————————————————————————————————————
-      - name: Load Doctrine fixtures
-        env:
-          DATABASE_URL2: mysql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@${{ env.DATABASE_HOST }}:${{ env.DATABASE_PORT }}/${{ env.DATABASE_NAME }}?serverVersion=mariadb-10.5.11
+      - name: Prepare the application
         run: |
-          cp .env.dist .env
+            # Build the environment configuration
+            php -r "file_exists('.env') || copy('.env.dist', '.env');"
+            printenv
+
+      - name: Create the database and load some test fixtures
+        env:
+          DATABASE_HOST: 127.0.0.1
+        run: |
           symfony console doctrine:database:create
-          symfony console doctrine:migrations:migrate
+          symfony console doctrine:migrations:migrate --no-interaction
+          symfony console doctrine:fixtures:load --no-interaction
 
       - name: Run functionnal and unit tests
         run: |
-          cp phpunit.xml.ci phpunit.xml
-          ./vendor/bin/phpunit --testsuite='main'
+          ./vendor/bin/phpunit --testsuite='Unit'
+
+      - name: Drop the database
+        env:
+          DATABASE_HOST: 127.0.0.1
+        run: |
+          symfony console doctrine:database:drop --force
