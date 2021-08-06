@@ -17,7 +17,6 @@ env:
   DATABASE_USER: sf5
   DATABASE_PASSWORD: sf5
   DATABASE_ROOT_PASSWORD: secret
-  DATABASE_URL: mysql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@${{ env.DATABASE_HOST }}:${{ env.DATABASE_PORT }}/${{ env.DATABASE_NAME }}?serverVersion=mariadb-10.5.11
 
 jobs:
   symfony:
@@ -105,10 +104,12 @@ jobs:
         run: composer phpstan
         if: matrix.php-versions == '7.4'
 
-#      # —— MariaDB ——————————————————————————————————————————————————————————
+      # —— MariaDB ——————————————————————————————————————————————————————————
       - name: Verify MariaDB connection
         env:
           PORT: ${{ job.services.mariadb.ports[3306] }}
+          DATABASE_URL: mysql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@${{ env.DATABASE_HOST }}:${{ env.DATABASE_PORT }}/${{ env.DATABASE_NAME }}?serverVersion=mariadb-10.5.11
+
         run: |
           while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
             sleep 1
