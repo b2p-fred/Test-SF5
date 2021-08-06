@@ -105,16 +105,18 @@ jobs:
         run: composer phpstan
         if: matrix.php-versions == '7.4'
 
-#      # —— MariaDB ——————————————————————————————————————————————————————————
-#      - name: Verify MariaDB connection
-#        env:
-#          PORT: ${{ job.services.mariadb.ports[3306] }}
-#          DATABASE_URL: mysql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@${{ env.DATABASE_HOST }}:${{ env.DATABASE_PORT }}/${{ env.DATABASE_NAME }}?serverVersion=mariadb-10.5.11
-#
-#        run: |
-#          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
-#            sleep 1
-#          done
+      # —— MariaDB ——————————————————————————————————————————————————————————
+      - name: Verify MariaDB connection
+        # Do not run this locally... it fails!
+        if: ${{ !env.ACT }}
+        env:
+          PORT: ${{ job.services.mariadb.ports[3306] }}
+          DATABASE_URL: mysql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@${{ env.DATABASE_HOST }}:${{ env.DATABASE_PORT }}/${{ env.DATABASE_NAME }}?serverVersion=mariadb-10.5.11
+
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+            sleep 1
+          done
 
       # —— Tests ————————————————————————————————————————————————————————————
       - name: Prepare the application
@@ -123,11 +125,17 @@ jobs:
             php -r "file_exists('.env') || copy('.env.dist', '.env');"
             printenv
 
-      - name: Create the database and load some test fixtures
+      - name: Drop the database (but do not fail)
+        continue-on-error: true
         env:
           DATABASE_HOST: 127.0.0.1
         run: |
           symfony console doctrine:database:drop --force
+
+      - name: Create the database and load some test fixtures
+        env:
+          DATABASE_HOST: 127.0.0.1
+        run: |
           symfony console doctrine:database:create
           symfony console doctrine:migrations:migrate --no-interaction
           symfony console doctrine:fixtures:load --no-interaction
