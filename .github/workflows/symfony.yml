@@ -127,6 +127,7 @@ jobs:
         env:
           DATABASE_HOST: 127.0.0.1
         run: |
+          symfony console doctrine:database:drop --force
           symfony console doctrine:database:create
           symfony console doctrine:migrations:migrate --no-interaction
           symfony console doctrine:fixtures:load --no-interaction
