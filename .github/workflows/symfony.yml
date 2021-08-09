@@ -160,9 +160,10 @@ jobs:
       - name: Upload unit tests code coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-#          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./artifacts/coverage-unit.xml
-          flags: unit-tests
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directories: ./artifacts
+          files: ./coverage-utils.xml,./coverage-unit.xml,./coverage-app.xml
+#          flags: unit-tests
           env_vars: OS,PHP
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)
