@@ -95,6 +95,15 @@ Grâce à [nektos/act](https://github.com/nektos/act) on peut tester en local le
 # Installation 
 $ curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
 
-# Lancement 
+# Lancement en local 
 $ act -P ubuntu-20.04=shivammathur/node:2004
+```
+
+La configuration des événements (section `on:`) fait que chaque PR vers `develop` ou mise à jour de la branche `develop` ou `master` déclenche l'exécution des actions définies dans le fichier.
+
+Ajout d'un badge dans un fichier Markdown :
+```
+
+![Symfony workflow](https://github.com/b2p-fred/Test-SF5/actions/workflows/symfony.yml/badge.svg)
+
 ```

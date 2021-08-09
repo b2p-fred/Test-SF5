@@ -29,8 +29,13 @@
     <p>Request method: {{ app.request.method }} {{ app.request.getPathInfo() }}</p>
     <p>Application Environment: {{ app.environment }}</p>
 
-    {# Send a dump of the resquest variable content to the debug toolbar #}
-    {% dump app.request %}
+    {# fixme: breaks the phpunit execution! #}
+{#    {% if app.environment == 'dev' %}#}
+{#        #}{# Send a dump of the request variable content to the debug toolbar #}
+{#        <pre>#}
+{#        {% dump app.request %}#}
+{#        </pre>#}
+{#    {% endif %}#}
 {% endif %}
 
 <div id="main-wrap" class="container-fluid">

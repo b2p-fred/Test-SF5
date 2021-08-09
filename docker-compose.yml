@@ -15,7 +15,7 @@ services:
       - APP_USER=${APP_USER:-www-data}
       - APP_ENV=${APP_ENV:-dev}
       - APP_SECRET=${APP_SECRET:-I_can_read_it_in_your_mind}
-      - DATABASE_URL=mysql://${DATABASE_USER:-db}:${DATABASE_PASSWORD:-db}@${DATABASE_HOST:-mariadb}:${DATABASE_PORT:-3306}/${DATABASE_NAME:-db}?serverVersion=mariadb-${TAG_MARIADB:-10.5.11}
+#      - DATABASE_URL=mysql://${DATABASE_USER:-db}:${DATABASE_PASSWORD:-db}@${DATABASE_HOST:-mariadb}:${DATABASE_PORT:-3306}/${DATABASE_NAME:-db}?serverVersion=mariadb-${TAG_MARIADB:-10.5.11}
     depends_on:
       - mariadb
     networks:
@@ -48,10 +48,12 @@ services:
       com.symfony.server.service-prefix: 'mariadb'
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD:-root}
-      - MYSQL_DATABASE=${DATABASE_NAME:-db}
-      - MYSQL_USER=${DATABASE_USER:-db}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD:-db}
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=${DATABASE_ALLOW_EMPTY_ROOT_PASSWORD:-false}
+      - MARIADB_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD:-}
+      - MARIADB_DATABASE=${DATABASE_NAME:-db}
+      - MARIADB_USER=${DATABASE_USER:-db}
+      - MARIADB_PASSWORD=${DATABASE_PASSWORD:-db}
+      - MARIADB_EXTRA_DATABASES=${MARIADB_EXTRA_DATABASES:-db_test}
     networks:
       - dev
 
@@ -67,14 +69,12 @@ services:
     restart: unless-stopped
     depends_on:
       - mariadb
-#    ports:
-#      - "8080:80"
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=${DATABASE_HOST:-mariadb}
       - PMA_PORT=${DATABASE_PORT:-3306}
       - PMA_USER=root
-      - PMA_PASSWORD=${DATABASE_ROOT_PASSWORD:-root}
+      - PMA_PASSWORD=${DATABASE_ROOT_PASSWORD:-}
     networks:
       - dev
 
@@ -90,30 +90,10 @@ services:
     labels:
       com.symfony.server.service-prefix: 'MAILER'
     restart: unless-stopped
-#    ports:
-#      - "1025:1025"
-#      - "1080:1080"
     networks:
       - dev
 
-#  # Front UI build tools
-#  node-vuejs:
-#    build:
-#      context: .
-#      dockerfile: docker/frontend-vuejs/Dockerfile
-#      target: node
-#      args:
-#        - TAG_NODEJS=${TAG_NODEJS:-14}
-#        - VERSION=${PROJECT_PWA_VERSION:-1}
-#    image: ${PROJECT:-test}_vuejs:${PROJECT_VERSION:-0}
-#    container_name: ${PROJECT:-test}_vuejs
-#    restart: unless-stopped
-#    environment:
-#      - "NODE_ENV=${NODE_ENV:-development}"
-#      - "NODE_USER=${NODE_USER:-node}"
-#    networks:
-#      - dev
-
+  # Front UI build tools
   node-nuxtjs:
     build:
       context: .
@@ -132,11 +112,11 @@ services:
     networks:
       - dev
 
-  # Front UI web server (for the VueJS application)
+  # Front UI web server (for the NuxtJs application)
   nginx-ui:
     build:
       context: .
-      dockerfile: docker/frontend-vuejs/Dockerfile
+      dockerfile: docker/frontend-nuxtjs/Dockerfile
       target: nginx
       args:
         - TAG_NGINX=${TAG_NGINX:-1.20}

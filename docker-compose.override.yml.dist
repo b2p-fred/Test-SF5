@@ -37,20 +37,12 @@ services:
       - "1080:1080"
 
   # Front UI build tools and development server
-  # VueJS application
-  node-vuejs:
-    ports:
-      - "4000:8080"
-      - "4001:8000"
-    volumes:
-      - ./my-web-front:/app/:rw
-
   # NuxtJS application
   node-nuxtjs:
     ports:
       - "3000:3000"
     volumes:
-      - ./my-nuxt-front:/app/:rw
+      - ./my-nuxt-front:/app/
 
   # Front UI production web server
   nginx-ui:
@@ -61,4 +53,3 @@ services:
 
 volumes:
   db-data:
-  built-front:
