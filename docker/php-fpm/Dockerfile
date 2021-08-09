@@ -10,6 +10,9 @@ ENV \
     APP_ENV=prod \
     APP_USER=www-data
 
+    #
+    # Base tools, php and extensions
+    #
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         git unzip \
@@ -17,34 +20,35 @@ RUN apt-get update \
         libxml2-dev \
         libpng-dev \
         libzip-dev \
+        libonig-dev \
         curl debconf apt-transport-https apt-utils \
         build-essential locales acl \
     && docker-php-ext-install \
-        mbstring \
-        pdo_mysql \
-        zip \
-        opcache \
+        bcmath \
         gd \
-        intl
+        intl \
+        mbstring \
+        opcache \
+        pdo_mysql \
+        zip
+
+RUN pecl install pcov && \
+    docker-php-ext-enable pcov
     #
     # composer
     #
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
-# Intentionally install a specific version !
+    # Intentionally install a specific version !
     && php composer-setup.php --version=2.1.3 \
-# Uncomment to use the last stable version
-#    && php composer-setup.php \
+    # Uncomment to use the last stable version
+    #    && php composer-setup.php \
     && php -r "unlink('composer-setup.php');" \
     && mv composer.phar /usr/local/bin/composer
 
-#    # Install phpcov tool
-#    && curl --location --output "vendor/bin/phpcov" "https://phar.phpunit.de/phpcov-7.0.2.phar" \
-#    && chmod +x "vendor/bin/phpcov" \
-#
-#    #
-#    # Symfony
-#    #
+    #
+    # Symfony
+    #
 RUN curl -sS https://get.symfony.com/cli/installer | bash \
     &&  mv /root/.symfony/bin/symfony /usr/local/bin
 

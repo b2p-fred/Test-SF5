@@ -36,6 +36,7 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.2.5",
+        "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-mbstring": "*",
@@ -98,7 +99,12 @@
         ],
         "lint": "php-cs-fixer --dry-run fix",
         "lint-fix": "php-cs-fixer fix",
-        "phpstan": "phpstan analyse -c phpstan.neon src tests"
+        "phpstan": "phpstan analyse -c phpstan.neon src tests",
+        "phpunit": "./vendor/bin/phpunit",
+        "tests-utils": "./vendor/bin/phpunit --testsuite 'Utils tests'",
+        "tests-unit": "./vendor/bin/phpunit --testsuite 'Unit tests'",
+        "tests-app": "./vendor/bin/phpunit --testsuite 'App tests'",
+        "tests-coverage": "./vendor/bin/phpunit --coverage-clover artifacts/coverage.xml --coverage-html artifacts/coverage.html"
     },
     "conflict": {
         "symfony/symfony": "*"

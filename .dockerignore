@@ -3,6 +3,8 @@
 **/*.php~
 **/._*
 **/.dockerignore
+**/node_modules
+**/.nuxt
 **/.DS_Store
 **/.git/
 **/.gitattributes
@@ -26,3 +28,4 @@ helm/
 public/bundles/
 var/
 vendor/
+reports/

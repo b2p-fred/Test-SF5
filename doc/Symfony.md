@@ -92,6 +92,18 @@ $ docker exec -it docker_sf5_php-fpm symfony console about
  -------------------- --------------------------------- 
 ```
 
+## Unit tests
+
+### PHPUnit
+
+Installation : 
+```shell
+$ composer require --dev phpunit/phpunit symfony/test-pack symfony/phpunit-bridge
+
+```
+
+Créer les fichiers de test dans le répertoire _tests_.
+
 ## Some useful plugins/bundles
 
 ### Debug stuff
@@ -125,7 +137,7 @@ Then configure the *dev/monolog.yaml* main handler to use a `rotating_file` type
 
 Read the doc on the Monolog powerful features [here](https://github.com/symfony/monolog-bundle).
 
-### Symfony security features
+### Symfony's security features
 ```shell
 composer require symfony/security-bundle
 ```
@@ -158,10 +170,10 @@ $ symfony console make:migration
 
 # Create the database
 $ symfony console doctrine:database:create
+$ symfony console doctrine:database:create --if-not-exists 
 
 # Run the DB migration (on an existing database)
 $ symfony console doctrine:migrations:migrate
-
 ```
 
 
@@ -183,7 +195,6 @@ And navigate to `http://localhost:8000/company`
 $ symfony console doctrine:query:sql "select * from company"
 ```
 
-
 ### User authentication
 According to [this page](https://symfony.com/doc/current/security.html#create-user-class)
 
@@ -204,6 +215,9 @@ $ composer require orm-fixtures --dev
 
 # Create some fixtures
 $ symfony console make:fixtures
+
+# Populate the database with the test fixtures
+$ symfony console doctrine:fixtures:load
 ```
 
 And edit the [Fixtures creation](../src/DataFixtures/UserFixtures.php).
@@ -237,7 +251,7 @@ $ composer require symfony/security-core
 # Verification email
 $ composer require symfonycasts/verify-email-bundle symfony/mailer
 
-// Create a user registration form
+# Create a user registration form
 $ php bin/console make:registration-form
 
 ```
