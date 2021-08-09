@@ -146,9 +146,27 @@ jobs:
 
       - name: Run all tests suites
         run: |
-          composer tests-utils
-          composer tests-unit
-          composer tests-app
+          composer tests-utils-coverage
+          composer tests-unit-coverage
+          composer tests-app-coverage
+
+      - name: Upload tests results
+        uses: actions/upload-artifact@v2
+        with:
+          name: tests-coverage-reports
+          path: artifacts/coverage-*.xml
+          if-no-files-found: error
+
+      - name: Upload unit tests code coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./artifacts/coverage-unit.xml
+          flags: unit-tests
+          env_vars: OS,PHP
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true # optional (default = false)
 
       - name: Drop the database
         env:
