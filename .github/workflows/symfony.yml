@@ -161,8 +161,7 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./artifacts
-          files: ./coverage-utils.xml,./coverage-unit.xml,./coverage-app.xml
+          files: ./artifacts/coverage-utils.xml,./artifacts/coverage-unit.xml,./artifacts/coverage-app.xml
 #          flags: unit-tests
           env_vars: OS,PHP
           name: codecov-umbrella # optional
