@@ -44,6 +44,10 @@ class RegistrationTest extends WebTestCase
             'registration_form[agreeTerms]' => '1',
         ]);
         $this->assertResponseRedirects('/');
+
+        // Request the mail verification page and redirected to /login
+        $crawler = $this->client->request('GET', '/verify/email');
+        $this->assertResponseRedirects('/login');
     }
 
     public function testRegisterExistingUser(): void

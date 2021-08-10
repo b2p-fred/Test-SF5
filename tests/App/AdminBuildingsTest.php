@@ -6,7 +6,7 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class AdminUserPagesTest extends WebTestCase
+class AdminBuildingsTest extends WebTestCase
 {
     private ?KernelBrowser $client = null;
 
@@ -23,26 +23,6 @@ class AdminUserPagesTest extends WebTestCase
 
         // simulate $testUser being logged in
         $this->client->loginUser($testUser);
-    }
-
-    public function testUsersPage(): void
-    {
-        // Request the users page
-        $crawler = $this->client->request('GET', '/admin/users');
-
-        // Validate a successful response and some content
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextSame('h1', 'Liste des utilisateurs');
-    }
-
-    public function testUserPage(): void
-    {
-        // Request the user page
-        $crawler = $this->client->request('GET', '/admin/user/1');
-
-        // Validate a successful response and some content
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextSame('h2', 'Fiche utilisateur');
     }
 
     public function testBuildingsPage(): void
@@ -73,30 +53,5 @@ class AdminUserPagesTest extends WebTestCase
         $this->assertFormValue('form[name="buildingForm"]', '_address', 'Rue des fleurs');
         $this->assertFormValue('form[name="buildingForm"]', '_zipcode', '26500');
         $this->assertFormValue('form[name="buildingForm"]', '_city', 'Bourg-lès-Valence');
-    }
-
-    public function testCompaniesPage(): void
-    {
-        // Request the building page
-        $crawler = $this->client->request('GET', '/admin/companies');
-
-        // Validate a successful response and some content
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextSame('h1', 'Hello companies!');
-    }
-
-    public function testCompanyPage(): void
-    {
-        // Request the building page
-        $crawler = $this->client->request('GET', '/admin/company/1');
-
-        // Validate a successful response and some content
-        $this->assertResponseIsSuccessful();
-
-        $this->assertCount(1, $crawler->filter('form[name="companyForm"]'));
-        $this->assertCount(1, $crawler->filter('input[name="_name"]'));
-        $this->assertCount(1, $crawler->filter('a[href="/admin/building/1"]'));
-
-        $this->assertFormValue('form[name="companyForm"]', '_name', 'Acme 1');
     }
 }
