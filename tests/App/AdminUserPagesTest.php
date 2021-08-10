@@ -77,7 +77,7 @@ class AdminUserPagesTest extends WebTestCase
 
     public function testCompaniesPage(): void
     {
-        // Request the building page
+        // Request the companies page
         $crawler = $this->client->request('GET', '/admin/companies');
 
         // Validate a successful response and some content
@@ -87,7 +87,7 @@ class AdminUserPagesTest extends WebTestCase
 
     public function testCompanyPage(): void
     {
-        // Request the building page
+        // Request the company page
         $crawler = $this->client->request('GET', '/admin/company/1');
 
         // Validate a successful response and some content
@@ -98,5 +98,12 @@ class AdminUserPagesTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('a[href="/admin/building/1"]'));
 
         $this->assertFormValue('form[name="companyForm"]', '_name', 'Acme 1');
+    }
+
+    public function testNewCompanyPage(): void
+    {
+        $this->client->request('GET', '/admin/company/create');
+        // Validate a successful response and some content
+        $this->assertResponseIsSuccessful();
     }
 }

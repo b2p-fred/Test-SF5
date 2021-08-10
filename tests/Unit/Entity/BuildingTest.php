@@ -3,6 +3,9 @@
 namespace Unit\Entity;
 
 use App\Entity\Building;
+use App\Entity\Company;
+use App\Repository\BuildingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 
 class BuildingTest extends TestCase
@@ -15,6 +18,8 @@ class BuildingTest extends TestCase
         $this->assertEquals('', $building->getAddress());
         $this->assertEquals('', $building->getCity());
         $this->assertEquals('', $building->getZipcode());
+        $companies = new ArrayCollection();
+        $this->assertEquals($companies, $building->getCompanies());
     }
 
     public function testGettersSetters()
@@ -32,5 +37,36 @@ class BuildingTest extends TestCase
 
         $building->setZipcode(1);
         $this->assertEquals(1, $building->getZipcode());
+    }
+
+    public function testABuilding()
+    {
+        $company = new Company();
+        $company->setName('Acme');
+
+        $building = new Building();
+
+        $building->setName('A');
+        $this->assertEquals('A', $building->getName());
+
+        $building->setAddress('A');
+        $this->assertEquals('A', $building->getAddress());
+
+        $building->setCity('A');
+        $this->assertEquals('A', $building->getCity());
+
+        $building->setZipcode(1);
+        $this->assertEquals(1, $building->getZipcode());
+
+        // Companies are collections !
+        $companies = new ArrayCollection();
+        $companies->add($company);
+
+        $building->addCompany($company);
+        $this->assertEquals($companies, $building->getCompanies());
+
+        $building->removeCompany($company);
+        $companies->removeElement($company);
+        $this->assertEquals($companies, $building->getCompanies());
     }
 }

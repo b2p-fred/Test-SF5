@@ -18,7 +18,6 @@ class CompanyTest extends TestCase
 
     public function testGettersSetters()
     {
-
         $building = new Building();
         $building->setName('A');
 
