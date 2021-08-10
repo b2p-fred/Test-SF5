@@ -17,6 +17,8 @@ env:
   DATABASE_USER: sf5
   DATABASE_PASSWORD: sf5
   DATABASE_ROOT_PASSWORD: secret
+  # Do not send mails from the application under test
+  MAILER_DSN: null://null
 
 jobs:
   symfony:
