@@ -53,7 +53,7 @@ services:
       - MARIADB_DATABASE=${DATABASE_NAME:-db}
       - MARIADB_USER=${DATABASE_USER:-db}
       - MARIADB_PASSWORD=${DATABASE_PASSWORD:-db}
-      - MARIADB_EXTRA_DATABASES=${MARIADB_EXTRA_DATABASES:-db_test}
+      - MARIADB_EXTRA_DATABASES=${EXTRA_DATABASES:-db_test}
     networks:
       - dev
 
