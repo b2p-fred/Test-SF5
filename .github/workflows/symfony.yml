@@ -13,7 +13,7 @@ on:
 env:
   DATABASE_HOST: mariadb
   DATABASE_PORT: 3306
-  DATABASE_NAME: sf5_test
+  DATABASE_NAME: sf5
   DATABASE_USER: sf5
   DATABASE_PASSWORD: sf5
   DATABASE_ROOT_PASSWORD: secret
@@ -32,7 +32,7 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: ${{ env.DATABASE_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ env.DATABASE_NAME }}
+          MYSQL_DATABASE: ${{ env.DATABASE_NAME }}_test
           MYSQL_USER: ${{ env.DATABASE_USER }}
           MYSQL_PASSWORD: ${{ env.DATABASE_PASSWORD }}
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
