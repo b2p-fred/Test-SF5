@@ -46,11 +46,34 @@ class RegistrationTest extends WebTestCase
         $this->assertResponseRedirects('/');
     }
 
-    /*
-     * @depends testRegisterNewUser
-     */
     public function testRegisterExistingUser(): void
     {
+        // Request a specific page
+        $crawler = $this->client->request('GET', '/register');
+
+        // Validate a successful response and some content
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Register');
+
+        // HTML contains a form with some input fields
+        $this->assertCount(1, $crawler->filter('form[name="registration_form"]'));
+        $this->assertCount(1, $crawler->filter('input[type="password"]'));
+        $this->assertCount(1, $crawler->filter('input[type="email"]'));
+        $this->assertCount(2, $crawler->filter('input[type="text"]'));
+        $this->assertCount(1, $crawler->filter('input[type="checkbox"]'));
+        $this->assertCount(1, $crawler->filter('input[type="hidden"]'));
+        $this->assertCount(1, $crawler->filter('button[type="submit"]'));
+
+        // Registering a new user
+        $crawler = $this->client->submitForm('Register', [
+            'registration_form[firstName]' => 'Jean',
+            'registration_form[lastName]' => 'Martin',
+            'registration_form[email]' => 'jean.martin@gmail.com',
+            'registration_form[plainPassword]' => 'Jeannot !',
+            'registration_form[agreeTerms]' => '1',
+        ]);
+        $this->assertResponseRedirects('/');
+
         // Request a specific page
         $crawler = $this->client->request('GET', '/register');
 
