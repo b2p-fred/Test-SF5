@@ -4,7 +4,7 @@ namespace Utils;
 
 use App\Utils\Math;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\InvalidArgumentException;
+use InvalidArgumentException;
 
 class MathTest extends TestCase
 {
