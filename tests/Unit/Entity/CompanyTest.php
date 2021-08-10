@@ -11,7 +11,7 @@ class CompanyTest extends TestCase
     public function testConstruct()
     {
         $company = new Company();
-        $this->assertEquals(1, $company->getId());
+        $this->assertEquals(null, $company->getId());
         $this->assertEquals('', $company->getName());
         $this->assertEquals('', $company->getBuilding());
     }

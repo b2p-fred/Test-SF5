@@ -10,7 +10,7 @@ class BuildingTest extends TestCase
     public function testConstruct()
     {
         $building = new Building();
-        $this->assertEquals('', $building->getId());
+        $this->assertEquals(null, $building->getId());
         $this->assertEquals('', $building->getName());
         $this->assertEquals('', $building->getAddress());
         $this->assertEquals('', $building->getCity());
