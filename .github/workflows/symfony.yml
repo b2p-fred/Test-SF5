@@ -140,11 +140,15 @@ jobs:
           symfony console doctrine:migrations:migrate --no-interaction
           symfony console doctrine:fixtures:load --no-interaction
 
-      - name: Run functionnal and unit tests
-        run: |
-          ./vendor/bin/phpunit
-
-      - name: Run all tests suites
+#      - name: Run all tests suites
+#        env:
+#          DATABASE_HOST: 127.0.0.1
+#        run: |
+#          ./vendor/bin/phpunit
+#
+      - name: Run all tests suites with code coveragte measurement
+        env:
+          DATABASE_HOST: 127.0.0.1
         run: |
           composer tests-utils-coverage
           composer tests-unit-coverage
