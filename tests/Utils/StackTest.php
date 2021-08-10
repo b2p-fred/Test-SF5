@@ -1,7 +1,9 @@
 <?php
 
+namespace Utils;
+
 use PHPUnit\Framework\TestCase;
-use App\Utils\Math;
+use Throwable;
 
 class StackTest extends TestCase
 {

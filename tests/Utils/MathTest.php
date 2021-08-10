@@ -1,7 +1,10 @@
 <?php
 
+namespace Utils;
+
 use App\Utils\Math;
 use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
 
 class MathTest extends TestCase
 {
