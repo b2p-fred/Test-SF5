@@ -46,6 +46,8 @@ class EmailVerifier
 
     /**
      * @throws VerifyEmailExceptionInterface
+     * @codeCoverageIgnore: testing this would be much heavy regarding the benefits of the test. Testing the
+     * registration mail verification will be included in the functional human tests suite.
      */
     public function handleEmailConfirmation(Request $request, User $user): void
     {
