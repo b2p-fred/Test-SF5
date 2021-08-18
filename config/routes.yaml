@@ -1,6 +1,9 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+# JWT login check
 login_check:
     path: /api/login_check
     methods: ['OPTIONS', 'POST']
+
+## API platform - manually set the docs URI
+#swagger_ui:
+#    path: /docs
+#    controller: api_platform.swagger.action.ui
