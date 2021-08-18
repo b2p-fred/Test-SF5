@@ -233,13 +233,6 @@ $ composer require symfony/rate-limiter
 ```
 
 
-Add a favicon:
-```shell
-# Copy the favicon.ico file in to the `public` folder and then:
-$ composer require symfony/asset
-```
-
-
 Create a user [registration form](https://symfony.com/doc/current/forms.html:
 ```shell
 # Forms
@@ -255,3 +248,15 @@ $ composer require symfonycasts/verify-email-bundle symfony/mailer
 $ php bin/console make:registration-form
 
 ```
+
+### JWT Token
+According to [this page](https://github.com/lexik/LexikJWTAuthenticationBundle/blob/2.x/Resources/doc/index.md#getting-started)
+
+```shell
+# Install the bundle
+$ composer require lexik/jwt-authentication-bundle
+
+# Generate SSL keys
+$ symfony console lexik:jwt:generate-keypair
+```
+

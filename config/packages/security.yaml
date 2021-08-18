@@ -17,34 +17,51 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
-    #                property: apiToken
 
     firewalls:
-        #        api_login:
-        #            pattern: ^/api/login
-        #            stateless: true
-        #            json_login:
-        #                check_path: /api/login_check
-        #                success_handler: lexik_jwt_authentication.handler.authentication_success
-        #                failure_handler: lexik_jwt_authentication.handler.authentication_failure
-        #
-        #
-        #        api:
-        #            pattern:   ^/api
-        #            stateless: true
-        #            jwt: ~
-
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        login:
+            pattern: ^/api/login_check
+            stateless: true
+#            provider: app_user_provider
+##            custom_authenticator:
+##                - lexik_jwt_authentication.jwt_token_authenticator
+
+            json_login:
+                check_path: /api/login_check
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern:   ^/api/
+            stateless: true
+            provider: app_user_provider
+            jwt: ~
 
         main:
             lazy: true
             provider: app_user_provider
 
-            custom_authenticator: App\Security\LoginFormAuthenticator
-            #            custom_authenticators:
-            #                - App\Security\ApiKeyAuthenticator
+            custom_authenticator:
+                - App\Security\LoginFormAuthenticator
+                - App\Security\ApiLoginAuthenticator
+
+#            json_login:
+#                check_path: /login_json
+#                username_path: username
+#                password_path: password
+
+            json_login:
+                check_path: /api/login
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
             # configure the maximum login attempts in a custom period of time
             login_throttling:
@@ -64,17 +81,21 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        #        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        #        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+        # API login
+        - { path: '^/api/docs', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: '^/api/login_check', roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        - { path: ^/profile, roles: ROLE_USER }
-
-        # require ROLE_ADMIN for /admin*
-        - { path: '^/admin', roles: ROLE_ADMIN }
-
-        # OR require ROLE_ADMIN or IS_AUTHENTICATED_FULLY for /admin*
-        - { path: '^/admin', roles: [ IS_AUTHENTICATED_FULLY, ROLE_ADMIN ] }
-
-        # the 'path' value can be any valid regular expression
-        # (this one will match URLs like /api/post/7298 and /api/comment/528491)
-        - { path: ^/api/(post|comment)/\d+$, roles: ROLE_USER }
+        - { path: '^/api/', roles: IS_AUTHENTICATED_FULLY }
+#
+#        - { path: '^/api/profile', roles: ROLE_USER }
+#
+        # SSR application
+#        # require ROLE_ADMIN for /admin*
+#        - { path: '^/admin', roles: ROLE_ADMIN }
+#
+#        # OR require ROLE_ADMIN or IS_AUTHENTICATED_FULLY for /admin*
+#        - { path: '^/admin', roles: [ IS_AUTHENTICATED_FULLY, ROLE_ADMIN ] }
+##
+##        # the 'path' value can be any valid regular expression
+##        # (this one will match URLs like /api/post/7298 and /api/comment/528491)
+##        - { path: ^/api/(post|comment)/\d+$, roles: ROLE_USER }
