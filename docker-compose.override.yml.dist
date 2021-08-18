@@ -36,20 +36,5 @@ services:
       - "1025:1025"
       - "1080:1080"
 
-  # Front UI build tools and development server
-  # NuxtJS application
-  node-nuxtjs:
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./my-nuxt-front:/app/
-
-  # Front UI production web server
-  nginx-ui:
-    ports:
-      - "9001:80"
-#    volumes:
-#      - ./my-web-front/dist/:/usr/share/nginx/html/:ro
-
 volumes:
   db-data:
