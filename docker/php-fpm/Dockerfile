@@ -71,4 +71,4 @@ WORKDIR /var/www/
 
 USER $PHP_USER
 
-CMD composer install ; php-fpm --daemonize ; sleep 1 ; rm .symfony/var/*.pid ; symfony server:start
+CMD composer install ; php-fpm --daemonize ; sleep 1 ; rm .symfony/var/*.pid ; symfony --no-tls --allow-http server:start

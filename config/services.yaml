@@ -25,3 +25,25 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Controller\LuckyController: ~
 
+    # Open API
+    # -----
+    # Version 2.6
+    App\OpenApi\JwtDecorator:
+        decorates: 'api_platform.openapi.factory'
+        autoconfigure: false
+
+    ## Version 2.5
+#    App\Swagger\SwaggerDecorator:
+#        decorates: 'api_platform.swagger.normalizer.documentation'
+#        arguments: ['@App\Swagger\SwaggerDecorator.inner']
+#        autoconfigure: false
+
+    App\EventListener\KernelListener:
+#        arguments:
+#            $logger: '@monolog.logger.requests'
+        tags:
+            # Just before anything else
+            - { name: kernel.event_listener, event: kernel.request, priority: 1024 }
+            # Just before the audit listener
+            - { name: kernel.event_listener, event: kernel.terminate, priority: -1023 }
+

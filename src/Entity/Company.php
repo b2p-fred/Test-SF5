@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
+ *
+ * @ApiResource
  */
 class Company
 {
@@ -16,6 +19,8 @@ class Company
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * [Groups(['company:list', 'company:item'])]
      */
     private $id;
 
@@ -23,6 +28,8 @@ class Company
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * [Groups(['company:list', 'company:item'])]
      */
     private $name;
 
