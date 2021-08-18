@@ -6,12 +6,11 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class UserController extends AbstractController
 {
@@ -52,13 +51,10 @@ class UserController extends AbstractController
      * `users/{id}` route.
      *
      * @Route("/api/me", name="api_me")
-     *
-     * @return JsonResponse
      */
-    public function me(LoggerInterface $logger, SerializerInterface $serializer, UserRepository $userRepository): Response
+    public function me(LoggerInterface $logger): RedirectResponse
     {
-        $token = $this->tokenInterface->getToken();
-        $user = $token->getUser();
+        $user = $this->getUser();
 
         return $this->redirectToRoute('api_users_get_item', ['id' => $user->getId()]);
     }

@@ -4,6 +4,8 @@ namespace App\EventListener;
 
 use ApiPlatform\Core\Validator\Exception\ValidationException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
@@ -99,7 +101,7 @@ class KernelListener
             'trace' => $exception->getTraceAsString(),
         ]);
 
-        $event->setResponse(new Response(
+        $event->setResponse(new JsonResponse(
             [
                 'code' => 400,
                 'violations' => [
