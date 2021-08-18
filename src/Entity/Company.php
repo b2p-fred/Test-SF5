@@ -2,27 +2,40 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CompanyRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
+ *
+ * @ApiResource
  */
 class Company
 {
     /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
+     * [Groups(['company:list', 'company:item'])]
      */
     private $id;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255)
+     *
+     * [Groups(['company:list', 'company:item'])]
      */
     private $name;
 
     /**
+     * @var Building|null
+     *
      * @ORM\ManyToOne(targetEntity=Building::class, inversedBy="companies")
      */
     private $building;

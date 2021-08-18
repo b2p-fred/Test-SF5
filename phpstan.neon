@@ -1,0 +1,33 @@
+parameters:
+    # https://phpstan.org/config-reference#rule-level
+    level: 5
+
+    # https://phpstan.org/config-reference#analysed-files
+    paths:
+        - config
+        - src
+        - tests
+        - public
+
+    doctrine:
+        # repositoryClass: MyApp\Doctrine\BetterEntityRepository
+        objectManagerLoader: tests/phpstan-object-manager.php
+
+    # https://github.com/phpstan/phpstan-symfony#configuration
+    # Specific configuration for the Symfony extension
+    symfony:
+        container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
+        # constant_hassers: false
+        console_application_loader: tests/phpstan-console-loader.php
+
+    # Some configuration for the analyzer
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+
+    # Some errors I will ignore
+    ## ignoreErrors:
+    ##     - '#PHPDoc tag .#'
+
+    # Some files I will ignore
+    ## excludePaths:
+    ##    - src/Utils/*

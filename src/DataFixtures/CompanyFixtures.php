@@ -8,11 +8,11 @@ use Doctrine\Persistence\ObjectManager;
 
 class CompanyFixtures extends Fixture
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $company = new Company();
         $company
-            ->setName("Acme 1")
+            ->setName('Acme 1')
             ->setBuilding($this->getReference(BuildingFixtures::BUILDING_1_REFERENCE));
         $manager->persist($company);
 

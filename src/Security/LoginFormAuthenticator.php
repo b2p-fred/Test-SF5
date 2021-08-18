@@ -20,12 +20,9 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
     use TargetPathTrait;
+
+    private LoggerInterface $logger;
 
     public const LOGIN_ROUTE = 'app_login';
 
@@ -37,17 +34,24 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $this->urlGenerator = $urlGenerator;
     }
 
+    public function supports(Request $request): bool
+    {
+        $this->logger->debug('[LoginFormAuthenticator] - supports, uri: '.$request->getUri());
+
+        return AbstractLoginFormAuthenticator::supports($request);
+    }
+
     public function authenticate(Request $request): PassportInterface
     {
-        $this->logger->debug('LoginFormAuthenticator - authenticate');
+        $this->logger->debug('[LoginFormAuthenticator] - authenticate');
 
         $email = $request->request->get('email', '');
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 
         return new Passport(
-            new UserBadge($email),
-            new PasswordCredentials($request->request->get('password', '')),
+            new UserBadge((string) $email),
+            new PasswordCredentials((string) $request->request->get('password', '')),
             [
                 new CsrfTokenBadge('authenticate', $request->get('_csrf_token')),
             ]
@@ -56,7 +60,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $this->logger->debug('LoginFormAuthenticator - onAuthenticationSuccess');
+        $this->logger->debug('[LoginFormAuthenticator] - onAuthenticationSuccess');
 
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
@@ -67,10 +71,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
-        $this->logger->debug('LoginFormAuthenticator - onAuthenticationFailure');
+        $this->logger->debug('[LoginFormAuthenticator] - onAuthenticationFailure');
 
         return AbstractLoginFormAuthenticator::onAuthenticationFailure($request, $exception);
-//        return new Response(Response::HTTP_UNAUTHORIZED);
     }
 
     protected function getLoginUrl(Request $request): string

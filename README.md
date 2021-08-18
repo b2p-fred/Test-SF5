@@ -1,5 +1,9 @@
 # My SF5 tests project
 
+![Symfony workflow](https://github.com/b2p-fred/Test-SF5/actions/workflows/symfony.yml/badge.svg)
+
+[![Code Coverage](https://codecov.io/gh/b2p-fred/Test-SF5/branch/develop/graph/badge.svg)](https://codecov.io/gh/b2p-fred/Test-SF5)
+
 ## De la documentation
 
 Plusieurs sujets : 

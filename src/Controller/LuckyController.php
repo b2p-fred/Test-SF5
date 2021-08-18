@@ -1,5 +1,7 @@
 <?php
+
 // src/Controller/LuckyController.php
+
 namespace App\Controller;
 
 use Psr\Log\LoggerInterface;
@@ -15,26 +17,24 @@ class LuckyController extends AbstractController
      *
      * Example method that gets a random integer and sleeps for some few milliseconds
      *
-     * @param LoggerInterface $logger
-     * @return Response
      * @throws \Exception
      */
     public function number(LoggerInterface $logger): Response
     {
         // Initial timestamp
         $startTimestamp = \microtime(true);
-        $logger->debug(\sprintf('Job started at %.2f (%s).', $startTimestamp, \date('H:i:s', $startTimestamp)));
+        $logger->debug(\sprintf('Job started at %.2f (%s).', $startTimestamp, \date('H:i:s', (int) $startTimestamp)));
 
-        // Make the job -)
+        // Make the job :)
         $number = random_int(0, 100);
         sleep($number / 100);
 
         // Final timestamp
         $endTimestamp = \microtime(true);
-        $logger->debug(\sprintf('Job ended at %.2f (%s).', $endTimestamp, \date('H:i:s', $endTimestamp)));
+        $logger->debug(\sprintf('Job ended at %.2f (%s).', $endTimestamp, \date('H:i:s', (int) $endTimestamp)));
         $duration = \round(($endTimestamp - $startTimestamp));
 
-        $logger->info(\sprintf('Job completed. Started at %.2f (%s). Duration : %d s', $startTimestamp, \date('H:i:s', $startTimestamp), $duration));
+        $logger->info(\sprintf('Job completed. Started at %.2f (%s). Duration : %d s', $startTimestamp, \date('H:i:s', (int) $startTimestamp), $duration));
 
         return $this->render('lucky/number.html.twig', [
             'number' => $number,

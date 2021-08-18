@@ -38,7 +38,9 @@ class CompanyController extends AbstractController
         // Minimum validation for the company attributes
         $errors = $validator->validate($company);
         if (count($errors) > 0) {
-            return new Response((string) $errors, 400);
+            $errorsString = implode(',', (array) $errors);
+
+            return new Response($errorsString, 400);
         }
 
         // tell Doctrine you want to (eventually) save the Company (no queries yet)
@@ -53,15 +55,13 @@ class CompanyController extends AbstractController
     /**
      * @Route("/admin/company/{id}", name="company_show")
      *
-     * Thanks to the ExtraBundle, no need to get a Repository and find the company in the repository -)
+     * Thanks to the ExtraBundle, no need to get a Repository and find the company in the repository :)
      * See https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html
      */
     public function show(Company $company): Response
     {
-//        return new Response('Check out this great company: '.$company->getName());
-
         // or render a template
         // in the template, print things with {{ product.name }}
-         return $this->render('company/show.html.twig', ['item' => $company]);
+        return $this->render('company/show.html.twig', ['item' => $company]);
     }
 }

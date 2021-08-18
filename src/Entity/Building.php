@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BuildingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,10 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=BuildingRepository::class)
+ *
+ * @ApiResource
  */
 class Building
 {
     /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -25,21 +30,29 @@ class Building
     private $name;
 
     /**
+     * @var string|null
+     *
      * @ORM\Column(type="string", length=512, nullable=true)
      */
     private $address;
 
     /**
+     * @var int|null
+     *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $zipcode;
 
     /**
+     * @var string|null
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $city;
 
     /**
+     * @var Collection&iterable<Company>
+     *
      * @ORM\OneToMany(targetEntity=Company::class, mappedBy="building")
      */
     private $companies;
