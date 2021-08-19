@@ -1,95 +1,85 @@
 security:
-    # https://symfony.com/doc/current/security/experimental_authenticators.html
-    enable_authenticator_manager: true
+  # https://symfony.com/doc/current/security/experimental_authenticators.html
+  enable_authenticator_manager: true
 
-    role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
-        ROLE_SUPER_ADMIN: [ ROLE_USER, ROLE_ADMIN ]
+  role_hierarchy:
+    ROLE_ADMIN: ROLE_USER
+    ROLE_SUPER_ADMIN: [ ROLE_USER, ROLE_ADMIN ]
 
-    password_hashers:
-        App\Entity\User:
-            algorithm: auto
+  password_hashers:
+    App\Entity\User:
+      algorithm: auto
 
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    providers:
-        # used to reload user from session & other features (e.g., switch_user)
-        app_user_provider:
-            entity:
-                class: App\Entity\User
-                property: email
+  # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+  providers:
+    # used to reload user from session & other features (e.g., switch_user)
+    app_user_provider:
+      entity:
+        class: App\Entity\User
+        property: email
 
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
 
-        login:
-            pattern: ^/api/login_check
-            stateless: true
-#            provider: app_user_provider
-##            custom_authenticator:
-##                - lexik_jwt_authentication.jwt_token_authenticator
+    login:
+      pattern: ^/api/login_check
+      stateless: true
+      provider: app_user_provider
 
-            json_login:
-                check_path: /api/login_check
-                username_path: email
-                password_path: password
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+      json_login:
+        check_path: /api/login_check
+        username_path: email
+        password_path: password
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-        api:
-            pattern:   ^/api/
-            stateless: true
-            provider: app_user_provider
-            jwt: ~
+    api:
+      pattern: ^/api/
+      stateless: true
+      provider: app_user_provider
+      jwt: ~
 
-        main:
-            lazy: true
-            provider: app_user_provider
+    main:
+      lazy: true
+      provider: app_user_provider
 
-            custom_authenticator:
-                - App\Security\LoginFormAuthenticator
-                - App\Security\ApiLoginAuthenticator
+      custom_authenticator:
+        - App\Security\LoginFormAuthenticator
+        - App\Security\ApiLoginAuthenticator
 
-#            json_login:
-#                check_path: /login_json
-#                username_path: username
-#                password_path: password
+      json_login:
+        check_path: /api/login
+        username_path: email
+        password_path: password
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-            json_login:
-                check_path: /api/login
-                username_path: email
-                password_path: password
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+      # configure the maximum login attempts in a custom period of time
+      login_throttling:
+        max_attempts: 3
+        interval: '15 minutes'
 
-            # configure the maximum login attempts in a custom period of time
-            login_throttling:
-                max_attempts: 30
-                interval: '15 minutes'
+      logout:
+        path: /logout
+        target: /
 
-            logout:
-                path: /logout
-                target: /
+      # activate different ways to authenticate
+      # https://symfony.com/doc/current/security.html#firewalls-authentication
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
+      # https://symfony.com/doc/current/security/impersonating_user.html
+      # switch_user: true
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+  # Easy way to control access for large sections of your site
+  # Note: Only the *first* access control that matches will be used
+  access_control:
+    # API login
+    - { path: '^/api/docs', roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
-    access_control:
-        # API login
-        - { path: '^/api/docs', roles: IS_AUTHENTICATED_ANONYMOUSLY }
-#        - { path: '^/api/login_check', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: '^/api/', roles: IS_AUTHENTICATED_FULLY }
 
-        - { path: '^/api/', roles: IS_AUTHENTICATED_FULLY }
-#
-#        - { path: '^/api/profile', roles: ROLE_USER }
-#
-        # SSR application
+    # SSR application
 #        # require ROLE_ADMIN for /admin*
 #        - { path: '^/admin', roles: ROLE_ADMIN }
 #

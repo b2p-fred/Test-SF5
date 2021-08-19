@@ -35,20 +35,20 @@ class AdminCompaniesTest extends WebTestCase
         $this->assertSelectorTextSame('h1', 'Hello companies!');
     }
 
-    public function testCompanyPage(): void
-    {
-        // Request the company page
-        $crawler = $this->client->request('GET', '/admin/company/1');
-
-        // Validate a successful response and some content
-        $this->assertResponseIsSuccessful();
-
-        $this->assertCount(1, $crawler->filter('form[name="companyForm"]'));
-        $this->assertCount(1, $crawler->filter('input[name="_name"]'));
-        $this->assertCount(1, $crawler->filter('a[href="/admin/building/1"]'));
-
-        $this->assertFormValue('form[name="companyForm"]', '_name', 'Acme 1');
-    }
+//    public function testCompanyPage(): void
+//    {
+//        // Request the company page
+//        $crawler = $this->client->request('GET', '/admin/company/1');
+//
+//        // Validate a successful response and some content
+//        $this->assertResponseIsSuccessful();
+//
+//        $this->assertCount(1, $crawler->filter('form[name="companyForm"]'));
+//        $this->assertCount(1, $crawler->filter('input[name="_name"]'));
+//        $this->assertCount(1, $crawler->filter('a[href="/admin/building/1"]'));
+//
+//        $this->assertFormValue('form[name="companyForm"]', '_name', 'Acme 1');
+//    }
 
     public function testNewCompanyPage(): void
     {

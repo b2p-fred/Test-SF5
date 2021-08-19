@@ -25,6 +25,8 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
+     *
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
@@ -36,6 +36,12 @@
 {#        {% dump app.request %}#}
 {#        </pre>#}
 {#    {% endif %}#}
+{% endif %}
+
+{% if app.user %}
+    <div class="mb-3">
+        You are logged in as {{ app.user.firstName }}, <a href="{{ path('app_logout') }}">Logout</a>
+    </div>
 {% endif %}
 
 <div id="main-wrap" class="container-fluid">

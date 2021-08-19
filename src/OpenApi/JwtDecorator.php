@@ -24,6 +24,21 @@ final class JwtDecorator implements OpenApiFactoryInterface
         $openApi = ($this->decorated)($context);
         $schemas = $openApi->getComponents()->getSchemas();
 
+        $schemas['Error'] = new \ArrayObject([
+            'type' => 'object',
+            'properties' => [
+                'code' => [
+                    'type' => 'integer',
+                    'example' => 401,
+                    'readOnly' => true,
+                ],
+                'message' => [
+                    'type' => 'string',
+                    'example' => 'Invalid credentials',
+                    'readOnly' => true,
+                ],
+            ],
+        ]);
         $schemas['Token'] = new \ArrayObject([
             'type' => 'object',
             'properties' => [
@@ -38,10 +53,12 @@ final class JwtDecorator implements OpenApiFactoryInterface
             'properties' => [
                 'email' => [
                     'type' => 'string',
-                    'example' => 'g.lagaffe@edition-dupuis.com',
+                    'description' => 'The user unique and valid mail address',
+                    'example' => 'glagaffe@edition-dupuis.com',
                 ],
                 'password' => [
                     'type' => 'string',
+                    'description' => 'The user password',
                     'example' => 'Gaston',
                 ],
             ],
@@ -52,7 +69,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
             null, null, null, null,
             new Model\Operation(
                 'postCredentialsItem',
-                ['Token'],
+                ['User authentication'],
                 [
                     '200' => [
                         'description' => 'The requested JWT token is contained in the `token` attribute',
@@ -64,13 +81,23 @@ final class JwtDecorator implements OpenApiFactoryInterface
                             ],
                         ],
                     ],
+                    '401' => [
+                        'description' => 'The provided credentials do not allow to get a JWT',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    '$ref' => '#/components/schemas/Error',
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
                 'Get JWT token to login.',
                 'Description',
                 null,
                 [],
                 new Model\RequestBody(
-                    'Generate new JWT Token',
+                    'Generate new JWT token',
                     new \ArrayObject([
                         'application/json' => [
                             'schema' => [
@@ -81,7 +108,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
                 ),
             ),
         );
-        $openApi->getPaths()->addPath('/authentication_token', $pathItem);
+        $openApi->getPaths()->addPath('/api/login_check', $pathItem);
 
         return $openApi;
     }

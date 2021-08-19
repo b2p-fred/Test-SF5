@@ -145,9 +145,17 @@ composer require symfony/security-bundle
 This to include the [Symfony security features](https://www.doctrine-project.org/) in the application.
 
 ### Doctrine ORM
+Doctrine is a popular ORM; see [here](https://www.doctrine-project.org/projects.html)
 ```shell
-composer require --with-all-dependencies doctrine
+$ composer require --with-all-dependencies doctrine
 ```
+
+Add some specific bundles to help matching with more databases: 
+```shell
+$ composer req fresh/doctrine-enum-bundle='~7.3'
+```
+See the `src/DBAL` directory content and the User entity *gender* attribute.
+
 
 **Note** sometimes one must use `--no-scripts` else the default cache clearing script declared in the *composer.json* will fail the installation.
 
@@ -259,4 +267,18 @@ $ composer require lexik/jwt-authentication-bundle
 # Generate SSL keys
 $ symfony console lexik:jwt:generate-keypair
 ```
+
+### API Platform
+More about [API Platform here](https://api-platform.com/)
+
+```shell
+# Install the bundle
+$ composer require api
+
+# Testing utilities
+$ composer require --dev symfony/browser-kit symfony/http-client 
+$ composer require --dev nelmio/alice
+```
+
+Create some test fixtures files in the fixtures directory 
 

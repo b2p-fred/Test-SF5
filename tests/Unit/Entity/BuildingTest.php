@@ -35,8 +35,8 @@ class BuildingTest extends TestCase
         $building->setCity('A');
         $this->assertEquals('A', $building->getCity());
 
-        $building->setZipcode(1);
-        $this->assertEquals(1, $building->getZipcode());
+        $building->setZipcode('26000');
+        $this->assertEquals('26000', $building->getZipcode());
     }
 
     public function testABuilding()
@@ -55,8 +55,8 @@ class BuildingTest extends TestCase
         $building->setCity('A');
         $this->assertEquals('A', $building->getCity());
 
-        $building->setZipcode(1);
-        $this->assertEquals(1, $building->getZipcode());
+        $building->setZipcode('26000');
+        $this->assertEquals('26000', $building->getZipcode());
 
         // Companies are collections !
         $companies = new ArrayCollection();

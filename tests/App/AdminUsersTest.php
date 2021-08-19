@@ -35,13 +35,13 @@ class AdminUsersTest extends WebTestCase
         $this->assertSelectorTextSame('h1', 'Liste des utilisateurs');
     }
 
-    public function testUserPage(): void
-    {
-        // Request the user page
-        $crawler = $this->client->request('GET', '/admin/user/1');
-
-        // Validate a successful response and some content
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextSame('h2', 'Fiche utilisateur');
-    }
+//    public function testUserPage(): void
+//    {
+//        // Request the user page
+//        $crawler = $this->client->request('GET', '/admin/user/1');
+//
+//        // Validate a successful response and some content
+//        $this->assertResponseIsSuccessful();
+//        $this->assertSelectorTextSame('h2', 'Fiche utilisateur');
+//    }
 }

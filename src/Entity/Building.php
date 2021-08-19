@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BuildingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,11 +26,24 @@ class Building
     private $id;
 
     /**
+     * @param string $name a name property - this description will be available in the API documentation too
+     *
      * @ORM\Column(type="string", length=255)
-     */
+     *
+     * @ApiProperty(
+     *     attributes={
+     *         "openapi_context"={
+     *             "type"="string",
+     *             "enum"={"one", "two"},
+     *             "example"="one"
+     *         }
+     *     }
+     * )     */
     private $name;
 
     /**
+     * @param string $address a name property - this description will be available in the API documentation too
+     *
      * @var string|null
      *
      * @ORM\Column(type="string", length=512, nullable=true)
@@ -37,9 +51,9 @@ class Building
     private $address;
 
     /**
-     * @var int|null
+     * @var string|null
      *
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=10, nullable=true)
      */
     private $zipcode;
 
@@ -56,6 +70,16 @@ class Building
      * @ORM\OneToMany(targetEntity=Company::class, mappedBy="building")
      */
     private $companies;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $lat;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $lng;
 
     public function __construct()
     {
@@ -91,12 +115,12 @@ class Building
         return $this;
     }
 
-    public function getZipcode(): ?int
+    public function getZipcode(): ?string
     {
         return $this->zipcode;
     }
 
-    public function setZipcode(?int $zipcode): self
+    public function setZipcode(?string $zipcode): self
     {
         $this->zipcode = $zipcode;
 
@@ -141,6 +165,30 @@ class Building
                 $company->setBuilding(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLat(): ?float
+    {
+        return $this->lat;
+    }
+
+    public function setLat(?float $lat): self
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    public function getLng(): ?float
+    {
+        return $this->lng;
+    }
+
+    public function setLng(?float $lng): self
+    {
+        $this->lng = $lng;
 
         return $this;
     }
