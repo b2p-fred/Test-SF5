@@ -12,8 +12,7 @@ App\Entity\User:
     gender: 'male'
     birthdate: <(new \DateTime('1966-06-01'))>
     roles: [ 'ROLE_ADMIN' ]
-#    language: "fr-FR"
-#    timezone: "Europe/Paris"
+    company: '@company_1'
 
   user_2:
     firstname: "Gaston"
@@ -23,8 +22,7 @@ App\Entity\User:
     isverified: false
     gender: 'male'
     birthdate: <(new \DateTime('1957-02-01'))>
-  #    language: "fr-FR"
-  #    timezone: "Europe/Paris"
+    company: '@company_1'
 
   user_{3..100}:
     firstname: <firstName()>
@@ -33,6 +31,6 @@ App\Entity\User:
     plainPassword: Test!
     gender: <randomElement(['male', 'female', 'unknown'])>
     birthdate: <dateTimeBetween('-100 years', '-18 year')>
-#    phone (unique): <e164PhoneNumber()>
-#    language: "fr-FR"
-#    timezone: "Europe/Paris"
+
+    # 50% have a company relation!
+    company: 50%? @company_<numberBetween(1, 10)>

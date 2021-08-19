@@ -9,9 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * The User class is the main representation of an application's user.
+ *
+ * -----
+ *
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  *
@@ -20,11 +26,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
+     * Using the Symfony Uuid generators to create unique identifiers
+     * ($ composer require symfony/uid)
+     * See https://symfony.com/doc/current/components/uid.html.
+     * See https://github.com/symfony/symfony/issues/41772 to understand why
+     * it is not possible to generate a UuidV4 with a generator.
+     * Thus, it may be very interesting to use the ramsey/uuid to get UUID v4
+     * as strings in the database ? For the moment, uuid will need conversions -)
+     * -----.
+     *
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true, name="id")
      */
-    private int $id;
+    private UuidV4 $id;
+
+    public function __construct()
+    {
+        $this->id = Uuid::v4();
+    }
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -38,22 +57,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     /**
-     * @var string|null The hashed password
+     * The hashed password.
+     *
      * @ORM\Column(type="string", nullable=true)
      */
-    private $password;
+    private ?string $password;
 
     /**
+     * The user's first name.
+     *
      * @Assert\NotBlank
      * @ORM\Column(type="string", length=255)
      */
-    private string $FirstName;
+    private string $firstName;
 
     /**
+     * The user's last name.
+     *
      * @Assert\NotBlank
      * @ORM\Column(type="string", length=255)
      */
-    private string $LastName;
+    private string $lastName;
 
     /**
      * @ORM\Column(type="boolean")
@@ -72,19 +96,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="users")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=true)
      */
-    private $company;
+    private ?Company $company;
 
     /**
      * The plainPassword is used to provide a password that will be encoded before
      * persisting in the database (e.g. password in a login form or user creation
      * by an API endpoint).
-     *
-     * @var string|null
      */
-    private $plainPassword;
+    private ?string $plainPassword;
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -178,31 +201,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getFirstName(): ?string
     {
-        return $this->FirstName;
+        return $this->firstName;
     }
 
-    public function setFirstName(string $FirstName): self
+    public function setFirstName(string $firstName): self
     {
-        $this->FirstName = $FirstName;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
     public function getLastName(): ?string
     {
-        return $this->LastName;
+        return $this->lastName;
     }
 
-    public function setLastName(string $LastName): self
+    public function setLastName(string $lastName): self
     {
-        $this->LastName = $LastName;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
+    /**
+     * The user's name is composed of the first name and last name.
+     */
     public function getName(): ?string
     {
-        return $this->FirstName.' '.$this->LastName;
+        return $this->firstName.' '.$this->lastName;
     }
 
     public function isVerified(): bool

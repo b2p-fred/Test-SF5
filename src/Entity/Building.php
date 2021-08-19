@@ -8,6 +8,8 @@ use App\Repository\BuildingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @ORM\Entity(repositoryClass=BuildingRepository::class)
@@ -17,13 +19,18 @@ use Doctrine\ORM\Mapping as ORM;
 class Building
 {
     /**
-     * @var int
-     *
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true, name="id")
+     *
+     * @var UuidV4
      */
-    private $id;
+    private UuidV4 $id;
+
+    public function __construct()
+    {
+        $this->id = Uuid::v4();
+        $this->companies = new ArrayCollection();
+    }
 
     /**
      * @param string $name a name property - this description will be available in the API documentation too
@@ -39,7 +46,7 @@ class Building
      *         }
      *     }
      * )     */
-    private $name;
+    private string $name;
 
     /**
      * @param string $address a name property - this description will be available in the API documentation too
@@ -48,21 +55,21 @@ class Building
      *
      * @ORM\Column(type="string", length=512, nullable=true)
      */
-    private $address;
+    private ?string $address;
 
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private $zipcode;
+    private ?string $zipcode;
 
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $city;
+    private ?string $city;
 
     /**
      * @var Collection&iterable<Company>
@@ -74,19 +81,14 @@ class Building
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $lat;
+    private float $lat;
 
     /**
      * @ORM\Column(type="float", nullable=true)
      */
-    private $lng;
+    private float $lng;
 
-    public function __construct()
-    {
-        $this->companies = new ArrayCollection();
-    }
-
-    public function getId(): ?int
+    public function getId(): ?UuidV4
     {
         return $this->id;
     }

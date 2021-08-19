@@ -70,6 +70,7 @@
         "symfony/serializer": "5.3.*",
         "symfony/twig-bridge": "5.3.*",
         "symfony/twig-bundle": "^5.3",
+        "symfony/uid": "5.3.*",
         "symfony/validator": "5.3.*",
         "symfony/yaml": "5.3.*",
         "symfonycasts/verify-email-bundle": "^1.5"

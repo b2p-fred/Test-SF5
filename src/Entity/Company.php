@@ -7,6 +7,8 @@ use App\Repository\CompanyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
@@ -16,15 +18,17 @@ use Doctrine\ORM\Mapping as ORM;
 class Company
 {
     /**
-     * @var int
-     *
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true, name="id")
      *
-     * [Groups(['company:list', 'company:item'])]
+     * @var UuidV4
      */
-    private $id;
+    private UuidV4 $id;
+
+    public function __construct()
+    {
+        $this->id = Uuid::v4();
+    }
 
     /**
      * @var string
@@ -33,26 +37,21 @@ class Company
      *
      * [Groups(['company:list', 'company:item'])]
      */
-    private $name;
+    private string $name;
 
     /**
      * @var Building|null
      *
      * @ORM\ManyToOne(targetEntity=Building::class, inversedBy="companies")
      */
-    private $building;
+    private ?Building $building;
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="company")
      */
     private $users;
 
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-    }
-
-    public function getId(): ?int
+    public function getId(): ?UuidV4
     {
         return $this->id;
     }

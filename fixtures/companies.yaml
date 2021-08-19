@@ -1,9 +1,9 @@
 App\Entity\Company:
-  Company_1:
+  company_1:
     name: "Company ACME 1"
     building: '@building_1'
 
   # 9 fake companies
-  Company_{2..10}:
+  company_{2..10}:
     name: Company <current()>
     building: '@building_<numberBetween(1, 100)>'
