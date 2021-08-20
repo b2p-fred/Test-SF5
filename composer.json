@@ -111,15 +111,19 @@
         "lint": "./vendor/bin/php-cs-fixer --dry-run fix",
         "lint-fix": "./vendor/bin/php-cs-fixer fix",
         "phpstan": "./vendor/bin/phpstan --memory-limit=1G analyse -c phpstan.neon src tests",
-        "phpunit": "./vendor/bin/phpunit",
-        "tests": "./vendor/bin/phpunit",
-        "tests-utils": "./vendor/bin/phpunit --testsuite 'Utils tests'",
-        "tests-unit": "./vendor/bin/phpunit --testsuite 'Unit tests'",
-        "tests-app": "./vendor/bin/phpunit --testsuite 'App tests'",
-        "tests-coverage": "./vendor/bin/phpunit --coverage-clover artifacts/coverage.xml",
-        "tests-utils-coverage": "./vendor/bin/phpunit --testsuite 'Utils tests' --coverage-clover artifacts/coverage-utils.xml",
-        "tests-unit-coverage": "./vendor/bin/phpunit --testsuite 'Unit tests' --coverage-clover artifacts/coverage-unit.xml",
-        "tests-app-coverage": "./vendor/bin/phpunit --testsuite 'App tests' --coverage-clover artifacts/coverage-app.xml"
+        "phpunit": "./bin/phpunit",
+        "tests": "./bin/phpunit",
+        "tests-utils": "./bin/phpunit --testsuite 'Utils tests'",
+        "tests-unit": "./bin/phpunit --testsuite 'Unit tests'",
+        "tests-app": "./bin/phpunit --testsuite 'App tests'",
+        "tests-api": "./bin/phpunit --testsuite 'Api tests'",
+        "tests-functional": "./bin/phpunit --testsuite 'Functional tests'",
+        "tests-coverage": "./bin/phpunit --coverage-clover artifacts/coverage.xml",
+        "tests-utils-coverage": "./bin/phpunit --testsuite 'Utils tests' --coverage-clover artifacts/coverage-utils.xml",
+        "tests-unit-coverage": "./bin/phpunit --testsuite 'Unit tests' --coverage-clover artifacts/coverage-unit.xml",
+        "tests-app-coverage": "./bin/phpunit --testsuite 'App tests' --coverage-clover artifacts/coverage-app.xml",
+        "tests-api-coverage": "./bin/phpunit --testsuite 'Api tests' --coverage-clover artifacts/coverage-api.xml",
+        "tests-functional-coverage": "./bin/phpunit --testsuite 'Functional tests' --coverage-clover artifacts/coverage-functional.xml"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -131,7 +135,6 @@
         }
     },
     "require-dev": {
-        "dama/doctrine-test-bundle": "^6.6",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "friendsofphp/php-cs-fixer": "^3.0",
         "hautelook/alice-bundle": "^2.9",

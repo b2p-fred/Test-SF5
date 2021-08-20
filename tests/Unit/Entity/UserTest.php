@@ -1,20 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Unit\Entity;
+namespace App\Tests\Unit\Entity;
 
 use App\Entity\User;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class UserTest extends TestCase
 {
     public function testConstruct()
     {
         $user = new User();
-//        $this->assertEquals(null, $user->getId());
-//        $this->assertEquals('', $user->getFirstName());
-//        $this->assertEquals('', $user->getLastName());
-//        $this->assertEquals('', $user->getEmail());
-//        $this->assertEquals('', $user->getPassword());
+        $this->assertInstanceOf(UuidV4::class, $user->getId());
         $this->assertEquals(['ROLE_USER'], $user->getRoles());
     }
 

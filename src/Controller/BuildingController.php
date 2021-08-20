@@ -4,10 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Building;
 use App\Repository\BuildingRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Uid\UuidV4;
 
 class BuildingController extends AbstractController
 {
@@ -31,11 +31,6 @@ class BuildingController extends AbstractController
      */
     public function show(Building $building): Response
     {
-        $building = $this->getDoctrine()
-            ->getRepository(Building::class)
-            ->findOneBy(['id' => $id]);
-
-
         return $this->render('building/show.html.twig', ['item' => $building]);
     }
 }

@@ -1,14 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\DBAL\Types\HumanGenderType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,7 +26,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  *
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}},
+ * )
+ * @ApiFilter(PropertyFilter::class)
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -47,6 +56,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     *
+     * @Groups({"user:read", "user:write"})
      */
     private string $email;
 
@@ -68,6 +82,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\NotBlank
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"user:read", "user:write"})
      */
     private string $firstName;
 
@@ -76,6 +92,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @Assert\NotBlank
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"user:read", "user:write"})
      */
     private string $lastName;
 
@@ -85,18 +103,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $isVerified = false;
 
     /**
+     * The user's gender.
+     *
      * @ORM\Column(name="gender", type="enum_human_gender", nullable=false)
+     *
+     * @Groups({"user:read", "user:write"})
      */
     private string $gender = HumanGenderType::GENDER_UNKNOWN;
 
     /**
+     * The user's date of birth.
+     *
      * @ORM\Column(type="date", nullable=true)
+     *
+     * @Groups({"user:read", "user:write"})
      */
     private $birthdate;
 
     /**
+     * The company the user is working for... I choose to make this an embedded
+     * resource. Thus, the company information are available for the user without
+     * an extra API request. Else I would have got only the company IRI
+     * To make it possible, I added the user:read group for some properties of
+     * the company.
+     * -----
+     *
      * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="users")
      * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=true)
+     *
+     * @Groups({"user:read", "user:write"})
      */
     private ?Company $company;
 

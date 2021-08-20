@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Tests\App;
 
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -35,13 +35,19 @@ class AdminUsersTest extends WebTestCase
         $this->assertSelectorTextSame('h1', 'Liste des utilisateurs');
     }
 
-//    public function testUserPage(): void
-//    {
-//        // Request the user page
-//        $crawler = $this->client->request('GET', '/admin/user/1');
-//
-//        // Validate a successful response and some content
-//        $this->assertResponseIsSuccessful();
-//        $this->assertSelectorTextSame('h2', 'Fiche utilisateur');
-//    }
+    /**
+     * @depends testUsersPage
+     */
+    public function testUserPage(): void
+    {
+        // Request the users page
+        $this->client->request('GET', '/admin/users');
+
+        // Click to get the user page
+        $this->client->clickLink('Fiche');
+
+        // Validate a successful response and some content
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextSame('h2', 'Fiche utilisateur');
+    }
 }

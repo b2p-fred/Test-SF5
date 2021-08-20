@@ -1,23 +1,20 @@
 <?php
 
-namespace Unit\Entity;
+namespace App\Tests\Unit\Entity;
 
 use App\Entity\Building;
 use App\Entity\Company;
 use App\Repository\BuildingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class BuildingTest extends TestCase
 {
     public function testConstruct()
     {
         $building = new Building();
-        $this->assertEquals(null, $building->getId());
-        $this->assertEquals('', $building->getName());
-        $this->assertEquals('', $building->getAddress());
-        $this->assertEquals('', $building->getCity());
-        $this->assertEquals('', $building->getZipcode());
+        $this->assertInstanceOf(UuidV4::class, $building->getId());
         $companies = new ArrayCollection();
         $this->assertEquals($companies, $building->getCompanies());
     }

@@ -3,25 +3,27 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\CompanyRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
 /**
  * @ORM\Entity(repositoryClass=CompanyRepository::class)
  *
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups"={"company:read", "company:item:get"}},
+ *     denormalizationContext={"groups"={"company:write"}},
+ * )
  */
 class Company
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true, name="id")
-     *
-     * @var UuidV4
      */
     private UuidV4 $id;
 
@@ -31,23 +33,33 @@ class Company
     }
 
     /**
-     * @var string
+     * The name of the company.
+     * Note that it is an embedded resource for the user.
      *
      * @ORM\Column(type="string", length=255)
      *
-     * [Groups(['company:list', 'company:item'])]
+     * @Groups({"company:read", "company:write", "user:read"})
      */
     private string $name;
 
     /**
-     * @var Building|null
-     *
      * @ORM\ManyToOne(targetEntity=Building::class, inversedBy="companies")
+     *
+     * @Groups({"company:read", "company:write"})
      */
     private ?Building $building;
 
     /**
+     * This resource is a Company sub-resource, whereas it is possible to
+     * GET /api/companies/{uuid}/users to get the list of the users related to
+     * a company.
+     *
+     * @var Collection&iterable<User>
+     *
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="company")
+     *
+     * @ApiSubresource()
+     * @Groups({"company:read", "company:write"})
      */
     private $users;
 

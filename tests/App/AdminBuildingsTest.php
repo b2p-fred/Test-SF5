@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Tests\App;
 
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -27,7 +27,7 @@ class AdminBuildingsTest extends WebTestCase
 
     public function testBuildingsPage(): void
     {
-        // Request the building page
+        // Request the buildings page
         $crawler = $this->client->request('GET', '/admin/buildings');
 
         // Validate a successful response and some content
@@ -35,10 +35,17 @@ class AdminBuildingsTest extends WebTestCase
         $this->assertSelectorTextSame('h1', 'Hello buildings!');
     }
 
+    /**
+     * @depends testBuildingsPage
+     */
     public function testBuildingPage(): void
     {
-        // Request the building page
-        $crawler = $this->client->request('GET', '/admin/building/1');
+        // Request the buildings page
+        $this->client->request('GET', '/admin/buildings');
+
+        // Click to get the building page
+        $this->client->clickLink('Building 1');
+        $crawler = $this->client->getCrawler();
 
         // Validate a successful response and some content
         $this->assertResponseIsSuccessful();
@@ -50,7 +57,7 @@ class AdminBuildingsTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('input[name="_city"]'));
 
         $this->assertFormValue('form[name="buildingForm"]', '_name', 'Building 1');
-        $this->assertFormValue('form[name="buildingForm"]', '_address', 'Rue des fleurs');
+        $this->assertFormValue('form[name="buildingForm"]', '_address', 'Rue des jardins');
         $this->assertFormValue('form[name="buildingForm"]', '_zipcode', '26500');
         $this->assertFormValue('form[name="buildingForm"]', '_city', 'Bourg-lès-Valence');
     }

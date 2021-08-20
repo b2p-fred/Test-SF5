@@ -1,19 +1,18 @@
 <?php
 
-namespace Unit\Entity;
+namespace App\Tests\Unit\Entity;
 
 use App\Entity\Building;
 use App\Entity\Company;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class CompanyTest extends TestCase
 {
     public function testConstruct()
     {
         $company = new Company();
-        $this->assertEquals(null, $company->getId());
-        $this->assertEquals('', $company->getName());
-        $this->assertEquals('', $company->getBuilding());
+        $this->assertInstanceOf(UuidV4::class, $company->getId());
     }
 
     public function testGettersSetters()

@@ -1,12 +1,16 @@
 <?php
 
-namespace App;
+namespace App\Tests\App;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RegistrationTest extends WebTestCase
 {
+    // This test needs to refresh database!
+    use RefreshDatabaseTrait;
+
     private ?KernelBrowser $client = null;
 
     protected function setUp(): void
@@ -14,7 +18,6 @@ class RegistrationTest extends WebTestCase
         // This calls KernelTestCase::bootKernel(), and creates a
         // "client" that is acting as the browser
         $this->client = static::createClient();
-
     }
 
     public function testRegisterNewUser(): void
@@ -76,7 +79,7 @@ class RegistrationTest extends WebTestCase
             'registration_form[plainPassword]' => 'Jeannot !',
             'registration_form[agreeTerms]' => '1',
         ]);
-        $this->assertResponseRedirects('/');
+        $this->assertResponseIsSuccessful();
 
         // Request a specific page
         $crawler = $this->client->request('GET', '/register');

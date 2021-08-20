@@ -4,25 +4,28 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\BuildingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
 /**
  * @ORM\Entity(repositoryClass=BuildingRepository::class)
  *
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups"={"building:read"}},
+ *     denormalizationContext={"groups"={"building:write"}},
+ * )
  */
 class Building
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true, name="id")
-     *
-     * @var UuidV4
      */
     private UuidV4 $id;
 
@@ -37,56 +40,60 @@ class Building
      *
      * @ORM\Column(type="string", length=255)
      *
-     * @ApiProperty(
-     *     attributes={
-     *         "openapi_context"={
-     *             "type"="string",
-     *             "enum"={"one", "two"},
-     *             "example"="one"
-     *         }
-     *     }
-     * )     */
+     * @Groups({"building:read", "building:write", "company:item:get"})
+     */
     private string $name;
 
     /**
      * @param string $address a name property - this description will be available in the API documentation too
      *
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=512, nullable=true)
+     *
+     * @Groups({"building:read", "building:write", "company:item:get"})
      */
     private ?string $address;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=10, nullable=true)
+     *
+     * @Groups({"building:read", "building:write", "company:item:get"})
      */
     private ?string $zipcode;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Groups({"building:read", "building:write", "company:item:get"})
      */
     private ?string $city;
 
     /**
+     * This resource is a Building sub-resource, whereas it is possible to
+     * GET /api/buildgins/{uuid}/companies to get the list of the companies
+     * related to a building.
+     *
      * @var Collection&iterable<Company>
      *
      * @ORM\OneToMany(targetEntity=Company::class, mappedBy="building")
+     *
+     * @ApiSubresource()
+     * @Groups({"building:read", "building:write"})
      */
     private $companies;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     *
+     * @Groups({"building:read", "building:write"})
      */
-    private float $lat;
+    private ?float $lat;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     *
+     * @Groups({"building:read", "building:write"})
      */
-    private float $lng;
+    private ?float $lng;
 
     public function getId(): ?UuidV4
     {

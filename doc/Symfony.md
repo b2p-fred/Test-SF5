@@ -99,11 +99,35 @@ $ docker exec -it docker_sf5_php-fpm symfony console about
 Installation : 
 ```shell
 $ composer require --dev phpunit/phpunit symfony/test-pack symfony/phpunit-bridge
-
 ```
 
-Créer les fichiers de test dans le répertoire _tests_.
+Créer les fichiers de test dans le répertoire _tests_. Symfony installe un bridge qui permet de lancer les tests en pré chargeant l'environnement de test. Pour lancer les tests : 
 
+```shell
+$ ./bin/phpunit
+
+# La "vraie" version de phpunit est installée dans /usr/local/bin ou dans ./vendor/bin  
+```
+
+Par la suite on va installer un package pour disposer de fixtures de tests dans des fichiers Yaml; ce package remplace avantageusement `dama/doctrine-test-bundle` donc on ne l'installe plus !
+
+**DEPRECATED**
+
+    Pour optimiser les performances des tests, installer le bundle:
+    ```shell
+    $ composer require --dev dama/doctrine-test-bundle
+    ```
+    et voir la [doc ici](https://github.com/dmaicher/doctrine-test-bundle). L'idée est que chaque modification apportée à la base de données pendant un test est rollback à la fin de l'exécution du test :) 
+    
+    Ce bundle est également utilisable avec Behat ! Par contre, il envoie une deprecation notice:
+    ```
+    Remaining indirect deprecation notices (1)
+    
+      1x: The "DAMA\DoctrineTestBundle\Doctrine\DBAL\AbstractStaticDriverV2" class implements "Doctrine\DBAL\Driver\ExceptionConverterDriver" that is deprecated.
+        1x in PHPUnitExtension::executeBeforeFirstTest from DAMA\DoctrineTestBundle\PHPUnit
+    ```
+    qu'il est impossible de fixer ... [voir ici](https://github.com/dmaicher/doctrine-test-bundle/issues/129).
+    
 ## Some useful plugins/bundles
 
 ### Debug stuff

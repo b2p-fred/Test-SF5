@@ -26,7 +26,7 @@ api_platform:
   swagger:
     versions: [ 3 ]
     api_keys:
-      apiKey:
+      jwt:
         name: Authorization
         type: header
 
@@ -47,3 +47,22 @@ api_platform:
       name:
       # URL to the license used for the API. MUST be in the format of a URL.
       url:
+
+  collection:
+    # Pagination des ressources
+    pagination:
+      page_parameter_name: page
+      enabled_parameter_name: pagination
+      items_per_page_parameter_name: itemsPerPage
+      partial_parameter_name: partial
+
+  defaults:
+    # Pagination des ressources
+    pagination_enabled: true
+    pagination_partial: false
+    pagination_client_enabled: false
+    # Allow the clients to GET ?itemsPerPage=X
+    pagination_client_items_per_page: true
+    pagination_client_partial: false
+    pagination_items_per_page: 30
+    pagination_maximum_items_per_page: 100

@@ -1,6 +1,6 @@
 <?php
 
-namespace Utils;
+namespace App\Tests\Utils;
 
 use App\Utils\Math;
 use PHPUnit\Framework\TestCase;

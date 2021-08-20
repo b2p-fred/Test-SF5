@@ -1,6 +1,6 @@
 <?php
 
-namespace Utils;
+namespace App\Tests\Utils;
 
 use PHPUnit\Framework\TestCase;
 use Throwable;
@@ -12,27 +12,27 @@ class StackTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        fwrite(STDOUT, __METHOD__."setUpBeforeClass\n");
+        // fwrite(STDOUT, __METHOD__."setUpBeforeClass\n");
     }
 
     protected function setUp(): void
     {
-        fwrite(STDOUT, __METHOD__."setUp\n");
+        // fwrite(STDOUT, __METHOD__."setUp\n");
     }
 
     protected function tearDown(): void
     {
-        fwrite(STDOUT, __METHOD__."tearDown\n");
+        // fwrite(STDOUT, __METHOD__."tearDown\n");
     }
 
     public static function tearDownAfterClass(): void
     {
-        fwrite(STDOUT, __METHOD__."tearDownAfterClass\n");
+        // fwrite(STDOUT, __METHOD__."tearDownAfterClass\n");
     }
 
     protected function onNotSuccessfulTest(Throwable $t): void
     {
-        fwrite(STDOUT, __METHOD__."onNotSuccessfulTest\n");
+        // fwrite(STDOUT, __METHOD__."onNotSuccessfulTest\n");
         throw $t;
     }
 
