@@ -140,8 +140,8 @@ jobs:
           DATABASE_HOST: 127.0.0.1
         run: |
           symfony console doctrine:database:create
-          symfony console doctrine:migrations:migrate --no-interaction
-          symfony console doctrine:fixtures:load --no-interaction
+          symfony console doctrine:migrations:migrate --no-interaction -vv
+          symfony console hautelook:fixtures:load --no-interaction -vv
 
 #      - name: Run all tests suites
 #        env:
