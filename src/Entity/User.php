@@ -71,6 +71,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     /**
+     * The plainPassword is used to provide a password that will be encoded before
+     * persisting in the database (e.g. password in a login form or user creation
+     * by an API endpoint).
+     *
+     * @Assert\NotBlank()
+     */
+    private ?string $plainPassword;
+
+    /**
      * The hashed password.
      *
      * @ORM\Column(type="string", nullable=true)
@@ -96,6 +105,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      */
     private string $lastName;
+
+    /**
+     * The user's laguage.
+     *
+     * @Assert\NotBlank
+     * @ORM\Column(type="string", length=5)
+     *
+     * @Groups({"user:read", "user:write"})
+     */
+    private string $language = 'fr-fr';
 
     /**
      * @ORM\Column(type="boolean")
@@ -126,7 +145,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * an extra API request. Else I would have got only the company IRI
      * To make it possible, I added the user:read group for some properties of
      * the company.
-     * -----
+     * -----.
      *
      * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="users")
      * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=true)
@@ -134,13 +153,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      */
     private ?Company $company;
-
-    /**
-     * The plainPassword is used to provide a password that will be encoded before
-     * persisting in the database (e.g. password in a login form or user creation
-     * by an API endpoint).
-     */
-    private ?string $plainPassword;
 
     public function getId()
     {
@@ -264,6 +276,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getName(): ?string
     {
         return $this->firstName.' '.$this->lastName;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
+
+        return $this;
     }
 
     public function isVerified(): bool

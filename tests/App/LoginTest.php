@@ -34,8 +34,8 @@ class LoginTest extends WebTestCase
 
         // Signing in a user
         $crawler = $this->client->submitForm('Sign in', [
-            'email' => 'fmohier@b2pweb.com',
-            'password' => 'Fred!',
+            'email' => 'big.brother@theworld.com',
+            'password' => 'I@mTh3B0ss!',
         ]);
         // Go to the home page
 //        $this->assertResponseRedirects('/');
@@ -59,7 +59,7 @@ class LoginTest extends WebTestCase
 
         // Signing in a user
         $crawler = $this->client->submitForm('Sign in', [
-            'email' => 'fmohier@b2pweb.com',
+            'email' => 'big.brother@theworld.com',
             'password' => 'A_bad_password',
         ]);
         // Go to the login page!

@@ -4,11 +4,12 @@
 #
 App\Entity\User:
   user_1:
-    firstname: Fred
-    lastname: Mohier
-    email (unique): fmohier@b2pweb.com
-    plainPassword: Fred!
+    firstname: Big
+    lastname: Brother
+    email (unique): big.brother@theworld.com
+    plainPassword: I@mTh3B0ss!
     isverified: true
+    language: 'fr-FR'
     gender: 'male'
     birthdate: <(new \DateTime('1966-06-01'))>
     roles: [ 'ROLE_ADMIN' ]
@@ -20,6 +21,7 @@ App\Entity\User:
     email (unique): gaston.lagaffe@edition-dupuis.com
     plainPassword: Gaston!
     isverified: false
+    language: 'fr-FR'
     gender: 'male'
     birthdate: <(new \DateTime('1957-02-01'))>
     company: '@company_1'
@@ -29,6 +31,7 @@ App\Entity\User:
     lastname: <lastName()>
     email (unique): <safeEmail()>
     plainPassword: Test!
+    language: <randomElement(['fr-fr', 'en-gb', 'es-es', 'de-de', 'it-it', ''])>
     gender: <randomElement(['male', 'female', 'unknown'])>
     birthdate: <dateTimeBetween('-100 years', '-18 year')>
 

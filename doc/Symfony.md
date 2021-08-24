@@ -291,6 +291,7 @@ $ composer require lexik/jwt-authentication-bundle
 # Generate SSL keys
 $ symfony console lexik:jwt:generate-keypair
 ```
+The default configuration is suitable if you configure the bundle properly. See this repo configuration and do not forget to generate the SSL keys!
 
 ### API Platform
 More about [API Platform here](https://api-platform.com/)

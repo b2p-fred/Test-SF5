@@ -4,6 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    legal_notice_uri: 'https://legal.eprotocole.com/legal.pdf'
+    online_help_uri:  'https://help.eprotocole.com'
+    default_language: 'fr-FR'
 
 services:
     # default configuration for services in *this* file
@@ -19,11 +22,6 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/Tests/'
-
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    App\Controller\LuckyController: ~
 
     # Open API
     # -----
@@ -48,4 +46,16 @@ services:
             - { name: kernel.event_listener, event: kernel.request, priority: 1024 }
             # Just before the audit listener
             - { name: kernel.event_listener, event: kernel.terminate, priority: -1023 }
+
+    ## Managers
+    ## -----
+    App\Manager\ApiInformationManager:
+        arguments:
+            $rootDir: '%kernel.project_dir%'
+            $apiTitle: '%api_platform.title%'
+            $apiDescription: '%api_platform.description%'
+            $apiVersion: '%api_platform.version%'
+            $legalNoticeLink: '%legal_notice_uri%'
+            $onlineHelpLink: '%online_help_uri%'
+            $defaultLanguage: '%default_language%'
 

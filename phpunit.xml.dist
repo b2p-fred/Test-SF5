@@ -31,9 +31,6 @@
         <testsuite name="API tests">
             <directory>tests/Api</directory>
         </testsuite>
-        <testsuite name="Functional tests">
-            <directory>tests/Functional</directory>
-        </testsuite>
     </testsuites>
 
     <coverage processUncoveredFiles="true">

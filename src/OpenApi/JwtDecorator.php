@@ -10,6 +10,12 @@ use ApiPlatform\Core\OpenApi\Factory\OpenApiFactoryInterface;
 use ApiPlatform\Core\OpenApi\Model;
 use ApiPlatform\Core\OpenApi\OpenApi;
 
+/**
+ * This class is a decorator used to enrich the Swagger UI of the project API.
+ * No interest in tests nor code coverage for this file.
+ *
+ * @codeCoverageIgnore
+ */
 final class JwtDecorator implements OpenApiFactoryInterface
 {
     private OpenApiFactoryInterface $decorated;
@@ -54,12 +60,12 @@ final class JwtDecorator implements OpenApiFactoryInterface
                 'email' => [
                     'type' => 'string',
                     'description' => 'The user unique and valid mail address',
-                    'example' => 'glagaffe@edition-dupuis.com',
+                    'example' => 'gaston.lagaffe@edition-dupuis.com (user role) / big.brother@theworld.com (admin role)',
                 ],
                 'password' => [
                     'type' => 'string',
                     'description' => 'The user password',
-                    'example' => 'Gaston',
+                    'example' => 'Gaston! / I@mTh3B0ss!',
                 ],
             ],
         ]);

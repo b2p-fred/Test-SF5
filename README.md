@@ -4,6 +4,14 @@
 
 [![Code Coverage](https://codecov.io/gh/b2p-fred/Test-SF5/branch/develop/graph/badge.svg)](https://codecov.io/gh/b2p-fred/Test-SF5)
 
+## Des outils
+
+Accéder à l'API en ligne de commande :
+```shell
+$ cd bin
+$ ./api-example.sh -h
+```
+
 ## De la documentation
 
 Plusieurs sujets : 

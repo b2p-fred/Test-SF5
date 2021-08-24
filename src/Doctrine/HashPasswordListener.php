@@ -56,7 +56,7 @@ class HashPasswordListener implements EventSubscriber
             $entity,
             $entity->getPlainPassword()
         );
-        $this->logger->debug('Hashing '.$entity->getName()."'s plain password: ".$entity->getPlainPassword());
+        $this->logger->debug('Hashing '.$entity->getName()."'s plain password.");
         $entity->setPassword($encoded);
     }
 }

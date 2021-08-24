@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\BuildingRepository;
@@ -17,7 +16,10 @@ use Symfony\Component\Uid\UuidV4;
  * @ORM\Entity(repositoryClass=BuildingRepository::class)
  *
  * @ApiResource(
- *     normalizationContext={"groups"={"building:read"}},
+ *     normalizationContext={
+ *      "groups"={"building:read"},
+ *      "skip_null_values" = false,
+ *     },
  *     denormalizationContext={"groups"={"building:write"}},
  * )
  */

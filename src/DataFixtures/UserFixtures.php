@@ -21,15 +21,15 @@ class UserFixtures extends Fixture
     {
         $user = new User();
         $user
-            ->setFirstName('Fred')
-            ->setLastName('Mohier')
-            ->setEmail('fmohier@b2pweb.com')
+            ->setFirstName('Big')
+            ->setLastName('Brother')
+            ->setEmail('big.brother@theworld.com')
             ->setGender(HumanGenderType::GENDER_MALE)
             ->setBirthdate(new \DateTime('01/06/1966'))
             ->setRoles(['ROLE_ADMIN'])
             ->setPassword($this->passwordHasher->hashPassword(
                 $user,
-                'fmohier@b2pweb.com'
+                'I@mTh3B0ss!'
             ));
         $manager->persist($user);
 
@@ -39,11 +39,11 @@ class UserFixtures extends Fixture
             ->setLastName('Lagaffe')
             ->setGender(HumanGenderType::GENDER_UNKNOWN)
             ->setBirthdate(new \DateTime('01/02/1957'))
-            ->setEmail('glagaffe@edition-dupuis.com')
+            ->setEmail('gaston.lagaffe@edition-dupuis.com')
             ->setRoles(['ROLE_USER'])
             ->setPassword($this->passwordHasher->hashPassword(
                 $user,
-                'Gaston'
+                'Gaston!'
             ));
         $manager->persist($user);
 

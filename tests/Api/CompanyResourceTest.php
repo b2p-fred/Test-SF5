@@ -4,13 +4,13 @@ namespace App\Tests\Api;
 
 use App\Tests\Base\ApiResourceTestCase;
 
-class BuildingResourceTest extends ApiResourceTestCase
+class CompanyResourceTest extends ApiResourceTestCase
 {
-    public const RESOURCE = 'building';
+    public const RESOURCE = 'company';
 
-    public static function setUpBeforeClass(): void
+    protected function setUp(): void
     {
-        parent::configure(self::RESOURCE, null, null, null, 100);
+        parent::configure(self::RESOURCE, null, 'companies', null, 10);
     }
 
     /**
@@ -21,7 +21,7 @@ class BuildingResourceTest extends ApiResourceTestCase
         parent::testDenied();
     }
 
-    public function testListResource(array $expectedFields = [])
+    public function testListResource()
     {
         self::$verbose = false;
 
@@ -31,12 +31,8 @@ class BuildingResourceTest extends ApiResourceTestCase
 
         $this->expectedFields = [
             'name',
-            'address',
-            'zipcode',
-            'city',
-            'companies',
-            'lat',
-            'lng',
+            'building',
+            'users',
         ];
 
         parent::testListResource();
@@ -48,18 +44,13 @@ class BuildingResourceTest extends ApiResourceTestCase
 
         $this->postedData = [
             'name' => 'New item',
-            'city' => 'The city',
         ];
         $this->expectedResponse = [
             'name' => 'New item',
-            'address' => null,
-            'zipcode' => null,
-            'city' => 'The city',
-            'companies' => [],
-            'lat' => null,
-            'lng' => null,
+            'users' => [],
         ];
 
         parent::testCreateResource();
     }
+
 }

@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,15 +48,40 @@ class UserController extends AbstractController
     }
 
     /**
-     * This route allows to get the current logged-in user profile. It simply redirects to the correct
-     * `users/{id}` route.
+     * This route allows to get the current logged-in user profile. It simply redirects to the currently
+     * authenticated user `users/{id}` route.
      *
      * @Route("/api/me", name="api_me")
      */
-    public function me(LoggerInterface $logger): RedirectResponse
+    public function me(): RedirectResponse
     {
         $user = $this->getUser();
 
         return $this->redirectToRoute('api_users_get_item', ['id' => $user->getId()]);
     }
+
+//
+//    /**
+//     * This route allows to get the current logged-in user profile. It simply redirects to the currently
+//     * authenticated user `users/{id}` route.
+//     *
+//     * @Route("/api/version", name="api_version")
+//     */
+//    public function version(LoggerInterface $logger): JsonResponse
+//    {
+//        $user = $this->getUser();
+//
+//        return new JsonResponse(
+//            [
+//                'code' => 200,
+//                'messages' => [
+//                    [
+//                        'message' => 'Application message',
+//                        'messageTemplate' => 'application.error',
+//                    ],
+//                ],
+//            ],
+//            200
+//        );
+//    }
 }

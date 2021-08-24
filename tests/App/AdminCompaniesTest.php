@@ -18,8 +18,8 @@ class AdminCompaniesTest extends WebTestCase
         $userRepository = static::getContainer()->get(UserRepository::class);
 
         // retrieve the test user
-        $testUser = $userRepository->findOneBy(['email' => 'fmohier@b2pweb.com']);
-//        $testUser = $userRepository->findOneByEmail('fmohier@b2pweb.com');
+        $testUser = $userRepository->findOneBy(['email' => 'big.brother@theworld.com']);
+//        $testUser = $userRepository->findOneByEmail('big.brother@theworld.com');
 
         // simulate $testUser being logged in
         $this->client->loginUser($testUser);
