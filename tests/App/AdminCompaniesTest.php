@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Tests\App;
 
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -18,8 +18,8 @@ class AdminCompaniesTest extends WebTestCase
         $userRepository = static::getContainer()->get(UserRepository::class);
 
         // retrieve the test user
-        $testUser = $userRepository->findOneBy(['email' => 'fmohier@b2pweb.com']);
-//        $testUser = $userRepository->findOneByEmail('fmohier@b2pweb.com');
+        $testUser = $userRepository->findOneBy(['email' => 'big.brother@theworld.com']);
+//        $testUser = $userRepository->findOneByEmail('big.brother@theworld.com');
 
         // simulate $testUser being logged in
         $this->client->loginUser($testUser);
@@ -35,19 +35,27 @@ class AdminCompaniesTest extends WebTestCase
         $this->assertSelectorTextSame('h1', 'Hello companies!');
     }
 
+    /**
+     * @depends testCompaniesPage
+     */
     public function testCompanyPage(): void
     {
-        // Request the company page
-        $crawler = $this->client->request('GET', '/admin/company/1');
+        // Request the companies page
+        $this->client->request('GET', '/admin/companies');
+
+        // Click to get the company page
+        $this->client->clickLink('Company ACME 1');
+        $crawler = $this->client->getCrawler();
+//        dump($this->client);
 
         // Validate a successful response and some content
         $this->assertResponseIsSuccessful();
 
         $this->assertCount(1, $crawler->filter('form[name="companyForm"]'));
         $this->assertCount(1, $crawler->filter('input[name="_name"]'));
-        $this->assertCount(1, $crawler->filter('a[href="/admin/building/1"]'));
+        $this->assertCount(1, $crawler->filter('a[href^="/admin/building/"]'));
 
-        $this->assertFormValue('form[name="companyForm"]', '_name', 'Acme 1');
+        $this->assertFormValue('form[name="companyForm"]', '_name', 'Company ACME 1');
     }
 
     public function testNewCompanyPage(): void

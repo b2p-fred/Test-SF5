@@ -1,0 +1,39 @@
+#
+# Use plainPassword to provide the un-hashed user password. It will be encoded thanks
+# to a dedicated listened as if the user self-registered.
+#
+App\Entity\User:
+  user_1:
+    firstname: Big
+    lastname: Brother
+    email (unique): big.brother@theworld.com
+    plainPassword: I@mTh3B0ss!
+    isverified: true
+    language: 'fr-FR'
+    gender: 'male'
+    birthdate: <(new \DateTime('1966-06-01'))>
+    roles: [ 'ROLE_ADMIN' ]
+    company: '@company_1'
+
+  user_2:
+    firstname: "Gaston"
+    lastname: "Lagaffe"
+    email (unique): gaston.lagaffe@edition-dupuis.com
+    plainPassword: Gaston!
+    isverified: false
+    language: 'fr-FR'
+    gender: 'male'
+    birthdate: <(new \DateTime('1957-02-01'))>
+    company: '@company_1'
+
+  user_{3..100}:
+    firstname: <firstName()>
+    lastname: <lastName()>
+    email (unique): <safeEmail()>
+    plainPassword: Test!
+    language: <randomElement(['fr-fr', 'en-gb', 'es-es', 'de-de', 'it-it', ''])>
+    gender: <randomElement(['male', 'female', 'unknown'])>
+    birthdate: <dateTimeBetween('-100 years', '-18 year')>
+
+    # 50% have a company relation!
+    company: 50%? @company_<numberBetween(1, 10)>

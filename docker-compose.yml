@@ -15,6 +15,7 @@ services:
       - APP_USER=${APP_USER:-www-data}
       - APP_ENV=${APP_ENV:-dev}
       - APP_SECRET=${APP_SECRET:-I_can_read_it_in_your_mind}
+      - KERNEL_CLASS=${KERNEL_CLASS:-'App\Kernel'}
 #      - DATABASE_URL=mysql://${DATABASE_USER:-db}:${DATABASE_PASSWORD:-db}@${DATABASE_HOST:-mariadb}:${DATABASE_PORT:-3306}/${DATABASE_NAME:-db}?serverVersion=mariadb-${TAG_MARIADB:-10.5.11}
     depends_on:
       - mariadb

@@ -1,23 +1,20 @@
 <?php
 
-namespace Unit\Entity;
+namespace App\Tests\Unit\Entity;
 
 use App\Entity\Building;
 use App\Entity\Company;
 use App\Repository\BuildingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class BuildingTest extends TestCase
 {
     public function testConstruct()
     {
         $building = new Building();
-        $this->assertEquals(null, $building->getId());
-        $this->assertEquals('', $building->getName());
-        $this->assertEquals('', $building->getAddress());
-        $this->assertEquals('', $building->getCity());
-        $this->assertEquals('', $building->getZipcode());
+        $this->assertInstanceOf(UuidV4::class, $building->getId());
         $companies = new ArrayCollection();
         $this->assertEquals($companies, $building->getCompanies());
     }
@@ -35,8 +32,8 @@ class BuildingTest extends TestCase
         $building->setCity('A');
         $this->assertEquals('A', $building->getCity());
 
-        $building->setZipcode(1);
-        $this->assertEquals(1, $building->getZipcode());
+        $building->setZipcode('26000');
+        $this->assertEquals('26000', $building->getZipcode());
     }
 
     public function testABuilding()
@@ -55,8 +52,8 @@ class BuildingTest extends TestCase
         $building->setCity('A');
         $this->assertEquals('A', $building->getCity());
 
-        $building->setZipcode(1);
-        $this->assertEquals(1, $building->getZipcode());
+        $building->setZipcode('26000');
+        $this->assertEquals('26000', $building->getZipcode());
 
         // Companies are collections !
         $companies = new ArrayCollection();

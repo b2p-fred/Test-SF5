@@ -8,6 +8,7 @@ on:
       - develop
   pull_request:
     branches:
+      - master
       - develop
       
 env:
@@ -139,8 +140,8 @@ jobs:
           DATABASE_HOST: 127.0.0.1
         run: |
           symfony console doctrine:database:create
-          symfony console doctrine:migrations:migrate --no-interaction
-          symfony console doctrine:fixtures:load --no-interaction
+          symfony console doctrine:migrations:migrate --no-interaction -vv
+          symfony console hautelook:fixtures:load --no-interaction -vv
 
 #      - name: Run all tests suites
 #        env:
@@ -148,13 +149,15 @@ jobs:
 #        run: |
 #          ./vendor/bin/phpunit
 #
-      - name: Run all tests suites with code coveragte measurement
+      - name: Run all tests suites with code coverage measurement
         env:
           DATABASE_HOST: 127.0.0.1
         run: |
           composer tests-utils-coverage
           composer tests-unit-coverage
+          composer tests-api-coverage
           composer tests-app-coverage
+          composer tests-functional-coverage
 
       - name: Upload tests results
         uses: actions/upload-artifact@v2
@@ -167,8 +170,30 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./artifacts/coverage-utils.xml,./artifacts/coverage-unit.xml,./artifacts/coverage-app.xml
-#          flags: unit-tests
+          files: ./artifacts/coverage-utils.xml,./artifacts/coverage-unit.xml
+          flags: unit-tests
+          env_vars: OS,PHP
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: false
+
+      - name: Upload functional tests code coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./artifacts/coverage-api.xml,./artifacts/coverage-functional.xml
+          flags: functional-tests
+          env_vars: OS,PHP
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: false
+
+      - name: Upload application tests code coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./artifacts/coverage-app.xml
+          flags: app-tests
           env_vars: OS,PHP
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)

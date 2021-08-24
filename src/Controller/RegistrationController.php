@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,21 +26,33 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
+     *
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function register(Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    public function register(LoggerInterface $logger, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+        $logger->debug(\sprintf('Form submitted: %s!', $form->isSubmitted()));
+        $logger->debug(\sprintf('Form field: %s = %s', 'First', $form->get('firstName')->getData()));
+        $logger->debug(\sprintf('Form field: %s = %s', 'Last', $form->get('lastName')->getData()));
+        $logger->debug(\sprintf('Form field: %s = %s', 'Pwd', $form->get('plainPassword')->getData()));
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $logger->debug(\sprintf('Form is not valid!'));
+            $logger->debug(\sprintf('Form field: %s = %s', 'Pwd', $form->getErrors(true)));
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $passwordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+//            // encode the plain password
+//            $user->setPlainPassword($form->get('plainPassword')->getData());
+//            $user->setPassword(
+//                $passwordHasher->hashPassword(
+//                    $user,
+//                    $form->get('plainPassword')->getData()
+//                )
+//            );
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -50,7 +63,7 @@ class RegistrationController extends AbstractController
                 'app_verify_email',
                 $user,
                 (new TemplatedEmail())
-                    ->from(new Address('mailer@fred-domain.com', 'Fred mail Bot'))
+                    ->from(new Address('mailer@test-domain.com', 'Test mail Bot'))
                     ->to((string) $user->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')

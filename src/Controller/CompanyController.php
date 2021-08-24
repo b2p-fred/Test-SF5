@@ -60,8 +60,6 @@ class CompanyController extends AbstractController
      */
     public function show(Company $company): Response
     {
-        // or render a template
-        // in the template, print things with {{ product.name }}
         return $this->render('company/show.html.twig', ['item' => $company]);
     }
 }

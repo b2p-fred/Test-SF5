@@ -28,6 +28,9 @@
         <testsuite name="App tests">
             <directory>tests/App</directory>
         </testsuite>
+        <testsuite name="API tests">
+            <directory>tests/Api</directory>
+        </testsuite>
     </testsuites>
 
     <coverage processUncoveredFiles="true">
@@ -49,7 +52,4 @@
         <extension class="Symfony\Component\Panther\ServerExtension" />
     </extensions>
     -->
-    <extensions>
-        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />
-    </extensions>
 </phpunit>

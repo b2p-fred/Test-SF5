@@ -1,0 +1,15 @@
+resources:
+  # Buildings
+  App\Entity\Building:
+    properties:
+      name:
+        attributes:
+          openapi_context:
+            type: string
+            enum: [ 'one', 'two' ]
+            example: one
+      timestamp:
+        attributes:
+          openapi_context:
+            type: string
+            format: date-time

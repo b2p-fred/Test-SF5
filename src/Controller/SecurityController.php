@@ -1,7 +1,5 @@
 <?php
 
-// src/Controller/SecurityController.php
-
 namespace App\Controller;
 
 // ...
@@ -12,20 +10,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    /**
-     * @Route("/login_json", name="json_login", methods={"POST"})
-     */
-    public function apiLogin(AuthenticationUtils $authenticationUtils): Response
-    {
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-//        $username = $this->getUser()->getUserIdentifier();
-
-        return $error ? $this->json(['error' => $error]) : $this->json(['token' => $lastUsername]);
-    }
-
     /**
      * @Route("/login", name="app_login")
      */

@@ -4,6 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    legal_notice_uri: 'https://legal.eprotocole.com/legal.pdf'
+    online_help_uri:  'https://help.eprotocole.com'
+    default_language: 'fr-FR'
 
 services:
     # default configuration for services in *this* file
@@ -11,7 +14,7 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    # makes classes in src/ available to be used as services
+    # make classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
@@ -19,25 +22,22 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/Tests/'
-
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    App\Controller\LuckyController: ~
 
     # Open API
     # -----
-    # Version 2.6
     App\OpenApi\JwtDecorator:
         decorates: 'api_platform.openapi.factory'
         autoconfigure: false
 
-    ## Version 2.5
-#    App\Swagger\SwaggerDecorator:
-#        decorates: 'api_platform.swagger.normalizer.documentation'
-#        arguments: ['@App\Swagger\SwaggerDecorator.inner']
-#        autoconfigure: false
+    # Password management
+    # -----
+    App\Doctrine\HashPasswordListener:
+        tags:
+            - { name: doctrine.event_subscriber }
 
+    # Catch kernel events to make a requests log
+    # todo: test this ;)
+    # -----
     App\EventListener\KernelListener:
 #        arguments:
 #            $logger: '@monolog.logger.requests'
@@ -46,4 +46,16 @@ services:
             - { name: kernel.event_listener, event: kernel.request, priority: 1024 }
             # Just before the audit listener
             - { name: kernel.event_listener, event: kernel.terminate, priority: -1023 }
+
+    ## Managers
+    ## -----
+    App\Manager\ApiInformationManager:
+        arguments:
+            $rootDir: '%kernel.project_dir%'
+            $apiTitle: '%api_platform.title%'
+            $apiDescription: '%api_platform.description%'
+            $apiVersion: '%api_platform.version%'
+            $legalNoticeLink: '%legal_notice_uri%'
+            $onlineHelpLink: '%online_help_uri%'
+            $defaultLanguage: '%default_language%'
 

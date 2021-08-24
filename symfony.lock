@@ -25,18 +25,6 @@
     "composer/xdebug-handler": {
         "version": "2.0.2"
     },
-    "dama/doctrine-test-bundle": {
-        "version": "4.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "4.0",
-            "ref": "56eaa387b5e48ebcc7c95a893b47dfa1ad51449c"
-        },
-        "files": [
-            "config/packages/test/dama_doctrine_test_bundle.yaml"
-        ]
-    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -135,6 +123,9 @@
     "egulias/email-validator": {
         "version": "3.1.1"
     },
+    "fakerphp/faker": {
+        "version": "v1.15.0"
+    },
     "fig/link-util": {
         "version": "1.1.2"
     },
@@ -152,6 +143,20 @@
     },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
+    },
+    "hautelook/alice-bundle": {
+        "version": "2.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.1",
+            "ref": "71822522faf7ed2792d86b7f94ce73443358ccb9"
+        },
+        "files": [
+            "config/packages/dev/hautelook_alice.yaml",
+            "config/packages/test/hautelook_alice.yaml",
+            "fixtures/.gitignore"
+        ]
     },
     "laminas/laminas-code": {
         "version": "4.4.2"
@@ -182,6 +187,19 @@
     },
     "namshi/jose": {
         "version": "7.2.3"
+    },
+    "nelmio/alice": {
+        "version": "3.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.2",
+            "ref": "0b9900ece737bec7752e4155c0164639dd9b0cb0"
+        },
+        "files": [
+            "config/packages/dev/nelmio_alice.yaml",
+            "config/packages/test/nelmio_alice.yaml"
+        ]
     },
     "nelmio/cors-bundle": {
         "version": "1.5",
@@ -444,6 +462,9 @@
             "src/Kernel.php"
         ]
     },
+    "symfony/http-client": {
+        "version": "v5.3.4"
+    },
     "symfony/http-client-contracts": {
         "version": "v2.4.0"
     },
@@ -558,6 +579,9 @@
     "symfony/polyfill-php81": {
         "version": "v1.23.0"
     },
+    "symfony/polyfill-uuid": {
+        "version": "v1.23.0"
+    },
     "symfony/process": {
         "version": "v5.3.4"
     },
@@ -653,6 +677,9 @@
             "templates/base.html.twig"
         ]
     },
+    "symfony/uid": {
+        "version": "v5.3.3"
+    },
     "symfony/validator": {
         "version": "4.3",
         "recipe": {
@@ -694,6 +721,15 @@
     },
     "symfonycasts/verify-email-bundle": {
         "version": "v1.5.0"
+    },
+    "theofidry/alice-data-fixtures": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "fe5a50faf580eb58f08ada2abe8afbd2d4941e05"
+        }
     },
     "theseer/tokenizer": {
         "version": "1.2.1"

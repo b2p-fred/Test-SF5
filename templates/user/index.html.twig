@@ -5,6 +5,11 @@
     <div class="p-5">
         <h1>Liste des utilisateurs</h1>
 
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_register') }}">Register a new user</a>
+            <hr/>
+        {% endif %}
+
         <table class="table table-responsive">
             <tr>
                 <th></th>
@@ -24,9 +29,5 @@
                 </tr>
             {% endfor %}
         </table>
-        {% if is_granted('ROLE_ADMIN') %}
-            <hr/>
-            <a href="{{ path('app_register') }}">Back</a>
-        {% endif %}
     </div>
 {% endblock %}

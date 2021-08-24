@@ -99,11 +99,35 @@ $ docker exec -it docker_sf5_php-fpm symfony console about
 Installation : 
 ```shell
 $ composer require --dev phpunit/phpunit symfony/test-pack symfony/phpunit-bridge
-
 ```
 
-Créer les fichiers de test dans le répertoire _tests_.
+Créer les fichiers de test dans le répertoire _tests_. Symfony installe un bridge qui permet de lancer les tests en pré chargeant l'environnement de test. Pour lancer les tests : 
 
+```shell
+$ ./bin/phpunit
+
+# La "vraie" version de phpunit est installée dans /usr/local/bin ou dans ./vendor/bin  
+```
+
+Par la suite on va installer un package pour disposer de fixtures de tests dans des fichiers Yaml; ce package remplace avantageusement `dama/doctrine-test-bundle` donc on ne l'installe plus !
+
+**DEPRECATED**
+
+    Pour optimiser les performances des tests, installer le bundle:
+    ```shell
+    $ composer require --dev dama/doctrine-test-bundle
+    ```
+    et voir la [doc ici](https://github.com/dmaicher/doctrine-test-bundle). L'idée est que chaque modification apportée à la base de données pendant un test est rollback à la fin de l'exécution du test :) 
+    
+    Ce bundle est également utilisable avec Behat ! Par contre, il envoie une deprecation notice:
+    ```
+    Remaining indirect deprecation notices (1)
+    
+      1x: The "DAMA\DoctrineTestBundle\Doctrine\DBAL\AbstractStaticDriverV2" class implements "Doctrine\DBAL\Driver\ExceptionConverterDriver" that is deprecated.
+        1x in PHPUnitExtension::executeBeforeFirstTest from DAMA\DoctrineTestBundle\PHPUnit
+    ```
+    qu'il est impossible de fixer ... [voir ici](https://github.com/dmaicher/doctrine-test-bundle/issues/129).
+    
 ## Some useful plugins/bundles
 
 ### Debug stuff
@@ -145,9 +169,17 @@ composer require symfony/security-bundle
 This to include the [Symfony security features](https://www.doctrine-project.org/) in the application.
 
 ### Doctrine ORM
+Doctrine is a popular ORM; see [here](https://www.doctrine-project.org/projects.html)
 ```shell
-composer require --with-all-dependencies doctrine
+$ composer require --with-all-dependencies doctrine
 ```
+
+Add some specific bundles to help matching with more databases: 
+```shell
+$ composer req fresh/doctrine-enum-bundle='~7.3'
+```
+See the `src/DBAL` directory content and the User entity *gender* attribute.
+
 
 **Note** sometimes one must use `--no-scripts` else the default cache clearing script declared in the *composer.json* will fail the installation.
 
@@ -259,4 +291,19 @@ $ composer require lexik/jwt-authentication-bundle
 # Generate SSL keys
 $ symfony console lexik:jwt:generate-keypair
 ```
+The default configuration is suitable if you configure the bundle properly. See this repo configuration and do not forget to generate the SSL keys!
+
+### API Platform
+More about [API Platform here](https://api-platform.com/)
+
+```shell
+# Install the bundle
+$ composer require api
+
+# Testing utilities
+$ composer require --dev symfony/browser-kit symfony/http-client 
+$ composer require --dev nelmio/alice
+```
+
+Create some test fixtures files in the fixtures directory 
 

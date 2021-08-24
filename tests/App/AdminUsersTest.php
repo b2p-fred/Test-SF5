@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Tests\App;
 
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -18,8 +18,8 @@ class AdminUsersTest extends WebTestCase
         $userRepository = static::getContainer()->get(UserRepository::class);
 
         // retrieve the test user
-        $testUser = $userRepository->findOneBy(['email' => 'fmohier@b2pweb.com']);
-//        $testUser = $userRepository->findOneByEmail('fmohier@b2pweb.com');
+        $testUser = $userRepository->findOneBy(['email' => 'big.brother@theworld.com']);
+//        $testUser = $userRepository->findOneByEmail('big.brother@theworld.com');
 
         // simulate $testUser being logged in
         $this->client->loginUser($testUser);
@@ -35,10 +35,16 @@ class AdminUsersTest extends WebTestCase
         $this->assertSelectorTextSame('h1', 'Liste des utilisateurs');
     }
 
+    /**
+     * @depends testUsersPage
+     */
     public function testUserPage(): void
     {
-        // Request the user page
-        $crawler = $this->client->request('GET', '/admin/user/1');
+        // Request the users page
+        $this->client->request('GET', '/admin/users');
+
+        // Click to get the user page
+        $this->client->clickLink('Fiche');
 
         // Validate a successful response and some content
         $this->assertResponseIsSuccessful();

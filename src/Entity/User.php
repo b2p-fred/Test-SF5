@@ -1,32 +1,66 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use App\DBAL\Types\HumanGenderType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * The User class is the main representation of an application's user.
+ *
+ * -----
+ *
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  *
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}},
+ * )
+ * @ApiFilter(PropertyFilter::class)
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
+     * Using the Symfony Uuid generators to create unique identifiers
+     * ($ composer require symfony/uid)
+     * See https://symfony.com/doc/current/components/uid.html.
+     * See https://github.com/symfony/symfony/issues/41772 to understand why
+     * it is not possible to generate a UuidV4 with a generator.
+     * Thus, it may be very interesting to use the ramsey/uuid to get UUID v4
+     * as strings in the database ? For the moment, uuid will need conversions -)
+     * -----.
+     *
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true, name="id")
      */
-    private int $id;
+    private UuidV4 $id;
+
+    public function __construct()
+    {
+        $this->id = Uuid::v4();
+    }
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     *
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     *
+     * @Groups({"user:read", "user:write"})
      */
     private string $email;
 
@@ -37,29 +71,90 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
+     * The plainPassword is used to provide a password that will be encoded before
+     * persisting in the database (e.g. password in a login form or user creation
+     * by an API endpoint).
+     *
+     * @Assert\NotBlank()
      */
-    private string $password;
+    private ?string $plainPassword;
 
     /**
-     * @Assert\NotBlank
-     * @ORM\Column(type="string", length=255)
+     * The hashed password.
+     *
+     * @ORM\Column(type="string", nullable=true)
      */
-    private string $FirstName;
+    private ?string $password;
 
     /**
+     * The user's first name.
+     *
      * @Assert\NotBlank
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"user:read", "user:write"})
      */
-    private string $LastName;
+    private string $firstName;
+
+    /**
+     * The user's last name.
+     *
+     * @Assert\NotBlank
+     * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"user:read", "user:write"})
+     */
+    private string $lastName;
+
+    /**
+     * The user's laguage.
+     *
+     * @Assert\NotBlank
+     * @ORM\Column(type="string", length=5)
+     *
+     * @Groups({"user:read", "user:write"})
+     */
+    private string $language = 'fr-fr';
 
     /**
      * @ORM\Column(type="boolean")
      */
     private bool $isVerified = false;
 
-    public function getId(): ?int
+    /**
+     * The user's gender.
+     *
+     * @ORM\Column(name="gender", type="enum_human_gender", nullable=false)
+     *
+     * @Groups({"user:read", "user:write"})
+     */
+    private string $gender = HumanGenderType::GENDER_UNKNOWN;
+
+    /**
+     * The user's date of birth.
+     *
+     * @ORM\Column(type="date", nullable=true)
+     *
+     * @Groups({"user:read", "user:write"})
+     */
+    private $birthdate;
+
+    /**
+     * The company the user is working for... I choose to make this an embedded
+     * resource. Thus, the company information are available for the user without
+     * an extra API request. Else I would have got only the company IRI
+     * To make it possible, I added the user:read group for some properties of
+     * the company.
+     * -----.
+     *
+     * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="users")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=true)
+     *
+     * @Groups({"user:read", "user:write"})
+     */
+    private ?Company $company;
+
+    public function getId()
     {
         return $this->id;
     }
@@ -148,29 +243,49 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function getFirstName(): ?string
     {
-        return $this->FirstName;
+        return $this->firstName;
     }
 
-    public function setFirstName(string $FirstName): self
+    public function setFirstName(string $firstName): self
     {
-        $this->FirstName = $FirstName;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
     public function getLastName(): ?string
     {
-        return $this->LastName;
+        return $this->lastName;
     }
 
-    public function setLastName(string $LastName): self
+    public function setLastName(string $lastName): self
     {
-        $this->LastName = $LastName;
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * The user's name is composed of the first name and last name.
+     */
+    public function getName(): ?string
+    {
+        return $this->firstName.' '.$this->lastName;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
 
         return $this;
     }
@@ -183,6 +298,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getBirthdate(): ?\DateTimeInterface
+    {
+        return $this->birthdate;
+    }
+
+    public function setBirthdate(?\DateTimeInterface $birthdate): self
+    {
+        $this->birthdate = $birthdate;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    public function getIsVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        // forces the object to look "dirty" to Doctrine. Avoids
+        // Doctrine *not* saving this entity, if only plainPassword changes
+        $this->password = null;
 
         return $this;
     }

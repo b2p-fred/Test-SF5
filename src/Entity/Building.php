@@ -3,66 +3,101 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\BuildingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @ORM\Entity(repositoryClass=BuildingRepository::class)
  *
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={
+ *      "groups"={"building:read"},
+ *      "skip_null_values" = false,
+ *     },
+ *     denormalizationContext={"groups"={"building:write"}},
+ * )
  */
 class Building
 {
     /**
-     * @var int
-     *
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="uuid", unique=true, name="id")
      */
-    private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=512, nullable=true)
-     */
-    private $address;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $zipcode;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $city;
-
-    /**
-     * @var Collection&iterable<Company>
-     *
-     * @ORM\OneToMany(targetEntity=Company::class, mappedBy="building")
-     */
-    private $companies;
+    private UuidV4 $id;
 
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->companies = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    /**
+     * @param string $name a name property - this description will be available in the API documentation too
+     *
+     * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"building:read", "building:write", "company:item:get"})
+     */
+    private string $name;
+
+    /**
+     * @param string $address a name property - this description will be available in the API documentation too
+     *
+     * @ORM\Column(type="string", length=512, nullable=true)
+     *
+     * @Groups({"building:read", "building:write", "company:item:get"})
+     */
+    private ?string $address;
+
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     *
+     * @Groups({"building:read", "building:write", "company:item:get"})
+     */
+    private ?string $zipcode;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Groups({"building:read", "building:write", "company:item:get"})
+     */
+    private ?string $city;
+
+    /**
+     * This resource is a Building sub-resource, whereas it is possible to
+     * GET /api/buildgins/{uuid}/companies to get the list of the companies
+     * related to a building.
+     *
+     * @var Collection&iterable<Company>
+     *
+     * @ORM\OneToMany(targetEntity=Company::class, mappedBy="building")
+     *
+     * @ApiSubresource()
+     * @Groups({"building:read", "building:write"})
+     */
+    private $companies;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     *
+     * @Groups({"building:read", "building:write"})
+     */
+    private ?float $lat;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     *
+     * @Groups({"building:read", "building:write"})
+     */
+    private ?float $lng;
+
+    public function getId(): ?UuidV4
     {
         return $this->id;
     }
@@ -91,12 +126,12 @@ class Building
         return $this;
     }
 
-    public function getZipcode(): ?int
+    public function getZipcode(): ?string
     {
         return $this->zipcode;
     }
 
-    public function setZipcode(?int $zipcode): self
+    public function setZipcode(?string $zipcode): self
     {
         $this->zipcode = $zipcode;
 
@@ -141,6 +176,30 @@ class Building
                 $company->setBuilding(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLat(): ?float
+    {
+        return $this->lat;
+    }
+
+    public function setLat(?float $lat): self
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    public function getLng(): ?float
+    {
+        return $this->lng;
+    }
+
+    public function setLng(?float $lng): self
+    {
+        $this->lng = $lng;
 
         return $this;
     }
