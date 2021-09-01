@@ -23,12 +23,6 @@ services:
     volumes:
       - db-data:/var/lib/mysql
 
-  # MySQL Web interface
-  # Browse http://localhost:8080 to monitor the database
-  phpmyadmin:
-    ports:
-      - "8080:80"
-
   # Catch mails sent from the PHP application
   # Browse http://localhost:1080 to view the webmail
   mailcatcher:

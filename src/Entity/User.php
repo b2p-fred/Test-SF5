@@ -46,6 +46,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true, name="id")
+     *
+     * @Groups({"user:read", "user:write"})
      */
     private UuidV4 $id;
 
@@ -67,6 +69,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @param array<string> $roles The user roles
      * @ORM\Column(type="json")
+     *
+     * @Groups({"user:read"})
      */
     private array $roles = [];
 

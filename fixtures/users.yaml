@@ -26,7 +26,7 @@ App\Entity\User:
     birthdate: <(new \DateTime('1957-02-01'))>
     company: '@company_1'
 
-  user_{3..100}:
+  user_{3..1000}:
     firstname: <firstName()>
     lastname: <lastName()>
     email (unique): <safeEmail()>

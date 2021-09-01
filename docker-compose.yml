@@ -58,26 +58,26 @@ services:
     networks:
       - dev
 
-  # MySQL Web interface
-  # Browse http://localhost:8080 to monitor the database
-  phpmyadmin:
-    build:
-      context: docker/phpmyadmin
-      args:
-        - TAG_PHPMYADMIN=${TAG_PHPMYADMIN:-latest}
-    image: ${PROJECT:-test}_dbadmin:${PROJECT_VERSION:-0}
-    container_name: ${PROJECT:-test}_phpmyadmin
-    restart: unless-stopped
-    depends_on:
-      - mariadb
-    environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=${DATABASE_HOST:-mariadb}
-      - PMA_PORT=${DATABASE_PORT:-3306}
-      - PMA_USER=root
-      - PMA_PASSWORD=${DATABASE_ROOT_PASSWORD:-}
-    networks:
-      - dev
+#  # MySQL Web interface
+#  # Browse http://localhost:8080 to monitor the database
+#  phpmyadmin:
+#    build:
+#      context: docker/phpmyadmin
+#      args:
+#        - TAG_PHPMYADMIN=${TAG_PHPMYADMIN:-latest}
+#    image: ${PROJECT:-test}_dbadmin:${PROJECT_VERSION:-0}
+#    container_name: ${PROJECT:-test}_phpmyadmin
+#    restart: unless-stopped
+#    depends_on:
+#      - mariadb
+#    environment:
+#      - PMA_ARBITRARY=1
+#      - PMA_HOST=${DATABASE_HOST:-mariadb}
+#      - PMA_PORT=${DATABASE_PORT:-3306}
+#      - PMA_USER=root
+#      - PMA_PASSWORD=${DATABASE_ROOT_PASSWORD:-}
+#    networks:
+#      - dev
 
   # Catch mails sent from the PHP application
   # Browse http://localhost:1080 to view the webmail

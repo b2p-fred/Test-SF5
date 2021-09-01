@@ -85,13 +85,13 @@ class ApiInformationManager
     public function getBaseConfiguration(): array
     {
         return [
-            'root_directory' => $this->getRootDir(),
-            'api_title' => $this->getApiTitle(),
-            'api_description' => $this->getApiDescription(),
-            'api_version' => $this->getApiVersion(),
-            'api_legal_notice' => $this->getLegalNoticeLink(),
-            'online_help_link' => $this->getOnlineHelpLink(),
-            'language' => $this->getDefaultLanguage(),
+//            'root_directory' => $this->getRootDir(),
+            'apiTitle' => $this->getApiTitle(),
+            'apiDescription' => $this->getApiDescription(),
+            'apiVersion' => $this->getApiVersion(),
+            'apiLegalNoticeUri' => $this->getLegalNoticeLink(),
+            'onlineHelpUri' => $this->getOnlineHelpLink(),
+            'defaultLanguage' => $this->getDefaultLanguage(),
         ];
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Action;
 
 use App\Manager\ApiInformationManager;
-//use App\Utils\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
