@@ -96,3 +96,4 @@ services:
 
 networks:
   dev:
+    name: backend_dev
