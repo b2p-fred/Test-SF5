@@ -157,7 +157,6 @@ jobs:
           composer tests-unit-coverage
           composer tests-api-coverage
           composer tests-app-coverage
-          composer tests-functional-coverage
 
       - name: Upload tests results
         uses: actions/upload-artifact@v2

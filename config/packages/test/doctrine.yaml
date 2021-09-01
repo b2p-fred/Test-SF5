@@ -1,5 +1,4 @@
 doctrine:
     dbal:
         # "TEST_TOKEN" is typically set by ParaTest
-        dbname_suffix: '_test%env(default::TEST_TOKEN)%'
-#        url: "sqlite:///:memory:"
+        dbname_suffix: '%env(default::DATABASE_NAME_SUFFIX)%%env(default::TEST_TOKEN)%'
