@@ -8,8 +8,8 @@ services:
       context: docker/php-fpm
       args:
         - TAG_PHP=${TAG_PHP:-7.4-fpm}
-    image: ${PROJECT:-test}_php:${PROJECT_VERSION:-0}
-    container_name: ${PROJECT:-test}_php-fpm
+    image: ${IMAGE_NAME:-test:beta}
+    container_name: ${CONTAINER_NAME:-test}
     restart: unless-stopped
     environment:
       - APP_USER=${APP_USER:-www-data}
