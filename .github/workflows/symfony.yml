@@ -170,7 +170,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./artifacts/coverage-utils.xml,./artifacts/coverage-unit.xml
-          flags: unit-tests
+          flags: backend-unit-tests
           env_vars: OS,PHP
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)
@@ -180,8 +180,8 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./artifacts/coverage-api.xml,./artifacts/coverage-functional.xml
-          flags: functional-tests
+          files: ./artifacts/coverage-api.xml
+          flags: backend-api-tests
           env_vars: OS,PHP
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)
@@ -192,7 +192,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./artifacts/coverage-app.xml
-          flags: app-tests
+          flags: backend-app-tests
           env_vars: OS,PHP
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)
