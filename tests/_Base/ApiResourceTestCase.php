@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Base;
+namespace App\Tests\_Base;
 
 /**
  * Base class for testing all the API endpoints.
@@ -18,7 +18,7 @@ class ApiResourceTestCase extends CustomApiTestCase
 {
     public const API_PREFIX = '/api';
 
-    public static bool $verbose = true;
+    public static bool $verbose = false;
 
     private static string $resource;
     private static string $resources;
@@ -37,10 +37,16 @@ class ApiResourceTestCase extends CustomApiTestCase
     public int $profilerQueryCount = 10;
     public int $profilerQueryDuration = 100;
 
+    // In the collection, check all those fields are present
     public array $expectedFields = [];
 
-    public array $postedData = [];
+    // Post some data for a new resource creation
+    public static array $postedData = [];
     public array $expectedResponse = [];
+
+    // Data to update a resource
+    public array $updateData = [];
+
 
     /**
      * Configure the test class.
@@ -98,6 +104,9 @@ class ApiResourceTestCase extends CustomApiTestCase
         static::createClient()->request('GET', self::$resources);
         $this->assertResponseStatusCodeSame(401, 'JWT Token not found');
 
+        static::createClient()->request('GET', self::$resources);
+        $this->assertResponseStatusCodeSame(401, 'JWT Token not found');
+
         static::createClient()->request('POST', self::$resources, [
             'json' => [],
         ]);
@@ -105,7 +114,21 @@ class ApiResourceTestCase extends CustomApiTestCase
     }
 
     /**
-     * Test the listing of a collection.
+     * Test the listing of a resources' collection.
+     * -----
+     * How-to:
+     * In an inherited class:
+     * - define the fields that are expected for each item of the collection
+     *  $this->expectedFields = [
+     *      'firstName',
+     *      'lastName',
+     *  ]
+     *
+     * - optionally activate the Symfony profiler and specify the maximum
+     * query count and duration
+     *  $this->profilerEnabled = true;
+     *  $this->profilerQueryCount = 13;
+     *  $this->profilerQueryDuration = 120;
      */
     public function testListResource()
     {
@@ -219,22 +242,33 @@ class ApiResourceTestCase extends CustomApiTestCase
 
     /**
      * Test the creation of a new resource.
+     * -----
+     * How-to:
+     * In an inherited class:
+     * - define the data to post for creating a new resource
+     *  self::$postedData = [
+     *      'firstName' => 'John',
+     *      'lastName' => 'Doe',
+     *  ]
+     * - define the expected result:
+     *  $this->expectedResponse = [
+     *      "type" => "simple",
+     *      "firstName" => "John",
+     *      "lastName" => "Doe",
+     *  ]
+     * - call this method:
+     *  parent::testCreateResource();
      *
      * @depends testListResource
      */
     public function testCreateResource()
     {
-        if (self::$verbose) {
-            echo PHP_EOL.'----- '.__METHOD__.sprintf(', received %d out of %d %s, %d pages', self::$itemsCount, self::$totalItemsCount, self::$type, self::$pageCount).' -----'.PHP_EOL;
-            echo PHP_EOL.'----- '.__METHOD__.sprintf(', received %d out of %d %s, %d pages', self::$pageSize, self::$count, self::$type, self::$pageCount).' -----'.PHP_EOL;
-        }
-
         $client = static::createAuthenticatedClient();
 
-        // Add one more item in the list
+        // 1- Add one more item in the list
         try {
             $response = $client->request('POST', self::$resources, [
-                    'json' => $this->postedData,
+                    'json' => self::$postedData,
                 ]
             );
         } catch (\Exception $exception) {
@@ -245,17 +279,18 @@ class ApiResourceTestCase extends CustomApiTestCase
         $this->assertResponseStatusCodeSame(201);
         $json = \json_decode($response->getContent(), true);
         if (self::$verbose) {
-            echo PHP_EOL.'----- '.__METHOD__.', received some data: '.PHP_EOL;
+            echo PHP_EOL.'----- '.__METHOD__.', received a creation response: '.PHP_EOL;
             echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
-            echo "\r\n-----\r\n";
+            echo PHP_EOL.'-----'.PHP_EOL;
         }
 
-        // Some checks in the data
+        // 2- Some checks in the response data
         $this->assertEquals('/api/contexts/'.self::$type, $json['@context']);
         $this->assertStringStartsWith(self::$resources, $json['@id']);
         $this->assertEquals(self::$type, $json['@type']);
 
         // Check expected fields are present with correct values
+        $receivedItem = $json;
         $receivedFieldsList = array_keys($json);
         foreach ($this->expectedResponse as $field => $value) {
             $this->assertArrayHasKey(
@@ -266,15 +301,26 @@ class ApiResourceTestCase extends CustomApiTestCase
             $this->assertEquals($value, $json[$field]);
         }
 
-        // Confirm one more item in the list
+        // 3- Item get the new resource
+        $response = $client->request('GET', $json['@id']);
+        $this->assertResponseStatusCodeSame(200);
+        $json = \json_decode($response->getContent(), true);
+        if (self::$verbose) {
+            echo PHP_EOL.'----- '.__METHOD__.', received a get item response: '.PHP_EOL;
+            echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+            echo PHP_EOL.'-----'.PHP_EOL;
+        }
+        // Same as the created item!
+        $this->assertEquals($receivedItem, $json);
+
+        // 4- Confirm one more item in the list
         $response = $client->request('GET', self::$resources);
         $this->assertResponseStatusCodeSame(200);
         $json = \json_decode($response->getContent(), true);
-
         if (self::$verbose) {
-            echo PHP_EOL.'----- '.__METHOD__.', received some data: '.PHP_EOL;
+            echo PHP_EOL.'----- '.__METHOD__.', received collection data: '.PHP_EOL;
             echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
-            echo PHP_EOL.'-----';
+            echo PHP_EOL.'-----'.PHP_EOL;
         }
 
         // Total items count
@@ -286,5 +332,104 @@ class ApiResourceTestCase extends CustomApiTestCase
                 echo PHP_EOL.'***** '.__METHOD__.', did not checked total items count.'.' *****'.PHP_EOL;
             }
         }
+    }
+
+    /**
+     * Test the update of a resource.
+     * -----
+     * How-to:
+     * In an inherited class:
+     * - it will reuse the former defined $postedData, but you can redefine them
+     * - define the data to update:
+     *  $this->updateData = [
+     *      "type" => "simple",
+     *      "firstName" => "Jane",
+     *      "lastName" => "Doe",
+     *  ]
+     * - call this method:
+     *  parent::testUpdateResource();
+     *
+     * @depends testCreateResource
+     */
+    public function testUpdateResource()
+    {
+        if (self::$verbose) {
+            echo PHP_EOL.'----- '.__METHOD__.', posted: '.serialize(self::$postedData).' -----'.PHP_EOL;
+        }
+        $client = static::createAuthenticatedClient();
+
+        // 1 - Add one more item in the list
+        $response = $client->request('POST', self::$resources, ['json' => self::$postedData]);
+        $this->assertResponseStatusCodeSame(201);
+        $json = \json_decode($response->getContent(), true);
+        if (self::$verbose) {
+            echo PHP_EOL.'----- '.__METHOD__.', created a new resource: '.$json['@id'].' -----'.PHP_EOL;
+        }
+        $newExpectedData = array_merge($json, $this->updateData);
+
+        // 2 - Update the data
+        // PUT remplace et PATCH modifie, mais API Platform traite de la même façon
+        // Si une donnée n'est pas envoyée en PUT elle ne sera pas supprimée
+//        // PATCH impose d'utiliser le MIME type: "application/merge-patch+json"
+//        $response = $client->request('PATCH', $json['@id'], [
+//                'json' => $this->updateData,
+//            ]
+//        );
+        $response = $client->request('PUT', $json['@id'], [
+                'json' => $this->updateData,
+            ]
+        );
+        if (self::$verbose) {
+            echo PHP_EOL.'----- '.__METHOD__.', received a patch item response: '.PHP_EOL;
+            echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+            echo PHP_EOL.'-----'.PHP_EOL;
+        }
+
+        // 3- Item get the new resource
+        $response = $client->request('GET', $json['@id']);
+        $this->assertResponseStatusCodeSame(200);
+        $json = \json_decode($response->getContent(), true);
+        if (self::$verbose) {
+            echo PHP_EOL.'----- '.__METHOD__.', received a get item response: '.PHP_EOL;
+            echo json_encode(json_decode($response->getContent()), JSON_PRETTY_PRINT);
+            echo PHP_EOL.'-----'.PHP_EOL;
+        }
+        // Same as the expected data!
+        $this->assertEquals($newExpectedData, $json);
+    }
+
+    /**
+     * Test the deletion of a resource.
+     * -----
+     * How-to:
+     * In an inherited class:
+     * - it will reuse the former defined $postedData, but you can redefine them
+     * - call this method:
+     *  parent::testDeleteResource();
+     *
+     * @depends testCreateResource
+     */
+    public function testDeleteResource()
+    {
+        $client = static::createAuthenticatedClient();
+
+        // 1 - Add one more item in the list
+        $response = $client->request('POST', self::$resources, ['json' => self::$postedData]);
+        $this->assertResponseStatusCodeSame(201);
+        $json = \json_decode($response->getContent(), true);
+        if (self::$verbose) {
+            echo PHP_EOL.'----- '.__METHOD__.', created a new resource: '.$json['@id'].' -----'.PHP_EOL;
+        }
+
+        // 3 - Delete the new item
+        $response = $client->request('DELETE', $json['@id']);
+        $this->assertResponseStatusCodeSame(204);
+        if (self::$verbose) {
+            echo PHP_EOL.'----- '.__METHOD__.', received a delete item confirmation '.' -----'.PHP_EOL;
+        }
+
+        // 3- Item get the former resource -> does not exist anymore!
+        $response = $client->request('GET', $json['@id']);
+        $this->assertResponseStatusCodeSame(404);
     }
 }

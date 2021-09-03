@@ -156,12 +156,12 @@ cs: ## Run all coding standards checks
 tests: phpunit.xml.dist ## Run all the tests
 	$(COMPOSER) tests
 unit-tests: phpunit.xml.dist ## Run the unit tests
-	$(COMPOSER) test-utils
-	$(COMPOSER) test-unit
+	$(COMPOSER) tests-utils
+	$(COMPOSER) tests-unit
 api-tests: phpunit.xml.dist ## Run the API tests
-	$(COMPOSER) test-api
+	$(COMPOSER) tests-api
 app-tests: phpunit.xml.dist ## Run the application tests
-	$(COMPOSER) test-app
+	$(COMPOSER) tests-app
 
 
 ssh: ## Access Docker container terminal.

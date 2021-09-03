@@ -111,7 +111,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $lastName;
 
     /**
-     * The user's laguage.
+     * The user's language.
      *
      * @Assert\NotBlank
      * @ORM\Column(type="string", length=5)

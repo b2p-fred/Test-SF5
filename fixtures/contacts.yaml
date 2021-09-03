@@ -1,0 +1,37 @@
+#
+# Some contacts
+#
+App\Entity\Contact:
+  contact_1:
+    firstname: Great
+    lastname: Chief
+    type: responsible
+    email: great.chief@the-world.com
+    site: '@site_1'
+
+  contact_2:
+    firstname: Small
+    lastname: Chief
+    type: simple
+    email: small.chief@the-world.com
+    site: '@site_1'
+
+  contact_3:
+    firstname: Firemen
+    lastname: Chief
+    type: emergency
+    email: firemen.chief@the-world.com
+    site: '@site_1'
+
+  contact_{4..10}:
+    firstname: <firstName()>
+    lastname: <lastName()>
+    type: visitor
+    email: visitor.<current()>\@the-world.com
+    identifier: Visitor<current()>
+    password: Visitor!
+#    phone: '<e164PhoneNumber()>'
+    language: <randomElement(['fr', 'fr-fr', 'en-gb', 'es-es', 'de-de', 'it-it', ''])>
+
+    # 90% have a site relation!
+    site: 90%? @site_<numberBetween(1, 10)>

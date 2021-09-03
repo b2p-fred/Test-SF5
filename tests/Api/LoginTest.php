@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api;
 
-use App\Tests\Base\CustomApiTestCase;
+use App\Tests\_Base\CustomApiTestCase;
 
 class LoginTest extends CustomApiTestCase
 {
@@ -25,7 +25,7 @@ class LoginTest extends CustomApiTestCase
     {
         static::createClient()->request('POST', '/api/login_check', [
             'json' => [
-                'email' => 'big.brother@theworld.com',
+                'email' => 'big.brother@the-world.com',
                 'password' => 'I@mTh3B0ss!',
             ],
         ]);
@@ -53,7 +53,7 @@ class LoginTest extends CustomApiTestCase
     {
         static::createClient()->request('POST', '/api/login_check', [
             'json' => [
-                'email' => 'big.brother@theworld.com',
+                'email' => 'big.brother@the-world.com',
                 'password' => 'Bad password',
             ],
         ]);

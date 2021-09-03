@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Base;
+namespace App\Tests\_Base;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
@@ -45,7 +45,7 @@ class CustomApiTestCase extends ApiTestCase
     /**
      * Create a client with a default Authorization header.
      */
-    protected function createAuthenticatedClient(string $username = 'big.brother@theworld.com', string $password = 'I@mTh3B0ss!'): Client
+    protected function createAuthenticatedClient(string $username = 'big.brother@the-world.com', string $password = 'I@mTh3B0ss!'): Client
     {
         $client = static::createMyClient();
         $response = $this->logIn($client, $username, $password);

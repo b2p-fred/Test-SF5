@@ -8,6 +8,8 @@ parameters:
     online_help_uri:  'https://help.eprotocole.com'
     default_language: 'fr-FR'
 
+    documents_directory: "%kernel.project_dir%/public/uploaded_files"
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -59,3 +61,8 @@ services:
             $onlineHelpLink: '%online_help_uri%'
             $defaultLanguage: '%default_language%'
 
+    ## Files management
+    ## -----
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%documents_directory%'

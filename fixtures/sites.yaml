@@ -1,0 +1,26 @@
+#
+# Some sites
+#
+App\Entity\Site:
+  site_1:
+    name: "Site chargeur 1"
+    # fixme Make it automatic!
+    title: 'site-chargeur-1'
+    mainAddress: '@address_1'
+
+  site_2:
+    name: "Site chargeur 2"
+    # fixme Make it automatic!
+    title: 'site-chargeur-2'
+    mainAddress: '@address_2'
+    vehicleAddress: '@address_2'
+
+  site_{3..100}:
+    name: Site <current()>
+    # fixme Make it automatic!
+    title: site-<current()>
+    description: <sentences(3, true)>
+    # Define this relation on the other side
+#    contacts:
+    # Define this relation on the other side
+#    documents:

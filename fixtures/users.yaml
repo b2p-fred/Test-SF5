@@ -6,7 +6,7 @@ App\Entity\User:
   user_1:
     firstname: Big
     lastname: Brother
-    email (unique): big.brother@theworld.com
+    email: big.brother@the-world.com
     plainPassword: I@mTh3B0ss!
     isverified: true
     language: 'fr-FR'
@@ -18,7 +18,7 @@ App\Entity\User:
   user_2:
     firstname: "Gaston"
     lastname: "Lagaffe"
-    email (unique): gaston.lagaffe@edition-dupuis.com
+    email: gaston.lagaffe@edition-dupuis.com
     plainPassword: Gaston!
     isverified: false
     language: 'fr-FR'

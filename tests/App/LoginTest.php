@@ -34,7 +34,7 @@ class LoginTest extends WebTestCase
 
         // Signing in a user
         $crawler = $this->client->submitForm('Sign in', [
-            'email' => 'big.brother@theworld.com',
+            'email' => 'big.brother@the-world.com',
             'password' => 'I@mTh3B0ss!',
         ]);
         // Go to the home page
@@ -59,7 +59,7 @@ class LoginTest extends WebTestCase
 
         // Signing in a user
         $crawler = $this->client->submitForm('Sign in', [
-            'email' => 'big.brother@theworld.com',
+            'email' => 'big.brother@the-world.com',
             'password' => 'A_bad_password',
         ]);
         // Go to the login page!

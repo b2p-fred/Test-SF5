@@ -75,7 +75,6 @@ security:
   # Note: Only the *first* access control that matches will be used
   access_control:
     # API anonymous routes
-    - { path: '^/api', roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: '^/api/docs', roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: '^/api/version', roles: IS_AUTHENTICATED_ANONYMOUSLY }
 

@@ -1,0 +1,31 @@
+#
+# Some documents
+#
+App\Entity\Document:
+  document_1:
+    name: "PdS 1"
+    type: 'main'
+    # fixme Make it automatic!
+    title: 'pds-1'
+    description: "Rien de spécial :)"
+    language: 'fr-fr'
+    filename: 'pds-1.pdf'
+    site: '@site_1'
+
+  document_2:
+    name: "PdS 2"
+    type: 'main'
+    # fixme Make it automatic!
+    title: 'pds-2'
+    language: 'fr-FR'
+    filename: 'pds-2.pdf'
+    site: '@site_2'
+
+  document_{3..100}:
+    name: document <current()>
+    type: <randomElement(['main', 'annex', 'annex', 'annex', 'annex'])>
+    # fixme Make it automatic!
+    title: document-<current()>
+    description: 10%? <sentences(3, true)>
+    language: <randomElement(['fr-fr', 'en-gb', 'es-es', 'de-de', 'it-it', '', 'all'])>
+    site: '@site_<numberBetween(1, 100)>'

@@ -1,0 +1,24 @@
+App\Entity\Address:
+  address_1:
+    address: "Rue des jardins"
+    zipcode: 26500
+    city: "Bourg-lès-Valence"
+    lat: 44.945974
+    lng: 4.895834
+
+  address_2:
+    address: "Place de la liberté"
+    address2: "En face du théâtre"
+    zipcode: 26000
+    city: "Valence"
+    lat: 44.933121
+    lng: 4.892036
+
+  address_{3..100}:
+    address: <streetAddress()>
+    address2: 20%? <secondaryAddress()>
+    zipcode: <numerify('#####')>
+    city: '<city()>'
+    country: 50%? <randomElement(['France'])>
+    lat: '<latitude(41.31667, 51.07167)>'
+    lng: '<longitude(4.79556, 9.56)>'

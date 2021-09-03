@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api;
 
-use App\Tests\Base\ApiResourceTestCase;
+use App\Tests\_Base\ApiResourceTestCase;
 
 class BuildingResourceTest extends ApiResourceTestCase
 {
@@ -23,8 +23,6 @@ class BuildingResourceTest extends ApiResourceTestCase
 
     public function testListResource(array $expectedFields = [])
     {
-        self::$verbose = false;
-
         $this->profilerEnabled = true;
         $this->profilerQueryCount = 13;
         $this->profilerQueryDuration = 100;
@@ -44,9 +42,7 @@ class BuildingResourceTest extends ApiResourceTestCase
 
     public function testCreateResource()
     {
-        self::$verbose = false;
-
-        $this->postedData = [
+        self::$postedData = [
             'name' => 'New item',
             'city' => 'The city',
         ];

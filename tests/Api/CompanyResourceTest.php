@@ -2,7 +2,7 @@
 
 namespace App\Tests\Api;
 
-use App\Tests\Base\ApiResourceTestCase;
+use App\Tests\_Base\ApiResourceTestCase;
 
 class CompanyResourceTest extends ApiResourceTestCase
 {
@@ -42,7 +42,7 @@ class CompanyResourceTest extends ApiResourceTestCase
     {
         self::$verbose = false;
 
-        $this->postedData = [
+        self::$postedData = [
             'name' => 'New item',
         ];
         $this->expectedResponse = [
