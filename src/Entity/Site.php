@@ -43,25 +43,25 @@ class Site
     }
 
     /**
-     * The site name.
+     * Name of the site.
      *
      * @ORM\Column(type="string", length=255)
      */
-    private string $name;
+    private string $name = '';
 
     /**
      * Title ... may be a slug from the name?
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $title;
+    private ?string $title = '';
 
     /**
      * Multi line description of the site.
      *
-     * @ORM\Column(type="text", options={"default":""})
+     * @ORM\Column(type="text", options={"default":""}, nullable=true)
      */
-    private string $description = '';
+    private ?string $description = '';
 
     /**
      * The list of all the contacts attached to the site.
@@ -88,14 +88,14 @@ class Site
     private $documents;
 
     /**
-     * @ORM\OneToOne(targetEntity=Address::class, inversedBy="site2", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Address::class, inversedBy="site", cascade={"persist", "remove"})
      */
-    private ?Address $mainAddress;
+    private ?Address $mainAddress = null;
 
     /**
-     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Address::class, inversedBy="siteVehicle", cascade={"persist", "remove"})
      */
-    private ?Address $vehicleAddress;
+    private ?Address $vehicleAddress = null;
 
     public function getId(): ?UuidV4
     {

@@ -2,6 +2,7 @@
 
 namespace App\Tests\Api;
 
+use App\Entity\Address;
 use App\Tests\_Base\ApiResourceTestCase;
 
 class AddressResourceTest extends ApiResourceTestCase
@@ -24,7 +25,7 @@ class AddressResourceTest extends ApiResourceTestCase
     public function testListResource()
     {
         $this->profilerEnabled = true;
-        $this->profilerQueryCount = 13;
+        $this->profilerQueryCount = 23; // note that it may be much
         $this->profilerQueryDuration = 70;
 
         $this->expectedFields = [
@@ -46,7 +47,7 @@ class AddressResourceTest extends ApiResourceTestCase
 
     public function testCreateResource()
     {
-        self::$verbose = true;
+//        self::$verbose = true;
 
         self::$postedData = [
             'type' => 'main',
@@ -64,8 +65,8 @@ class AddressResourceTest extends ApiResourceTestCase
             'zipcode' => '26000',
             'city' => 'Valence',
             "country" => null,
-            "lat" => null,
-            "lng" => null,
+            "lat" => Address::DEFAULT_LAT,
+            "lng" => Address::DEFAULT_LNG,
             "site" => null,
         ];
 

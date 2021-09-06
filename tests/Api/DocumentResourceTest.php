@@ -44,7 +44,7 @@ class DocumentResourceTest extends ApiResourceTestCase
 
     public function testCreateResource()
     {
-        self::$verbose = true;
+//        self::$verbose = true;
 
         self::$postedData = [
             'type' => 'main',

@@ -1,2 +1,6 @@
 hautelook_alice:
-    fixtures_path: fixtures
+    # Path(s) to which to look for fixtures relative to the project directory or the bundle path.
+    fixtures_path:
+        - 'fixtures'
+    root_dirs:
+        - '%kernel.project_dir%'

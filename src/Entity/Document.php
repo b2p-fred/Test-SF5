@@ -53,14 +53,14 @@ class Document
      *
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name = '';
 
     /**
      * Title ... may be a slug from the name?
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $title;
+    private ?string $title = '';
 
     /**
      * Multi line description of the document.
@@ -79,14 +79,24 @@ class Document
     /**
      * @ORM\Column(type="string", length=512, nullable=true)
      */
-    private $filename;
+    private ?string $filename = '';
 
     /**
      * The site the document is attached to.
      *
      * @ORM\ManyToOne(targetEntity=Site::class, inversedBy="documents")
      */
-    private $site;
+    private ?Site $site;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private int $version = 0;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?\DateTime $versionedAt = null;
 
     public function getId(): UuidV4
     {
@@ -173,6 +183,31 @@ class Document
     public function setSite(?Site $site): self
     {
         $this->site = $site;
+
+        return $this;
+    }
+
+    public function getVersion(): ?int
+    {
+        return $this->version;
+    }
+
+    public function setVersion(int $version): self
+    {
+        $this->version = $version;
+        $this->setVersionedAt(new \DateTime());
+
+        return $this;
+    }
+
+    public function getVersionedAt(): ?\DateTime
+    {
+        return $this->versionedAt;
+    }
+
+    public function setVersionedAt(?\DateTime $versionedAt): self
+    {
+        $this->versionedAt = $versionedAt;
 
         return $this;
     }

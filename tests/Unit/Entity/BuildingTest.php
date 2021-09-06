@@ -36,7 +36,7 @@ class BuildingTest extends TestCase
         $this->assertEquals('26000', $building->getZipcode());
     }
 
-    public function testABuilding()
+    public function testBuilding()
     {
         $company = new Company();
         $company->setName('Acme');

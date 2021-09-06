@@ -118,12 +118,12 @@
         "tests-utils": "./bin/phpunit --testsuite 'Utils tests'",
         "tests-unit": "./bin/phpunit --testsuite 'Unit tests'",
         "tests-app": "./bin/phpunit --testsuite 'App tests'",
-        "tests-api": "./bin/phpunit --testsuite 'Api tests'",
+        "tests-api": "./bin/phpunit --testsuite 'API tests'",
         "tests-coverage": "./bin/phpunit --coverage-clover artifacts/coverage.xml",
         "tests-utils-coverage": "./bin/phpunit --testsuite 'Utils tests' --coverage-clover artifacts/coverage-utils.xml",
         "tests-unit-coverage": "./bin/phpunit --testsuite 'Unit tests' --coverage-clover artifacts/coverage-unit.xml",
         "tests-app-coverage": "./bin/phpunit --testsuite 'App tests' --coverage-clover artifacts/coverage-app.xml",
-        "tests-api-coverage": "./bin/phpunit --testsuite 'Api tests' --coverage-clover artifacts/coverage-api.xml"
+        "tests-api-coverage": "./bin/phpunit --testsuite 'API tests' --coverage-clover artifacts/coverage-api.xml"
     },
     "conflict": {
         "symfony/symfony": "*"

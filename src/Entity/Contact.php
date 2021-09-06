@@ -55,35 +55,35 @@ class Contact
      *
      * @ORM\Column(type="string", length=255)
      */
-    private string $firstName;
+    private string $firstName = '';
 
     /**
      * Contact last name.
      *
      * @ORM\Column(type="string", length=255)
      */
-    private string $lastName;
+    private string $lastName = '';
 
     /**
      * Contact mail address.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $email;
+    private ?string $email = null;
 
     /**
      * Contact identifier (used only for the mobile access).
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $identifier = '';
+    private ?string $identifier = null;
 
     /**
      * Contact password (used only for the mobile access).
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $password = '';
+    private ?string $password = null;
 
     /**
      * Contact preferred language.
@@ -105,7 +105,7 @@ class Contact
      *
      * @ORM\Column(type="string", length=16, nullable=true)
      */
-    private ?string $phone = '';
+    private ?string $phone = null;
 
     /**
      * The site the contact is attached to.

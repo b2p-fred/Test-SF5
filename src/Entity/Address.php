@@ -25,6 +25,9 @@ use Symfony\Component\Uid\UuidV4;
  */
 class Address
 {
+    const DEFAULT_LAT = 43.8168891505918;
+    const DEFAULT_LNG = 5.045658092187997;
+
     use TimestampableEntity;
 
     /**
@@ -45,61 +48,66 @@ class Address
      *
      * @ORM\Column(name="type", type="enum_address_type", nullable=false)
      */
-    private string $type = AddressType::ADDRESS_MAIN;
+    private ?string $type = AddressType::ADDRESS_MAIN;
 
     /**
      * First line of the address.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $address;
+    private ?string $address = '';
 
     /**
      * Second line of the address.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $address2;
+    private ?string $address2 = '';
 
     /**
      * Zip code.
      *
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private $zipcode;
+    private ?string $zipcode = '';
 
     /**
      * City.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $city;
+    private ?string $city = '';
 
     /**
      * Country.
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $country;
+    private ?string $country = '';
 
     /**
      * GPS coordinates - Latitude.
      *
      * @ORM\Column(type="float", nullable=true)
      */
-    private $lat;
+    private ?float $lat = self::DEFAULT_LAT;
 
     /**
      * GPS coordinates - Longitude.
      *
      * @ORM\Column(type="float", nullable=true)
      */
-    private $lng;
+    private ?float $lng = self::DEFAULT_LNG;
 
     /**
      * @ORM\OneToOne(targetEntity=Site::class, mappedBy="mainAddress", cascade={"persist", "remove"})
      */
     private $site;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Site::class, mappedBy="vehicleAddress", cascade={"persist", "remove"})
+     */
+    private $siteVehicle;
 
     public function getId(): UuidV4
     {
