@@ -27,7 +27,7 @@ class CompanyResourceTest extends ApiResourceTestCase
 
         $this->profilerEnabled = true;
         $this->profilerQueryCount = 13;
-        $this->profilerQueryDuration = 100;
+        $this->profilerQueryDuration = 200;
 
         $this->expectedFields = [
             'name',

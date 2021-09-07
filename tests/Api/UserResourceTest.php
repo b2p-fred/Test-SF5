@@ -25,7 +25,7 @@ class UserResourceTest extends ApiResourceTestCase
     {
         $this->profilerEnabled = true;
         $this->profilerQueryCount = 13;
-        $this->profilerQueryDuration = 120;
+        $this->profilerQueryDuration = 200;
 
         $this->expectedFields = [
             'email',

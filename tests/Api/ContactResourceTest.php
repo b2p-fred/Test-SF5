@@ -25,7 +25,7 @@ class ContactResourceTest extends ApiResourceTestCase
     {
         $this->profilerEnabled = true;
         $this->profilerQueryCount = 3;
-        $this->profilerQueryDuration = 60;
+        $this->profilerQueryDuration = 200;
 
         $this->expectedFields = [
             'type',

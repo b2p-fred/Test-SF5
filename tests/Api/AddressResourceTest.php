@@ -26,7 +26,7 @@ class AddressResourceTest extends ApiResourceTestCase
     {
         $this->profilerEnabled = true;
         $this->profilerQueryCount = 23; // note that it may be much
-        $this->profilerQueryDuration = 70;
+        $this->profilerQueryDuration = 200;
 
         $this->expectedFields = [
             'type',
