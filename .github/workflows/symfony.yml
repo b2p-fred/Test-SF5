@@ -127,6 +127,8 @@ jobs:
             # Build the environment configuration
             php -r "file_exists('.env') || copy('.env.dist', '.env');"
             printenv
+            # Generate SSL keys
+            symfony console lexik:jwt:generate-keypair
 
       - name: Drop the database (but do not fail)
         continue-on-error: true
@@ -141,6 +143,7 @@ jobs:
         run: |
           symfony console doctrine:database:create
           symfony console doctrine:migrations:migrate --no-interaction -vv
+          symfony console doctrine:schema:validate
           symfony console hautelook:fixtures:load --no-interaction -vv
 
 #      - name: Run all tests suites
