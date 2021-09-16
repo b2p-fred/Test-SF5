@@ -166,3 +166,6 @@ app-tests: phpunit.xml.dist ## Run the application tests
 
 ssh: ## Access Docker container terminal.
 	docker exec -t -i $(CONTAINER_NAME) bash
+
+ssh-root: ## Access Docker container terminal as a root user.
+	docker exec -t --user root -i $(CONTAINER_NAME) bash
