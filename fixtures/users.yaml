@@ -13,7 +13,6 @@ App\Entity\User:
     gender: 'male'
     birthdate: <(new \DateTime('1966-06-01'))>
     roles: [ 'ROLE_ADMIN' ]
-    company: '@company_1'
 
   user_2:
     firstname: "Gaston"
@@ -24,7 +23,6 @@ App\Entity\User:
     language: 'fr-FR'
     gender: 'male'
     birthdate: <(new \DateTime('1957-02-01'))>
-    company: '@company_1'
 
   user_{3..1000}:
     firstname: <firstName()>
@@ -34,6 +32,3 @@ App\Entity\User:
     language: <randomElement(['fr-fr', 'en-gb', 'es-es', 'de-de', 'it-it', ''])>
     gender: <randomElement(['male', 'female', 'unknown'])>
     birthdate: <dateTimeBetween('-100 years', '-18 year')>
-
-    # 50% have a company relation!
-    company: 50%? @company_<numberBetween(1, 10)>

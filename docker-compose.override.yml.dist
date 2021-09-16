@@ -25,10 +25,10 @@ services:
 
   # Catch mails sent from the PHP application
   # Browse http://localhost:1080 to view the webmail
-  mailcatcher:
-    ports:
-      - "1025:1025"
-      - "1080:1080"
+  # mailcatcher:
+  #   ports:
+  #     - "1025:1025"
+  #     - "1080:1080"
 
 volumes:
   db-data:

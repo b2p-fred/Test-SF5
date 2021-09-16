@@ -18,7 +18,7 @@ class DocumentTest extends TestCase
         $this->assertEquals(null, $document->getName());
         $this->assertEquals(null, $document->getTitle());
         $this->assertEquals(null, $document->getDescription());
-        $this->assertEquals(DocumentType::DOCUMENT_MAIN, $document->getType());
+        $this->assertEquals(DocumentType::DOCUMENT_PROTOCOL, $document->getType());
         $this->assertEquals('fr-FR', $document->getLanguage());
         $this->assertEquals(null, $document->getFilename());
 //        $this->assertEquals(null, $document->getSite());
@@ -39,8 +39,8 @@ class DocumentTest extends TestCase
         $document->setDescription('A');
         $this->assertEquals('A', $document->getDescription());
 
-        $document->setType(DocumentType::DOCUMENT_MAIN);
-        $this->assertEquals(DocumentType::DOCUMENT_MAIN, $document->getType());
+        $document->setType(DocumentType::DOCUMENT_PROTOCOL);
+        $this->assertEquals(DocumentType::DOCUMENT_PROTOCOL, $document->getType());
         $document->setType(DocumentType::DOCUMENT_ANNEX);
         $this->assertEquals(DocumentType::DOCUMENT_ANNEX, $document->getType());
 

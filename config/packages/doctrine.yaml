@@ -23,6 +23,7 @@ doctrine:
       enum_document_type: App\DBAL\Types\DocumentType
       enum_human_gender: App\DBAL\Types\HumanGenderType
       enum_language_type: App\DBAL\Types\LanguageType
+      enum_relation_type: App\DBAL\Types\RelationType
 
   orm:
     auto_generate_proxy_classes: true

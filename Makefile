@@ -36,7 +36,7 @@ COMPOSER        = docker exec $(CONTAINER_NAME) composer
 .DEFAULT_GOAL = info
                 # Not needed here, but you can put your all your targets to be sure
                 # there is no name conflict between your files and your targets.
-.PHONY        = banner info help
+.PHONY        = banner info help tests
 
 # Commands and information
 info: commands

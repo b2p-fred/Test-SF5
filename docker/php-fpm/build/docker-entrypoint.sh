@@ -29,5 +29,4 @@ fi
 
 echo "Done!"
 
-# Run Symfony server
-symfony server:start
+exec "$@"

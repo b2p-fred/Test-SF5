@@ -10,7 +10,7 @@ class DocumentResourceTest extends ApiResourceTestCase
 
     protected function setUp(): void
     {
-        parent::configure(self::RESOURCE, null, null, null, 100);
+        parent::configure(self::RESOURCE, null, null, null, 200);
     }
 
     /**
@@ -24,7 +24,7 @@ class DocumentResourceTest extends ApiResourceTestCase
     public function testListResource()
     {
         $this->profilerEnabled = true;
-        $this->profilerQueryCount = 3;
+        $this->profilerQueryCount = 13;
         $this->profilerQueryDuration = 200;
 
         $this->expectedFields = [
@@ -47,7 +47,7 @@ class DocumentResourceTest extends ApiResourceTestCase
 //        self::$verbose = true;
 
         self::$postedData = [
-            'type' => 'main',
+            'type' => 'protocol',
             'name' => 'PdS',
             'title' => 'pds',
             'description' => 'This document is about',
@@ -57,7 +57,7 @@ class DocumentResourceTest extends ApiResourceTestCase
 //            "@id" => "/api/documents/abfae75d-8af7-4ff0-a3c8-2c8a82f9583d",
             "@type" => "Document",
 //            "id" => "abfae75d-8af7-4ff0-a3c8-2c8a82f9583d",
-            "type" => "main",
+            "type" => "protocol",
             "name" => "PdS",
             "title" => "pds",
             "description" => "This document is about",

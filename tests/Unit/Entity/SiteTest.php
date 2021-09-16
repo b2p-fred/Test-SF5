@@ -16,6 +16,9 @@ class SiteTest extends TestCase
         $site = new Site();
         $this->assertInstanceOf(UuidV4::class, $site->getId());
 
+        // $this->assertNotEmpty($site->getCreatedAt());
+        // $this->assertNotEmpty($site->getUpdatedAt());
+
         $this->assertEquals(null, $site->getName());
         $this->assertEquals(null, $site->getTitle());
         $this->assertEquals(null, $site->getDescription());

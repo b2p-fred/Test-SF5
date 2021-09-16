@@ -1,0 +1,24 @@
+App\Entity\DocumentVersion:
+  dv_1_1:
+    document: '@document_1'
+    version: 1
+    description: "1ère version"
+    initiator: '@user_1'
+
+  dv_1_2:
+    document: '@document_1'
+    version: 2
+    description: "2ème version"
+    initiator: '@user_1'
+
+  dv_2_1:
+    document: '@document_2'
+    version: 1
+    description: "1ère version du document 2"
+    initiator: '@user_2'
+
+  # some other documents' versions
+  dv_{4..100}:
+    document: '@document_<numberBetween(3, 100)>'
+    version: 1
+    initiator: '@user_<numberBetween(3, 100)>'

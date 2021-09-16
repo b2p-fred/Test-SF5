@@ -1,0 +1,34 @@
+App\Entity\Relation:
+  relation_1.1:
+    type: 'sent'
+    sender: '@user_1'
+    recipient: '@user_3'
+    protocol: '@dv_1_1'
+    comments: ''
+
+  relation_1.2:
+    type: 'sent'
+    sender: '@user_1'
+    recipient: '@user_4'
+    protocol: '@dv_1_1'
+    comments: ''
+
+  relation_1.3:
+    type: 'sent'
+    sender: '@user_1'
+    recipient: '@user_4'
+    protocol: '@dv_1_2'
+    comments: ''
+
+  relation_2:
+    type: 'created'
+    sender: '@user_2'
+    recipient: '@user_1'
+    protocol: '@dv_2_1'
+
+  # some other relations
+  relation_{2..10}:
+    type: <randomElement(['created', 'sent', 'approved', 'refused'])>
+    sender: '@user_<numberBetween(3, 10)>'
+    recipient: '@user_<numberBetween(11, 100)>'
+    protocol: '@dv_<numberBetween(3, 100)>'

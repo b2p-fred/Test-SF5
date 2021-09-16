@@ -9,6 +9,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\DBAL\Types\HumanGenderType;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -54,6 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->id = Uuid::v4();
+        $this->relations = new ArrayCollection();
     }
 
     /**
@@ -142,21 +145,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user:read", "user:write"})
      */
     private $birthdate;
-
-    /**
-     * The company the user is working for... I choose to make this an embedded
-     * resource. Thus, the company information are available for the user without
-     * an extra API request. Else I would have got only the company IRI
-     * To make it possible, I added the user:read group for some properties of
-     * the company.
-     * -----.
-     *
-     * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="users")
-     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=true)
-     *
-     * @Groups({"user:read", "user:write"})
-     */
-    private ?Company $company;
 
     public function getId()
     {
@@ -330,17 +318,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCompany(): ?Company
-    {
-        return $this->company;
-    }
-
-    public function setCompany(?Company $company): self
-    {
-        $this->company = $company;
-
-        return $this;
-    }
+//    public function getRelation(): ?Relation
+//    {
+//        return $this->relation;
+//    }
+//
+//    public function setRelation(?Relation $relation): self
+//    {
+//        $this->relation = $relation;
+//
+//        return $this;
+//    }
 
     public function getIsVerified(): ?bool
     {
@@ -359,6 +347,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // forces the object to look "dirty" to Doctrine. Avoids
         // Doctrine *not* saving this entity, if only plainPassword changes
         $this->password = null;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Relation[]
+     */
+    public function getRelations(): Collection
+    {
+        return $this->relations;
+    }
+
+    public function addRelation(Relation $relation): self
+    {
+        if (!$this->relations->contains($relation)) {
+            $this->relations[] = $relation;
+            $relation->setInitiator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelation(Relation $relation): self
+    {
+        if ($this->relations->removeElement($relation)) {
+            // set the owning side to null (unless already changed)
+            if ($relation->getInitiator() === $this) {
+                $relation->setInitiator(null);
+            }
+        }
 
         return $this;
     }

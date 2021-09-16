@@ -8,10 +8,14 @@ services:
       context: docker/php-fpm
       args:
         - TAG_PHP=${TAG_PHP:-7.4-fpm}
+        - _UID=${_UID:-100}
+        - _GID=${_GID:-100}
     image: ${IMAGE_NAME:-test:beta}
     container_name: ${CONTAINER_NAME:-test}
     restart: unless-stopped
     environment:
+      - _UID=${_UID:-100}
+      - _GID=${_GID:-100}
       - APP_USER=${APP_USER:-www-data}
       - APP_ENV=${APP_ENV:-dev}
       - APP_SECRET=${APP_SECRET:-I_can_read_it_in_your_mind}
@@ -97,4 +101,4 @@ services:
 
 networks:
   dev:
-    name: backend_dev
+    name: ${PROJECT:-test}_lan

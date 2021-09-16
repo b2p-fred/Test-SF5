@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\DBAL\Types\DocumentType;
 use App\DBAL\Types\LanguageType;
 use App\Repository\DocumentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Uid\Uuid;
@@ -13,8 +15,8 @@ use Symfony\Component\Uid\UuidV4;
 
 /**
  * The Document class is the main representation of an application's document.
- * A security protocol is composed of several documents: one `main` document and
- * some `annex` documents.
+ * A security protocol is a `protocol` typed document. All other documents
+ * attached to a Site are `annex` documents.
  *
  * @ORM\Entity(repositoryClass=DocumentRepository::class)
  *
@@ -37,16 +39,17 @@ class Document
     public function __construct()
     {
         $this->id = Uuid::v4();
+        $this->versions = new ArrayCollection();
     }
 
     /**
      * The DocumentType class defines the allowed Document types:
-     * - `main` for the main document in a security protocole
+     * - `protocol` for the security protocole
      * - `annex` for an annex document.
      *
      * @ORM\Column(name="type", type="enum_document_type", nullable=false)
      */
-    private string $type = DocumentType::DOCUMENT_MAIN;
+    private string $type = DocumentType::DOCUMENT_PROTOCOL;
 
     /**
      * Name of the document.
@@ -97,6 +100,11 @@ class Document
      * @ORM\Column(type="datetime", nullable=true)
      */
     private ?\DateTime $versionedAt = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity=DocumentVersion::class, mappedBy="document", orphanRemoval=true)
+     */
+    private $versions;
 
     public function getId(): UuidV4
     {
@@ -208,6 +216,36 @@ class Document
     public function setVersionedAt(?\DateTime $versionedAt): self
     {
         $this->versionedAt = $versionedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DocumentVersion[]
+     */
+    public function getVersions(): Collection
+    {
+        return $this->versions;
+    }
+
+    public function addVersion(DocumentVersion $version): self
+    {
+        if (!$this->versions->contains($version)) {
+            $this->versions[] = $version;
+            $version->setDocument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVersion(DocumentVersion $version): self
+    {
+        if ($this->versions->removeElement($version)) {
+            // set the owning side to null (unless already changed)
+            if ($version->getDocument() === $this) {
+                $version->setDocument(null);
+            }
+        }
 
         return $this;
     }

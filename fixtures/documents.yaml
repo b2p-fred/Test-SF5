@@ -4,7 +4,7 @@
 App\Entity\Document:
   document_1:
     name: "PdS 1"
-    type: 'main'
+    type: 'protocol'
     # fixme Make it automatic!
     title: 'pds-1'
     description: "Rien de spécial :)"
@@ -14,7 +14,7 @@ App\Entity\Document:
 
   document_2:
     name: "PdS 2"
-    type: 'main'
+    type: 'protocol'
     # fixme Make it automatic!
     title: 'pds-2'
     language: 'fr-FR'
@@ -23,7 +23,16 @@ App\Entity\Document:
 
   document_{3..100}:
     name: document <current()>
-    type: <randomElement(['main', 'annex', 'annex', 'annex', 'annex'])>
+    type: 'protocol'
+    # fixme Make it automatic!
+    title: document-<current()>
+    description: 10%? <sentences(3, true)>
+    language: <randomElement(['fr-fr', 'en-gb', 'es-es', 'de-de', 'it-it', '', 'all'])>
+    site: '@site_<numberBetween(1, 100)>'
+
+  document_{101..200}:
+    name: document <current()>
+    type: 'annex'
     # fixme Make it automatic!
     title: document-<current()>
     description: 10%? <sentences(3, true)>

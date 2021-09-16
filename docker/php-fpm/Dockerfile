@@ -2,9 +2,15 @@ ARG TAG_PHP=7.4-fpm
 
 FROM php:${TAG_PHP}
 
+# Default identifiers to use for user substitution
+ARG _UID=1000
+ARG _GID=1000
+
 EXPOSE 9000/tcp
 
 ENV \
+    _UID=$_UID \
+    _GID=$_GID \
     PHP_USER=www-data \
     COMPOSER_ALLOW_SUPERUSER=1 \
     APP_ENV=prod \
@@ -15,6 +21,8 @@ ENV \
     #
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        libmagickwand-dev \
+        ghostscript \
         git unzip \
         zlib1g-dev \
         libxml2-dev \
@@ -32,8 +40,9 @@ RUN apt-get update \
         pdo_mysql \
         zip
 
-RUN pecl install pcov && \
-    docker-php-ext-enable pcov
+RUN pecl install pcov imagick && \
+    docker-php-ext-enable pcov imagick
+
     #
     # composer
     #
@@ -59,11 +68,19 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 COPY build/symfony.ini "$PHP_INI_DIR/conf.d/symfony.ini"
 
+ARG imagemagic_config=/etc/ImageMagick-6/policy.xml
+RUN if [ -f $imagemagic_config ] ; then sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' $imagemagic_config ; else echo did not see file $imagemagic_config ; fi
+
+RUN echo "*****"
+RUN echo "Application user id: ${PHP_USER} ${_UID} ${_GID}"
+RUN echo "*****"
+
+# Sustitute identifiers for the PHP user
+RUN usermod -u $_UID $PHP_USER &&\
+    groupmod -g $_GID $PHP_USER &&\
+    usermod -a -G $PHP_USER root
 # Application directory
-RUN usermod -u 1000 $PHP_USER &&\
-    groupmod -g 1000 $PHP_USER &&\
-    usermod -a -G $PHP_USER root &&\
-    mkdir -p /var/www &&\
+RUN mkdir -p /var/www &&\
     mkdir -p /var/www/.composer &&\
     chown -R "$PHP_USER:$PHP_USER" /var/www
 

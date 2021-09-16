@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}A company: #{{ item.id }}{% endblock %}
+{% block title %}A relation: #{{ item.id }}{% endblock %}
 
 {% block content %}
 
-    <form name="companyForm">
+    <form name="relationForm">
         <fieldset disabled="disabled">
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="_name" value="{{ item.name }}"/>
             </div>
 
-            {% if item.building is defined %}
+            {% if item.site is defined %}
                 <div class="form-group">
                     <label for="location">Location:</label>
-                    <a href="{{ path('building_show', {"id": item.building.id}) }}">{{ item.building.name }}</a>
+                    <a href="{{ path('building_show', {"id": item.site.id}) }}">{{ item.site.name }}</a>
                 </div>
             {% endif %}
         </fieldset>
