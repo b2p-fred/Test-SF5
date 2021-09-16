@@ -198,36 +198,6 @@ class Site
         return $this;
     }
 
-    /**
-     * @return Collection|Relation[]
-     */
-    public function getRelations(): Collection
-    {
-        return $this->relations;
-    }
-
-    public function addRelation(Relation $relation): self
-    {
-        if (!$this->relations->contains($relation)) {
-            $this->relations[] = $relation;
-            $relation->setSite($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRelation(Relation $relation): self
-    {
-        if ($this->relations->removeElement($relation)) {
-            // set the owning side to null (unless already changed)
-            if ($relation->getSite() === $this) {
-                $relation->setSite(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getMainAddress(): ?Address
     {
         return $this->mainAddress;

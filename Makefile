@@ -148,12 +148,12 @@ db-drop: ## Drop the database if it exists
 
 ## —— Coding standards ✨ ——————————————————————————————————————————————————————
 cs: ## Run all coding standards checks
-	$(COMPOSER) lint
+	$(COMPOSER) lint-fix
 	$(COMPOSER) phpstan
 
 
 ## —— Tests ✅ —————————————————————————————————————————————————————————————————
-tests: phpunit.xml.dist ## Run all the tests
+tests: phpunit.xml.dist unit-tests api-tests app-tests ## Run all the tests
 	$(COMPOSER) tests
 unit-tests: phpunit.xml.dist ## Run the unit tests
 	$(COMPOSER) tests-utils

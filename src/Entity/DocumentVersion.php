@@ -5,7 +5,6 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
@@ -75,7 +74,7 @@ class DocumentVersion
         return $this->version;
     }
 
-    public function setVersion(?string $version): self
+    public function setVersion(?int $version): self
     {
         $this->version = $version;
 

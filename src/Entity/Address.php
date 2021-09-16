@@ -25,10 +25,9 @@ use Symfony\Component\Uid\UuidV4;
  */
 class Address
 {
-    const DEFAULT_LAT = 43.8168891505918;
-    const DEFAULT_LNG = 5.045658092187997;
-
     use TimestampableEntity;
+    public const DEFAULT_LAT = 43.8168891505918;
+    public const DEFAULT_LNG = 5.045658092187997;
 
     /**
      * @ORM\Id

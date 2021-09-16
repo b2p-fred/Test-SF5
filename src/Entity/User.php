@@ -9,8 +9,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\DBAL\Types\HumanGenderType;
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -56,7 +54,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->id = Uuid::v4();
-        $this->relations = new ArrayCollection();
     }
 
     /**
@@ -318,18 +315,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-//    public function getRelation(): ?Relation
-//    {
-//        return $this->relation;
-//    }
-//
-//    public function setRelation(?Relation $relation): self
-//    {
-//        $this->relation = $relation;
-//
-//        return $this;
-//    }
-
     public function getIsVerified(): ?bool
     {
         return $this->isVerified;
@@ -347,36 +332,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // forces the object to look "dirty" to Doctrine. Avoids
         // Doctrine *not* saving this entity, if only plainPassword changes
         $this->password = null;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Relation[]
-     */
-    public function getRelations(): Collection
-    {
-        return $this->relations;
-    }
-
-    public function addRelation(Relation $relation): self
-    {
-        if (!$this->relations->contains($relation)) {
-            $this->relations[] = $relation;
-            $relation->setInitiator($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRelation(Relation $relation): self
-    {
-        if ($this->relations->removeElement($relation)) {
-            // set the owning side to null (unless already changed)
-            if ($relation->getInitiator() === $this) {
-                $relation->setInitiator(null);
-            }
-        }
 
         return $this;
     }
