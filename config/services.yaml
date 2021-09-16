@@ -30,6 +30,7 @@ services:
     App\OpenApi\JwtDecorator:
         decorates: 'api_platform.openapi.factory'
         autoconfigure: false
+        arguments: ['@App\OpenApi\JwtDecorator.inner']
 
     # Password management
     # -----
