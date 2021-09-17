@@ -2,6 +2,7 @@
 
 namespace App\Tests\Unit\Entity;
 
+use App\Entity\Address;
 use App\Entity\Contact;
 use App\Entity\Document;
 use App\Entity\Site;
@@ -16,8 +17,8 @@ class SiteTest extends TestCase
         $site = new Site();
         $this->assertInstanceOf(UuidV4::class, $site->getId());
 
-        // $this->assertNotEmpty($site->getCreatedAt());
-        // $this->assertNotEmpty($site->getUpdatedAt());
+        $this->assertEquals(null, $site->getCreatedAt());
+        $this->assertEquals(null, $site->getUpdatedAt());
 
         $this->assertEquals(null, $site->getName());
         $this->assertEquals(null, $site->getTitle());
@@ -47,13 +48,33 @@ class SiteTest extends TestCase
         $contact = new Contact();
         $contact->setFirstName('John');
         $contact->setLastName('Doe');
+        $contact2 = new Contact();
+        $contact2->setFirstName('Jack');
+        $contact2->setLastName('Smith');
 
         $contacts = new ArrayCollection();
         $contacts->add($contact);
-
         $site->addContact($contact);
         $this->assertEquals($contacts, $site->getContacts());
+        $this->assertEquals($contact->getSite(), $site);
 
+        $contacts->add($contact2);
+        $site->addContact($contact2);
+        $this->assertEquals($contacts, $site->getContacts());
+        $this->assertEquals($contact2->getSite(), $site);
+
+        $contacts->removeElement($contact);
+        $site->removeContact($contact);
+        $this->assertEquals($contacts, $site->getContacts());
+        $this->assertEquals($contact->getSite(), null);
+
+        // Addresses
+        $main = new Address();
+        $vehicle = new Address();
+        $site->setMainAddress($main);
+        $site->setVehicleAddress($vehicle);
+        $this->assertEquals($main, $site->getMainAddress());
+        $this->assertEquals($vehicle, $site->getVehicleAddress());
 
         // Documents collection
         $document = new Document();

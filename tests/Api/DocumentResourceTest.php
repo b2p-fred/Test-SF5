@@ -83,6 +83,18 @@ class DocumentResourceTest extends ApiResourceTestCase
         $this->assertTrue(true, 'This should already work.');
     }
 
+    public function testUpdateResource2()
+    {
+        $this->updateData = [
+            'name' => 'PdS updated 2',
+            'description' => 'This document is about...\nOne more line !',
+        ];
+
+        parent::testUpdateResource();
+        // Optional: Test anything here, if you want.
+        $this->assertTrue(true, 'This should already work.');
+    }
+
     public function testDeleteResource()
     {
         parent::testDeleteResource();

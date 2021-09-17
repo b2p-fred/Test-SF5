@@ -4,7 +4,9 @@ namespace App\Tests\Unit\Entity;
 
 use App\DBAL\Types\DocumentType;
 use App\Entity\Document;
+use App\Entity\DocumentVersion;
 use App\Entity\Site;
+use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\UuidV4;
 
@@ -14,6 +16,9 @@ class DocumentTest extends TestCase
     {
         $document = new Document();
         $this->assertInstanceOf(UuidV4::class, $document->getId());
+
+        $this->assertEquals(null, $document->getCreatedAt());
+        $this->assertEquals(null, $document->getUpdatedAt());
 
         $this->assertEquals(null, $document->getName());
         $this->assertEquals(null, $document->getTitle());
@@ -58,8 +63,24 @@ class DocumentTest extends TestCase
 //        $now = new \DateTime();
 //        $this->assertEquals($now, $document->getVersionedAt());
 
+        // Site relation
         $site = new Site();
         $document->setSite($site);
         $this->assertEquals($site, $document->getSite());
+
+        // Version relation
+        $documentVersion = new DocumentVersion();
+        $dvCollection = new ArrayCollection();
+        $this->assertEquals($dvCollection, $document->getVersions());
+
+        $dvCollection->add($documentVersion);
+        $document->addVersion($documentVersion);
+        $this->assertEquals($dvCollection, $document->getVersions());
+
+        // It is not possible to remove a document attached to a version!
+        // Remove the version first if needed...
+        // $dvCollection->removeElement($documentVersion);
+        // $document->removeVersion($documentVersion);
+        // $this->assertEquals($dvCollection, $document->getVersions());
     }
 }

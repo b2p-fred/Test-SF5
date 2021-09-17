@@ -24,8 +24,6 @@ class DocumentVersionTest extends TestCase
         $documentVersion = new DocumentVersion();
 
         $document = new Document();
-        $documentVersion->setDocument($document);
-        $this->assertEquals($document, $documentVersion->getDocument());
 
         $documentVersion->setDescription('A');
         $this->assertEquals('A', $documentVersion->getDescription());
@@ -36,5 +34,11 @@ class DocumentVersionTest extends TestCase
         $user = new User();
         $documentVersion->setInitiator($user);
         $this->assertEquals($user, $documentVersion->getInitiator());
+
+        // Creates the relation between the document and its version
+        $document->addVersion($documentVersion);
+
+        // $documentVersion->setDocument($document);
+        $this->assertEquals($document, $documentVersion->getDocument());
     }
 }
