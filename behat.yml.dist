@@ -1,0 +1,54 @@
+# -----
+# The default behat profile to run the tests locally or in a Docker container
+# $ ./vendor/bin/behat
+# ----
+default:
+  suites:
+    default:
+      contexts:
+        # Simulate browser calls
+        - Behat\MinkExtension\Context\MinkContext
+        # Code coverage context
+        - App\Tests\Behat\CoverageContext
+        # Specific for the project
+        - App\Tests\Behat\FeatureContext
+        # A specific context for API testings (extends Imbo\BehatApiExtension\Context\ApiContext)
+        - App\Tests\Behat\ExtendedApiContext
+#        - FeatureContext:
+#          JWTManager: '@lexik_jwt_authentication.jwt_manager'
+
+  extensions:
+    FriendsOfBehat\SymfonyExtension:
+      bootstrap: 'tests/bootstrap.php'
+      kernel:
+        class: ~
+        path: ~
+        environment: test
+        debug: true
+
+    Behat\MinkExtension:
+      base_url: http://localhost:8000/api/
+      sessions:
+        default:
+          symfony: ~
+
+    Imbo\BehatApiExtension:
+      apiClient:
+        # All the Guzzle request options as of https://docs.guzzlephp.org/en/stable/request-options.html
+        base_uri: http://localhost:8000/api/
+        timeout: 5.0
+#        debug: true
+#        verify: false
+
+# -----
+# Use this profile to run the tests in the Github actions pipeline
+# $ ./vendor/bin/behat --profile=github_actions
+# ----
+github_actions:
+  extensions:
+    Behat\MinkExtension:
+      base_url: http://127.0.0.1:8000/api/
+
+    Imbo\BehatApiExtension:
+      apiClient:
+        base_uri: http://127.0.0.1:8000/api/

@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+
+  # PHP interpreter
+  php-fpm:
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=test
+    command: ["vendor/bin/behat", "--profile=github_actions", "--format=progress"]
+    volumes:
+      - ./:/var/www/
+
+  # API web server
+  nginx-api:
+    ports:
+      - "8001:80"
+    volumes:
+      - ./:/var/www/:ro
+
+  # Application database
+  mariadb:
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+  # Catch mails sent from the PHP application
+  # Browse http://localhost:1080 to view the webmail
+  # mailcatcher:
+  #   ports:
+  #     - "1025:1025"
+  #     - "1080:1080"
+
+volumes:
+  db-data:

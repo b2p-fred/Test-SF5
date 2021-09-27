@@ -48,14 +48,15 @@ info: commands
 	@echo "     - clean: remove Docker containers and images"
 	@echo "     ---"
 	@$(call YELLOW, "Start / stop project services ?")
-	@echo "     - up: start the project services in console mode"
+	@echo "     - up: start the project services in console mode (APP_ENV=dev)"
+	@echo "     - up-test: start the project services in console mode - ready for integration tests (APP_ENV=test)"
 	@echo "     - up-detach: start the project services in daemon mode"
 	@echo "     - down: stop the project services"
 	@echo "     ---"
 	@$(call YELLOW, "Some Symfony useful commands !")
 	@echo "     - sf: list all available commands"
 	@echo "     - cc: clear the cache"
-	@echo "     - wc: warmup the cache"
+	@echo "     - cw: warmup the cache"
 	@echo "     - purge: purge the cache and log files"
 	@echo "     ---"
 	@$(call YELLOW, "For the database")
@@ -64,6 +65,10 @@ info: commands
 	@$(call YELLOW, "Coding standards and tests")
 	@echo "     - cs: runs lint and phpstan"
 	@echo "     - tests: runs all the tests (else use unit-tests, api-tests or app-tests)"
+	@$(call YELLOW, "Tests")
+	@echo "     - unit-tests: runs the unit tests"
+	@echo "     - unit-tests suite=Abc: runs the unit tests with some extra parameters"
+	@echo "     - behat-tests suite=: runs all the tests (else use unit-tests, api-tests or app-tests)"
 
 
 # --------------------
@@ -92,8 +97,10 @@ build: ## (Re-)build Docker images and containers with Docker compose
 	docker-compose -f docker-compose.yml build
 
 
-up: ## Start project services in console attached mode
+up: ## Start project services in console attached mode (APP_ENV=dev)
 	docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+up-test: ## Start project services in console attached mode (APP_ENV=test)
+	docker-compose -f docker-compose.yml -f docker-compose.test.yml up
 up-detach: ## Start project services in daemon mode
 	docker-compose -f docker-compose.yml -f docker-compose.override.yml up --detach
 
@@ -107,11 +114,14 @@ down: ## Stop Docker containers (if started in daemon mode)
 sf: ## List all Symfony commands
 	$(SYMFONY_CMD)
 
-cc: ## Clear the cache. DID YOU CLEAR YOUR CACHE????
+cc: ## Clear the cache.
 	$(SYMFONY_CMD) cache:clear
+	$(SYMFONY_CMD) --env=test cache:clear
 
-wc: ## Warmup the cache
+cw: ## Warmup the cache
+	rm -rf var/cache/*
 	$(SYMFONY_CMD) cache:warmup
+	$(SYMFONY_CMD) --env=test cache:warmup
 
 fix-perms: ## Fix permissions of all var files
 	chmod -R 777 var/*
@@ -156,12 +166,14 @@ cs: ## Run all coding standards checks
 tests: phpunit.xml.dist unit-tests api-tests app-tests ## Run all the tests
 	$(COMPOSER) tests
 unit-tests: phpunit.xml.dist ## Run the unit tests
-	$(COMPOSER) tests-utils-coverage
-	$(COMPOSER) tests-unit-coverage
+	$(COMPOSER) tests-utils-coverage $(suite)
+	$(COMPOSER) tests-unit-coverage $(suite)
 api-tests: phpunit.xml.dist ## Run the API tests
-	$(COMPOSER) tests-api-coverage
+	$(COMPOSER) tests-api-coverage $(suite)
 app-tests: phpunit.xml.dist ## Run the application tests
-	$(COMPOSER) tests-app-coverage
+	$(COMPOSER) tests-app-coverage $(suite)
+behat-tests: ## Run the Behat integration tests
+	$(COMPOSER) tests-behat $(suite)
 
 
 ssh: ## Access Docker container terminal.

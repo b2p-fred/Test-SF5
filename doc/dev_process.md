@@ -89,9 +89,9 @@ Les issues d'un sprint suivent successivement les étapes suivantes :
 
 Pour la procédure de code review, voir [dans ce document](./dev_rules.md).
 
-Au final, le code livré est fusionnée avec la branche `develop` et l'issue est clôturée. Pour avoir, à tout moment, une application fonctionnelle, chaque merge request doit mettre à disposition du code fonctionnel et non cassant pour le reste de l'application.
+Finalement, le code livré est fusionné avec la branche `develop` et l'issue est clôturée. Pour avoir, à tout moment, une application fonctionnelle, chaque merge request doit mettre à disposition du code fonctionnel et non cassant pour le reste de l'application.
 
-Les messages de commit suivent une nomenclature définie : #n°issue - résumé du contenu du commit. Par exemple:
+Les messages de commit suivent une nomenclature définie : #n°issue - résumé du contenu du commit. Par exemple :
 
 	#125 - feature name
 	First line
@@ -99,7 +99,7 @@ Les messages de commit suivent une nomenclature définie : #n°issue - résumé 
 
 sera un bon message pour le commit qui permet de clore l'issue numérotée 125 qui concerne "feature name". Les *First line* et *Second line* décrivent les modifications apportées au code source.
 
-La documentation associée à une issue doit se retrouver dans le code source, et des commentaires doivent avoir été ajoutés dans le code pour expliciter les fonctions complexes.
+La documentation associée à une issue doit se retrouver dans le code source et des commentaires doivent avoir été ajoutés dans le code pour expliciter les fonctions complexes.
 
 
 # Review
@@ -107,7 +107,12 @@ La sprint review a pour objectif de faire valider que le fonctionnel développé
 
 Les membres de l'équipe de développement présentent les fonctionnalités spécifiées dans chacune de leurs issues, en se basant sur les interfaces et/ou sur les tests associés et passants.
 
+
 # Retrospective
 La rétrospective correspond au bilan du sprint. Chaque participant (membres de l'équipe de réalisation, PO, ...) s'exprime pour donner son avis sur les aspects du sprint qui ont bien fonctionné et qui doivent être reproduits, et sur ceux qui sont encore à améliorer. 
 
 Une liste d'actions est définie à l'issue de cette cérémonie dans une optique d'amélioration continue.
+
+# Versionnement
+
+Pour le change log, voir ici: https://keepachangelog.com/fr/1.0.0/

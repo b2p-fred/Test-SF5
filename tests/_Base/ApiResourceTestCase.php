@@ -47,7 +47,6 @@ class ApiResourceTestCase extends CustomApiTestCase
     // Data to update a resource
     public array $updateData = [];
 
-
     /**
      * Configure the test class.
      *
@@ -122,7 +121,7 @@ class ApiResourceTestCase extends CustomApiTestCase
      *  $this->expectedFields = [
      *      'firstName',
      *      'lastName',
-     *  ]
+     *  ].
      *
      * - optionally activate the Symfony profiler and specify the maximum
      * query count and duration
@@ -257,7 +256,7 @@ class ApiResourceTestCase extends CustomApiTestCase
      *      "lastName" => "Doe",
      *  ]
      * - call this method:
-     *  parent::testCreateResource();
+     *  parent::testCreateResource();.
      *
      * @depends testListResource
      */
@@ -347,7 +346,7 @@ class ApiResourceTestCase extends CustomApiTestCase
      *      "lastName" => "Doe",
      *  ]
      * - call this method:
-     *  parent::testUpdateResource();
+     *  parent::testUpdateResource();.
      *
      * @depends testCreateResource
      */
@@ -405,7 +404,7 @@ class ApiResourceTestCase extends CustomApiTestCase
      * In an inherited class:
      * - it will reuse the former defined $postedData, but you can redefine them
      * - call this method:
-     *  parent::testDeleteResource();
+     *  parent::testDeleteResource();.
      *
      * @depends testCreateResource
      */

@@ -83,7 +83,6 @@ Clear all the Docker local stuff (images, containers, ...):
 $ docker system prune --all
 ```
 
-
 ## CI - Github actions
 
 Voir [de la doc ici](https://docs.github.com/en/actions) et il faut lire un peu pour comprendre tout ce bazar :)
@@ -107,3 +106,20 @@ Ajout d'un badge dans un fichier Markdown :
 ![Symfony workflow](https://github.com/b2p-fred/Test-SF5/actions/workflows/symfony.yml/badge.svg)
 
 ```
+
+## Makefile
+
+Un Makefile permet de simplifier l'utiisation des principales commandes liées aux outils de développement:
+```shell
+# Lancement des containers en mode développement
+$ make up
+
+# Lancement des containers en mode tests API (eg. Behat)
+$ make up-test
+
+# Arrêt
+$ make down
+```
+
+Il suffit simplement de lancer `make` pour avoir la liste et la doc de toutes les commandes disponibles ; en principe, on peut tout faire avec ce make -)
+

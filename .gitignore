@@ -4,6 +4,15 @@
 # Current environment file
 .env
 
+# Project artifacts (tests, ...)
+/artifacts
+
+# Docker related files
+/docker-compose.override.yml
+
+# Shell files
+.bash_history
+
 ###> symfony/framework-bundle ###
 .composer
 .symfony
@@ -28,3 +37,7 @@
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+
+###> friends-of-behat/symfony-extension ###
+/behat.yml
+###< friends-of-behat/symfony-extension ###

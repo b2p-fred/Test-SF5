@@ -39,11 +39,10 @@ services:
             - { name: doctrine.event_subscriber }
 
     # Catch kernel events to make a requests log
-    # todo: test this ;)
     # -----
     App\EventListener\KernelListener:
-#        arguments:
-#            $logger: '@monolog.logger.requests'
+        arguments:
+            $logger: '@monolog.logger.requests'
         tags:
             # Just before anything else
             - { name: kernel.event_listener, event: kernel.request, priority: 1024 }

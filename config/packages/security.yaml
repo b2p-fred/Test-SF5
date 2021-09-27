@@ -79,7 +79,10 @@ security:
     - { path: '^/api/version', roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
     # API authenticated routes
-    - { path: '^/api/', roles: IS_AUTHENTICATED_FULLY }
+    # - only allow the GET for simple users
+    - { path: '^/api/', roles: ROLE_USER, methods: ['GET'] }
+    # - and allow full CRUD for admin users
+    - { path: '^/api/', roles: ROLE_ADMIN, methods: ['GET', 'POST', 'PUT', 'DELETE'] }
 
     # SSR application
 #        # require ROLE_ADMIN for /admin*

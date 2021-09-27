@@ -1,25 +1,25 @@
-imports:
-    - { resource: ../api_platform.yaml }
-
+#imports:
+#  - { resource: ../api_platform.yaml }
+#
 api_platform:
-    # The title of the API.
-    title: 'API title - testing!'
+  # The title of the API.
+  title: 'API title - testing!'
 
-    collection:
-        # Pagination des ressources
-        pagination:
-            page_parameter_name: page
-            enabled_parameter_name: pagination
-            items_per_page_parameter_name: itemsPerPage
-            partial_parameter_name: partial
+  collection:
+    # Pagination des ressources
+    pagination:
+      page_parameter_name: page
+      enabled_parameter_name: pagination
+      items_per_page_parameter_name: itemsPerPage
+      partial_parameter_name: partial
 
-    defaults:
-        # Pagination des ressources
-        pagination_enabled: true
-        pagination_partial: false
-        pagination_client_enabled: false
-        # Allow the clients to GET ?itemsPerPage=X
-        pagination_client_items_per_page: true
-        pagination_client_partial: false
-        pagination_items_per_page: 10
-        pagination_maximum_items_per_page: 20
+  defaults:
+    # Pagination des ressources
+    pagination_enabled: true
+    pagination_partial: false
+    pagination_client_enabled: true
+    # Allow the clients to GET ?itemsPerPage=X
+    pagination_client_items_per_page: true
+    pagination_client_partial: false
+    pagination_items_per_page: 10
+    pagination_maximum_items_per_page: 20

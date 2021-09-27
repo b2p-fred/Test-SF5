@@ -25,6 +25,8 @@ First solution, run `bash` inside the PHP container:
 ```shell
 # Dive into the PHP container with a shell
 $ docker exec -it docker_sf5_php-fpm bash
+# OR
+$ make ssh
 www-data@456b61389e7d:~$ symfony check:requirements
 www-data@456b61389e7d:~$ symfony check:security
 www-data@456b61389e7d:~$ symfony server:start
@@ -33,7 +35,7 @@ www-data@456b61389e7d:~$ symfony server:start
 ```
 **Hint**: To use this solution, you can also `Create terminal` in a container from the PHPStorm IDE 
 
-Second solution, run Symfony commands in the container:
+Second solution, run Symfony commands in the container from the host:
 ```shell
 # Check Symfony requirements
 $ docker exec -it docker_sf5_php-fpm symfony check:requirements
@@ -209,7 +211,7 @@ $ symfony console doctrine:migrations:migrate
 ```
 
 
-Creat and implement a controller for the entities
+Create and implement a controller for the entities
 ```shell
 # Create the controllers
 $ symfony console make:controller Company
