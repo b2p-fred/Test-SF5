@@ -100,7 +100,7 @@ build: ## (Re-)build Docker images and containers with Docker compose
 up: ## Start project services in console attached mode (APP_ENV=dev)
 	docker-compose -f docker-compose.yml -f docker-compose.override.yml up
 up-test: ## Start project services in console attached mode (APP_ENV=test)
-	docker-compose -f docker-compose.yml -f docker-compose.test.yml up
+	docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.test.yml up
 up-detach: ## Start project services in daemon mode
 	docker-compose -f docker-compose.yml -f docker-compose.override.yml up --detach
 
