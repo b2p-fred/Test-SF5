@@ -30,21 +30,25 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.4",
+        "php": "^7.4|^8.0",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "api-platform/core": "^2.6",
+        "b2pweb/parroauth2-client": "dev-master",
         "composer/package-versions-deprecated": "^1.11",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.9",
         "gedmo/doctrine-extensions": "^3.1",
+        "guzzlehttp/guzzle": "^7.0",
+        "lcobucci/jwt": "^4.1",
         "lexik/jwt-authentication-bundle": "^2.12",
         "nelmio/cors-bundle": "^2.1",
+        "php-http/discovery": "^1.14",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
         "stof/doctrine-extensions-bundle": "^1.6",
@@ -114,6 +118,7 @@
         "tests-unit": "./bin/phpunit --testsuite 'Unit tests'",
         "tests-app": "./bin/phpunit --testsuite 'App tests'",
         "tests-api": "./bin/phpunit --testsuite 'API tests'",
+        "tests-behat": "./vendor/bin/behat --format pretty",
         "tests-coverage": "./bin/phpunit --coverage-clover artifacts/coverage.xml",
         "tests-utils-coverage": "./bin/phpunit --testsuite 'Utils tests' --coverage-clover artifacts/coverage-utils.xml",
         "tests-unit-coverage": "./bin/phpunit --testsuite 'Unit tests' --coverage-clover artifacts/coverage-unit.xml",
@@ -130,9 +135,14 @@
         }
     },
     "require-dev": {
+        "behat/behat": "^3.8",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "friends-of-behat/mink-browserkit-driver": "^1.5",
+        "friends-of-behat/mink-extension": "^2.5",
+        "friends-of-behat/symfony-extension": "^2.2",
         "friendsofphp/php-cs-fixer": "^3.0",
         "hautelook/alice-bundle": "^2.9",
+        "imbo/behat-api-extension": "^3.0",
         "nelmio/alice": "^3.8",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^0.12.94",
@@ -148,5 +158,11 @@
         "symfony/stopwatch": "^5.3",
         "symfony/var-dumper": "^5.3",
         "symfony/web-profiler-bundle": "^5.3"
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@github.com:b2pweb/parroauth2-client.git"
+        }
+    ]
 }

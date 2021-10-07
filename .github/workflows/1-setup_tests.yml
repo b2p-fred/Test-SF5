@@ -1,5 +1,6 @@
 # https://help.github.com/en/actions
-name: Full CI process for Symfony 5
+name: Setup and tests
+
 on:
   workflow_dispatch:
   push:
@@ -14,18 +15,20 @@ on:
 env:
   DATABASE_HOST: mariadb
   DATABASE_PORT: 3306
-  DATABASE_NAME: sf5
-  DATABASE_USER: sf5
-  DATABASE_PASSWORD: sf5
+  DATABASE_NAME: sf5_test
+  DATABASE_USER: sf5_test
+  DATABASE_PASSWORD: sf5_test
+  DATABASE_ROOT_USER: root
   DATABASE_ROOT_PASSWORD: secret
+  DATABASE_NAME_SUFFIX: ""
   # Do not send mails from the application under test
   MAILER_DSN: null://null
 
 jobs:
-  symfony:
-    name: Symfony 5 (PHP ${{ matrix.php-versions }})
+  setup:
+    name: Setup and unit/functional tests (${{ matrix.os-versions }} with Php ${{ matrix.php-versions }} and Symfony ${{ matrix.symfony-versions }})
     # https://hub.docker.com/_/ubuntu/
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os-versions }}
 
     services:
       # MariaDB
@@ -43,15 +46,16 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
+        os-versions: [ ubuntu-latest ] #, windows-latest ]
         php-versions: ['7.4', '8.0']
+        symfony-versions: ['5.3']
 
     steps:
-      # —— Setup Github actions —————————————————————————————————————————————
-      # https://github.com/actions/checkout (official)
+      # —— Setup repository ———————————————————————————————————————————————————
       - name: Checkout
         uses: actions/checkout@v2
 
-      # —— Setup PHP & extensions ————————————————————————————————————————————
+      # —— Setup PHP & extensions —————————————————————————————————————————————
       - name: Setup PHP, extensions and composer with shivammathur/setup-php
         id: setup-php
         uses: shivammathur/setup-php@v2
@@ -68,7 +72,7 @@ jobs:
       - name: Print PHP version
         run: echo ${{ steps.setup-php.outputs.php-version }}
 
-      # —— Composer —————————————————————————————————————————————————————————
+      # —— Composer ———————————————————————————————————————————————————————————
       - name: Validate composer.json and composer.lock
         run: composer validate
 
@@ -86,7 +90,7 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress
 
-      # —— Symfony ——————————————————————————————————————————————————————————
+      # —— Symfony ————————————————————————————————————————————————————————————
       - name: Check Symfony requirements & security
         run: |
           symfony check:requirements
@@ -97,61 +101,53 @@ jobs:
           symfony console about
           symfony var:export --multiline
 
-      # —— Coding standards —————————————————————————————————————————————————
-      # Can't handle PHP8 for now
+
+      # —— Coding standards ———————————————————————————————————————————————————
       - name: Coding standards checks (php-cs-fixer)
         run: composer lint-fix
+        # Can't handle PHP8 for now
         if: matrix.php-versions == '7.4'
 
-      # —— Static analysis ——————————————————————————————————————————————————
+      # —— Static analysis ————————————————————————————————————————————————————
       - name: Static analysis of PHP code (PHPStan)
         run: composer phpstan
+        # Can't handle PHP8 for now
         if: matrix.php-versions == '7.4'
 
-      # —— MariaDB ——————————————————————————————————————————————————————————
+      # —— MariaDB ————————————————————————————————————————————————————————————
       - name: Verify database connection
         # Do not run this locally... it fails!
         if: ${{ !env.ACT }}
         env:
           PORT: ${{ job.services.database.ports[3306] }}
-          DATABASE_URL: mysql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@${{ env.DATABASE_HOST }}:${{ env.DATABASE_PORT }}/${{ env.DATABASE_NAME }}?serverVersion=mariadb-10.5.11
+          DATABASE_URL: mysql://${{ env.DATABASE_ROOT_USER }}:${{ env.DATABASE_ROOT_PASSWORD }}@${{ env.DATABASE_HOST }}:${{ env.DATABASE_PORT }}/${{ env.DATABASE_NAME }}?serverVersion=mariadb-10.5.11
 
         run: |
           while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
             sleep 1
           done
 
-      # —— Tests ————————————————————————————————————————————————————————————
+      # —— Prepare the application ————————————————————————————————————————————
       - name: Prepare the application
         run: |
             # Build the environment configuration
             php -r "file_exists('.env') || copy('.env.dist', '.env');"
             printenv
-            # Generate SSL keys
+            # Generate SSL keys for the JWT Token
             symfony console lexik:jwt:generate-keypair
 
-      - name: Drop the database (but do not fail)
-        continue-on-error: true
-        env:
-          DATABASE_HOST: 127.0.0.1
-        run: |
-          symfony console doctrine:database:drop --force
-
+      # —— Prepare the database ———————————————————————————————————————————————
       - name: Create the database and load some test fixtures
         env:
           DATABASE_HOST: 127.0.0.1
         run: |
+          symfony console doctrine:database:drop --force
           symfony console doctrine:database:create
           symfony console doctrine:migrations:migrate --no-interaction -vv
           symfony console doctrine:schema:validate
           symfony console hautelook:fixtures:load --no-interaction -vv
 
-#      - name: Run all tests suites
-#        env:
-#          DATABASE_HOST: 127.0.0.1
-#        run: |
-#          ./vendor/bin/phpunit
-#
+      # —— Run the tests ——————————————————————————————————————————————————————
       - name: Run all tests suites with code coverage measurement
         env:
           DATABASE_HOST: 127.0.0.1
@@ -168,6 +164,7 @@ jobs:
           path: artifacts/coverage-*.xml
           if-no-files-found: error
 
+      # —— Upload the tests' coverage —————————————————————————————————————————
       - name: Upload unit tests code coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
@@ -200,9 +197,3 @@ jobs:
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)
           verbose: false
-
-      - name: Drop the database
-        env:
-          DATABASE_HOST: 127.0.0.1
-        run: |
-          symfony console doctrine:database:drop --force

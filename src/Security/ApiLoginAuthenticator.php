@@ -2,7 +2,6 @@
 
 namespace App\Security;
 
-use App\Entity\User;
 use App\Repository\UserRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,12 +24,7 @@ class ApiLoginAuthenticator extends AbstractAuthenticator
 
     private UserRepository $userRepository;
 
-    /*
-     * @var array|null
-     */
-    private $requestCredentials;
-
-    private User $currentUser;
+    private ?array $requestCredentials;
 
     public function __construct(LoggerInterface $logger, UserRepository $userRepository)
     {

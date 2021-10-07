@@ -1,32 +1,36 @@
 #!/bin/sh
-set -eux
+set -eu
 
-echo "Configuring PHP (hostname: ${HOSTNAME})..."
-
-# Do not care with this for the moment -)
-# Create user if necessary
-if ! getent passwd "${APP_USER}"; then
-    useradd --uid "${APP_USER}" --create-home dev
-fi
-
-## Use APP_USER as php-fpm user and fix permissions
-#sed --expression "s/www-data/${APP_USER}/g" --in-place /etc/php/*/fpm/php-fpm.d/docker.conf
-#chown -R "${APP_USER}:${APP_USER}" var public
-#
+echo "Docker entrypoint for PHP-FPM (hostname: ${HOSTNAME})..."
 
 # Configure application
 if [ "${APP_ENV}" = "prod" ]; then
-    # Generate cache
-    until composer install --classmap-authoritative --no-dev --no-interaction --no-progress --optimize-autoloader --prefer-dist ; do
-        sleep 5
-    done
+  # Install composer packages for production
+  echo "Installing project dependencies for production"
+  until composer install --classmap-authoritative --no-dev --no-interaction --no-progress --optimize-autoloader --prefer-dist; do
+    sleep 5
+  done
+
+  # todo: to be completed with application build and deployment ?
 else
-    # Generate cache
-    until composer install --no-interaction --no-progress --prefer-dist ; do
-        sleep 5
-    done
+  # Install composer packages
+  echo "Installing project dependencies in dev mode..."
+  until composer install --no-interaction --no-progress --prefer-dist; do
+    sleep 5
+  done
+
+  # Run PHP FPM in daemon mode
+  php-fpm --daemonize
+
+  # Remove Symfony server PID (avoid re-using older stuff!)
+  [ -f .symfony/var/*.pid ] && { echo "Removing an existing .symfony/var/*.pid file."; rm .symfony/var/*.pid; }
+
+#  # Starting application content server
+#  symfony --no-tls --allow-http server:start --daemon
+
+  # Generate SSL keys for the JWT Token (if they do not exist)
+  [ ! -f config/jwt/private.pem ] && { echo "Generating JWT token keys..."; symfony console lexik:jwt:generate-keypair; }
 fi
 
-echo "Done!"
-
-exec "$@"
+echo "Executing $@"
+"$@"

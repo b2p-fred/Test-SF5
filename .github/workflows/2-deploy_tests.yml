@@ -1,0 +1,104 @@
+# https://help.github.com/en/actions
+name: Deploy and tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    branches:
+      - master
+      - develop
+      
+env:
+  DATABASE_HOST: mariadb
+  DATABASE_PORT: 3306
+  DATABASE_NAME: sf5_test
+  DATABASE_USER: sf5_test
+  DATABASE_PASSWORD: sf5_test
+  DATABASE_ROOT_USER: root
+  DATABASE_ROOT_PASSWORD: secret
+  DATABASE_NAME_SUFFIX: ""
+  # Do not send mails from the application under test
+  MAILER_DSN: null://null
+
+jobs:
+  setup:
+    name: Deploy and tests (${{ matrix.os-versions }} with Php ${{ matrix.php-versions }} and Symfony ${{ matrix.symfony-versions }})
+    # https://hub.docker.com/_/ubuntu/
+    runs-on: ${{ matrix.os-versions }}
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os-versions: [ ubuntu-latest ]
+        php-versions: ['7.4', '8.0']
+        symfony-versions: ['5.3']
+
+    steps:
+      # —— Setup repository ———————————————————————————————————————————————————
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # —— Set up the Docker services ——————————————————————————————————————————
+      - name: Build Docker images
+        env:
+          TAG_PHP: ${{ matrix.php-versions }}-fpm
+          # Some specific uid/gid for the CI environment
+          _UID: 1001
+          _GID: 121
+          # Symfony test environment
+          APP_ENV: test
+
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.test.yml build
+
+      # —— Start the services —————————————————————————————————————————————————
+      - name: Start the Docker services
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
+          docker ps -a
+
+      - name: Sleep for 15 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '15s'
+
+      # —— Run the Behat tests ————————————————————————————————————————————————
+      - name: Run the Behat tests
+        run: |
+          id
+          docker-compose -f docker-compose.yml -f docker-compose.test.yml logs php-fpm
+          docker exec docker_sf5_php bash -c "id -u; id ; pwd"
+          docker exec docker_sf5_php bash -c "cat /etc/passwd"
+          docker exec docker_sf5_php bash -c "ls -alh . ; ls -alh ./vendor/bin/behat"
+          docker exec -u root docker_sf5_php bash -c "./vendor/bin/behat --profile=github_actions --format=progress"
+
+      # —— Stop the services ——————————————————————————————————————————————————
+      - name: Stop the Docker services
+        run: |
+          ls -alh artifacts
+          ls -alh artifacts/Behat
+          docker-compose -f docker-compose.yml -f docker-compose.test.yml down
+
+      # —— Upload the tests' coverage —————————————————————————————————————————
+      - name: Upload tests results
+        uses: actions/upload-artifact@v2
+        with:
+          name: behat-tests-coverage-reports
+          path: artifacts
+          if-no-files-found: error
+
+      - name: Upload Behat tests code coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+#          directory: artifacts/Behat
+#          files: ./artifacts/Behat/*.xml
+          flags: behat-tests
+          env_vars: OS,PHP
+          name: codecov-umbrella # optional
+          fail_ci_if_error: true # optional (default = false)
+          verbose: true

@@ -29,11 +29,11 @@ Jest, Karma et Jasmine, des outils de tests automatisés très puissants pour Ja
 TODO: choisir + ADR
 
 ## Tests fonctionnels
-Pour une API, les tests fonctionnels peuvent êtres vus comme des tests unitaires de chaque endpoint. 
+Pour une API, les tests fonctionnels peuvent être vus comme des tests unitaires de chaque endpoint. 
 
 L’utilisation de Behat permet de documenter et de spécifier via des scénarios utilisateur l’ensemble des fonctionnalités de l’API et de vérifier de manière d'automatiser leur application.
 
-L’API REST exposée par l’application Symfony peut être testée grâce aux contextes « REST » et « JSON » fournis par l'extension Behatch (installée avec API Platform).
+L’API REST exposée par l’application Symfony peut être testée grâce aux contextes « REST » et « JSON » fournis par l'extension Behatch (installée avec API Platform). Par contre, l'extension Behatch est maintenant abandonnée ! 
 
 L'approche « BDD (Behavior Driven Development) » introduite par Behat peut permettre de lier la phase de spécification fonctionnelle à l'écriture des tests (préalablement au développement). Les récits utilisateurs écrits pour Behat pourront servir de compléments à la documentation fonctionnelle de l'application. Grâce aux verbes fournis par les extensions Behat, il sera possible d’exécuter des scénarios de test en écrivant très peu (voire pas du tout) de code PHP.
 

@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\Tests\Behat\:
+        resource: '../tests/Behat/*'
+
+    transformation.argument_transformer.behatapiextension:
+        class: Imbo\BehatApiExtension\ServiceContainer\BehatApiExtension
+        tags:
+            -  { name: transformation.argument_transformer, priority: 100 }

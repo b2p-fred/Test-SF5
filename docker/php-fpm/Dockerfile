@@ -47,7 +47,7 @@ RUN pecl install pcov imagick && \
     # composer
     #
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+#    && php -r "if (hash_file('sha384', 'composer-setup.php') === '756890a4488ce9024fc62c56153228907f1545c228516cbf63f885e036d37e9a59d27d63f46af1d4d07ee0f76181c7d3') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
     # Intentionally install a specific version !
     && php composer-setup.php --version=2.1.3 \
     # Uncomment to use the last stable version
@@ -71,21 +71,31 @@ COPY build/symfony.ini "$PHP_INI_DIR/conf.d/symfony.ini"
 ARG imagemagic_config=/etc/ImageMagick-6/policy.xml
 RUN if [ -f $imagemagic_config ] ; then sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' $imagemagic_config ; else echo did not see file $imagemagic_config ; fi
 
-RUN echo "*****"
-RUN echo "Application user id: ${PHP_USER} ${_UID} ${_GID}"
-RUN echo "*****"
-
-# Sustitute identifiers for the PHP user
-RUN usermod -u $_UID $PHP_USER &&\
+RUN echo "*****" &&\
+    echo "Application user id: ${PHP_USER} ${_UID} ${_GID}" &&\
+    echo "*****" &&\
+    # Substitute identifiers for the PHP user &&\
+    usermod -u $_UID $PHP_USER &&\
     groupmod -g $_GID $PHP_USER &&\
-    usermod -a -G $PHP_USER root
-# Application directory
-RUN mkdir -p /var/www &&\
+    usermod -a -G $PHP_USER root &&\
+    # Application directory &&\
+    mkdir -p /var/www &&\
     mkdir -p /var/www/.composer &&\
     chown -R "$PHP_USER:$PHP_USER" /var/www
 
+# Container entrypoint
+COPY ./build/docker-entrypoint.sh /
+
+# Install application
+COPY --chown="$PHP_USER:$PHP_USER" . /var/www
 WORKDIR /var/www/
 
 USER $PHP_USER
 
-CMD composer install ; php-fpm --daemonize ; sleep 1 ; rm .symfony/var/*.pid ; symfony --no-tls --allow-http server:start
+# Configure entrypoint
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
+
+# Starting application content server
+CMD ["symfony", "--no-tls", "--allow-http", "server:start"]
+#CMD ["tail", "-f", "/dev/null"]
+
