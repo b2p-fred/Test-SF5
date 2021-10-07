@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-echo "Configuring PHP (hostname: ${HOSTNAME})..."
+echo "Docker entrypoint for PHP-FPM (hostname: ${HOSTNAME})..."
 
 # Configure application
 if [ "${APP_ENV}" = "prod" ]; then
@@ -25,8 +25,8 @@ else
   # Remove Symfony server PID (avoid re-using older stuff!)
   [ -f .symfony/var/*.pid ] && { echo "Removing an existing .symfony/var/*.pid file."; rm .symfony/var/*.pid; }
 
-  # Starting application content server
-  symfony --no-tls --allow-http server:start --daemon
+#  # Starting application content server
+#  symfony --no-tls --allow-http server:start --daemon
 
   # Generate SSL keys for the JWT Token (if they do not exist)
   [ ! -f config/jwt/private.pem ] && { echo "Generating JWT token keys..."; symfony console lexik:jwt:generate-keypair; }

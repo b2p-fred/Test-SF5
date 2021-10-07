@@ -90,9 +90,12 @@ COPY ./build/docker-entrypoint.sh /
 COPY . /var/www
 WORKDIR /var/www/
 
-#USER $PHP_USER
+USER $PHP_USER
 
 # Configure entrypoint
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
 
-CMD ["tail", "-f", "/dev/null"]
+# Starting application content server
+CMD ["symfony", "--no-tls", "--allow-http", "server:start"]
+#CMD ["tail", "-f", "/dev/null"]
+

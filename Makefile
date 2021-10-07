@@ -149,9 +149,9 @@ db: ## Create and load the database with the tests fixtures
 	$(SYMFONY_CMD) doctrine:database:create --if-not-exists
 	$(SYMFONY_CMD) doctrine:schema:drop --force
 	$(SYMFONY_CMD) doctrine:schema:create
+	$(SYMFONY_CMD) doctrine:migrations:migrate --no-interaction
 	$(SYMFONY_CMD) doctrine:schema:validate
-	#$(SYMFONY_CMD) doctrine:migrations:migrate --no-interaction
-	$(SYMFONY_CMD) hautelook:fixtures:load --no-interaction -vv
+	$(SYMFONY_CMD) hautelook:fixtures:load --no-interaction --no-bundles -vv
 
 db-drop: ## Drop the database if it exists
 	$(SYMFONY_CMD) doctrine:database:drop --force --if-exists

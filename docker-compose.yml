@@ -21,7 +21,6 @@ services:
       - APP_SECRET=${APP_SECRET:-I_can_read_it_in_your_mind}
       - KERNEL_CLASS=${KERNEL_CLASS:-'App\Kernel'}
       - COMPOSER_MEMORY_LIMIT=-1
-    command: ["tail", "-f", "/dev/null"]
     depends_on:
       - mariadb
     networks:
