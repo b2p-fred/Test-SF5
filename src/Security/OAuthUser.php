@@ -45,10 +45,6 @@ class OAuthUser implements UserInterface
         $this->setSub($payload['sub']);
 
         if (!empty($payload['metadata'])) {
-            $this->logger->debug('[OAuthUser] - user attributes:');
-            foreach ($payload['metadata'] as $attribute => $value) {
-                $this->logger->debug('[OAuthUser] - : '.$attribute.' = '.$value);
-            }
             $this->hydrate($payload['metadata']);
         } else {
             $this->logger->debug('[OAuthUser] - no user attributes.');

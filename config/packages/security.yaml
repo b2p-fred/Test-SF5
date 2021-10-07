@@ -18,6 +18,17 @@ security:
         class: App\Entity\User
         property: email
 
+    # used to create a user from and S2P OIDC token
+    app_oauth_user_provider:
+      entity:
+        class: App\Manager\OAuthUser
+        property: email
+
+    # Chain both user providers
+    all_users:
+      chain:
+        providers: ['app_user_provider', 'app_oauth_user_provider']
+
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -38,8 +49,14 @@ security:
     api:
       pattern: ^/api/
       stateless: true
-      provider: app_user_provider
+      provider: all_users
+
+      # Manage and validate own JWT
       jwt: ~
+
+      # Manage and validate S2P OIDC token
+      custom_authenticator:
+        - App\Security\ApiKeyAuthenticator
 
     main:
       lazy: true

@@ -2,7 +2,6 @@
 
 namespace App\Security;
 
-use App\Security\OAuthUser;
 use Parroauth2\Client\ClientConfig;
 use Parroauth2\Client\ClientInterface;
 use Parroauth2\Client\Extension\JwtAccessToken\JwtAccessToken;
@@ -68,29 +67,24 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
     {
         // Perform introspection on the received token
         // No HTTP request should be performed here because local introspection is enabled
-        $response = $this->client->endPoints()->introspection()
+        $token = $this->client->endPoints()->introspection()
             ->accessToken($this->requestToken)
             ->call();
 
         // The token is expired or invalid
-        if (!$response->active()) {
+        if (!$token->active()) {
             $this->logger->debug('[ApiKeyAuthenticator] - expired token!');
 
             // Code 401 "Unauthorized"
             throw new CustomUserMessageAuthenticationException('No API token provided');
         }
-        $this->logger->debug('[ApiKeyAuthenticator] - got a token: '.$response->username());
+        $this->logger->debug('[ApiKeyAuthenticator] - got a token: '.$token->username());
 
-        $token = $response;
-//        $this->logger->debug('[ApiKeyAuthenticator] - token: '.serialize($token));
-
-//        $user = new OAuthUser($this->logger, $response->username(), $response);
         $logger = $this->logger;
+        return new SelfValidatingPassport(new UserBadge($token->username(), function () use ($logger, $token) {
+            $this->logger->debug('[ApiKeyAuthenticator] - creating a user: '.$token->username());
 
-        return new SelfValidatingPassport(new UserBadge($response->username(), function () use ($logger, $response) {
-            $this->logger->debug('[ApiKeyAuthenticator] - creating a user: '.$response->username());
-
-            $user = new OAuthUser($logger, $response->username(), $response->claims());
+            $user = new OAuthUser($logger, $token->username(), $token->claims());
             $this->logger->debug('[ApiKeyAuthenticator] - user: '.$user);
 
             return $user;
@@ -118,7 +112,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
 
     /**
      * Extract the token from the Authorization HTTP header
-     *  'Authorization': 'Bearer XxX'.
+     *  'Authorization': 'S2pToken XxX'.
      */
     private function getCredentialsFromRequest(Request $request): ?string
     {
@@ -129,7 +123,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         $authorizationHeader = $request->headers->get('Authorization');
         $headerParts = explode(' ', $authorizationHeader);
 
-        if (!(2 === count($headerParts) && 0 === strcasecmp($headerParts[0], 'Bearer'))) {
+        if (!(2 === count($headerParts) && 0 === strcasecmp($headerParts[0], 'S2pToken'))) {
             return null;
         }
 

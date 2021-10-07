@@ -87,7 +87,7 @@ RUN echo "*****" &&\
 COPY ./build/docker-entrypoint.sh /
 
 # Install application
-COPY . /var/www
+COPY --chown="$PHP_USER:$PHP_USER" . /var/www
 WORKDIR /var/www/
 
 USER $PHP_USER

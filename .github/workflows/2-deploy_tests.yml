@@ -46,8 +46,10 @@ jobs:
       - name: Build Docker images
         env:
           TAG_PHP: ${{ matrix.php-versions }}-fpm
-          _UID: 1000
-          _GID: 1000
+          # Some specific uid/gid for the CI environment
+          _UID: 1001
+          _GID: 121
+          # Symfony test environment
           APP_ENV: test
 
         run: |
@@ -57,17 +59,17 @@ jobs:
       - name: Start the Docker services
         run: |
           docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
+          docker ps -a
 
-      - name: Sleep for 10 seconds
+      - name: Sleep for 5 seconds
         uses: jakejarvis/wait-action@master
         with:
-          time: '10s'
+          time: '5s'
 
       # —— Run the Behat tests ————————————————————————————————————————————————
-      - name: Start the services in Behat test mode
+      - name: Run the Behat tests
         run: |
-          docker ps -a
-          docker exec docker_sf5_php bash -c "vendor/bin/behat --profile=github_actions --format=progress"
+          docker exec -u root docker_sf5_php bash -c "./vendor/bin/behat --profile=github_actions --format=progress"
 
       # —— Stop the services ——————————————————————————————————————————————————
       - name: Stop the Docker services
