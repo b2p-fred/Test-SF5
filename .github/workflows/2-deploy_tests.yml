@@ -61,14 +61,19 @@ jobs:
           docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d
           docker ps -a
 
-      - name: Sleep for 5 seconds
+      - name: Sleep for 15 seconds
         uses: jakejarvis/wait-action@master
         with:
-          time: '5s'
+          time: '15s'
 
       # —— Run the Behat tests ————————————————————————————————————————————————
       - name: Run the Behat tests
         run: |
+          id
+          docker-compose -f docker-compose.yml -f docker-compose.test.yml logs php-fpm
+          docker exec docker_sf5_php bash -c "id -u; id ; pwd"
+          docker exec docker_sf5_php bash -c "cat /etc/passwd"
+          docker exec docker_sf5_php bash -c "ls -alh . ; ls -alh ./vendor/bin/behat"
           docker exec -u root docker_sf5_php bash -c "./vendor/bin/behat --profile=github_actions --format=progress"
 
       # —— Stop the services ——————————————————————————————————————————————————
