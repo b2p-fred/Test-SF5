@@ -382,11 +382,7 @@ Feature: Address
     Given the request body is:
     """
     {
-      "address": "1 place de la liberté",
-      "address2": "Bâtiment 1",
-      "zipcode": "26000",
-      "city": "Valence",
-      "country": "France"
+      "type": "visitor"
     }
     """
     When I wait 3 second
@@ -398,28 +394,9 @@ Feature: Address
     And the response body contains JSON:
     """
     {
-      "@context": "/api/contexts/Address",
-      "@id": "@regExp(/^\\/api\\/addresses\\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i)",
-      "@type": "Address",
-      "id": "@regExp(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i)",
-      "type": "main",
-      "address": "1 place de la liberté",
-      "address2": "Bâtiment 1",
-      "zipcode": "26000",
-      "city": "Valence",
-      "country": "France",
-      "lat": 43.816889,
-      "lng": 5.045658,
-      "site": null,
-      "createdAt": "@regExp(/^[0-9]{4}-0[1-9]|1[0-2]-0[1-9]|[1-2][0-9]|3[0-1]T2[0-3]|[01][0-9]:[0-5][0-9]:[0-5][0-9]+00:00$/i)",
-      "updatedAt": "@regExp(/^[0-9]{4}-0[1-9]|1[0-2]-0[1-9]|[1-2][0-9]|3[0-1]T2[0-3]|[01][0-9]:[0-5][0-9]:[0-5][0-9]+00:00$/i)"
-    }
-    """
-    And the response body contains JSON:
-    """
-    {
-      "createdAt": "@storeEqual(createdAt)",
-      "updatedAt": "@storeNotEqual(updatedAt)"
+      "type": "visitor",
+      "identifier": null,
+      "password": null,
     }
     """
 
@@ -457,7 +434,7 @@ Feature: Address
 
   Scenario: Delete an address with correct right
     Given I am authenticated as an administrator
-    # <<uuid>> is the UUID of the lst created item
+    # <<uuid>> is the UUID of the last created item
     When I request a unique "addresses" identified with "<<uuid>>" using HTTP "DELETE"
     Then the response code is 204
     And the response reason phrase is "No Content"
@@ -473,3 +450,41 @@ Feature: Address
       "hydra:totalItems": 101
     }
     """
+
+  Scenario: Create an address with some information
+    Given I am authenticated as an administrator
+    Given the request body is:
+    """
+    {
+      "address": "201 allée des Fleurs",
+      "zipcode": "26000",
+      "city": "Valence"
+    }
+    """
+    When I request "addresses" using HTTP "POST"
+    Then the response code is 201
+    And the response body contains JSON:
+    """
+    {
+      "@context": "/api/contexts/Address",
+      "@id": "@regExp(/^\\/api\\/addresses\\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i)",
+      "@type": "Address",
+      "id": "@regExp(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i)",
+      "address": "201 allée des Fleurs",
+      "zipcode": "26000",
+      "city": "Valence",
+      "createdAt": "@regExp(/^[0-9]{4}-0[1-9]|1[0-2]-0[1-9]|[1-2][0-9]|3[0-1]T2[0-3]|[01][0-9]:[0-5][0-9]:[0-5][0-9]+00:00$/i)",
+      "updatedAt": "@regExp(/^[0-9]{4}-0[1-9]|1[0-2]-0[1-9]|[1-2][0-9]|3[0-1]T2[0-3]|[01][0-9]:[0-5][0-9]:[0-5][0-9]+00:00$/i)"
+    }
+    """
+    # Get and store the newly created item identifier
+    And the response body contains JSON:
+    """
+    {
+      "id": "@storeSet(uuid)"
+    }
+    """
+    # <<uuid>> is the UUID of the last created item
+    When I request a unique "addresses" identified with "<<uuid>>" using HTTP "DELETE"
+    Then the response code is 204
+    And the response reason phrase is "No Content"
