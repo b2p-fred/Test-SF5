@@ -166,7 +166,7 @@ jobs:
 
       # —— Upload the tests' coverage —————————————————————————————————————————
       - name: Upload unit tests code coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./artifacts/coverage-utils.xml,./artifacts/coverage-unit.xml
@@ -177,7 +177,7 @@ jobs:
           verbose: false
 
       - name: Upload functional tests code coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./artifacts/coverage-api.xml
@@ -188,7 +188,7 @@ jobs:
           verbose: false
 
       - name: Upload application tests code coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./artifacts/coverage-app.xml
