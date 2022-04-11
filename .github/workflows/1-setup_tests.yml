@@ -158,7 +158,7 @@ jobs:
           composer tests-app-coverage
 
       - name: Upload tests results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: tests-coverage-reports
           path: artifacts/coverage-*.xml

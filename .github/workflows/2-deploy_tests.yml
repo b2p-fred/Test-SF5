@@ -85,7 +85,7 @@ jobs:
 
       # —— Upload the tests' coverage —————————————————————————————————————————
       - name: Upload tests results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: behat-tests-coverage-reports
           path: artifacts
